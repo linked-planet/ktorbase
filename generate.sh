@@ -33,6 +33,10 @@ mv "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linktime/ktorbase"/* "$FULL_DE
 mv "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linktime/ktorbase"/* "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$NAME_PATH/"
 mv "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linktime/ktorbase"/* "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$NAME_PATH/"
 
+echo "Renaming cloud formation template ..."
+mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.json.tmpl" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.json.tmpl"
+mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.yml" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.yml"
+
 echo "Clean up ..."
 # clean up com / linktime folder(s) as necessary
 if [[ "$GROUP_ID" != "com"* ]]; then
