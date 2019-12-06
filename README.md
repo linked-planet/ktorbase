@@ -1,5 +1,5 @@
 # link-time ktor base
-[![Build Status](https://travis-ci.org/link-time/ktorbase.svg?branch=master)](https://travis-ci.org/link-time/ktorbase)
+[![Build Status](https://travis-ci.com/link-time/ktorbase.svg?branch=master)](https://travis-ci.com/link-time/ktorbase)
 [![GitHub License](https://img.shields.io/badge/license-CC0%201.0%20Universal-blue.svg?style=flat)](https://creativecommons.org/publicdomain/zero/1.0/legalcode)
 
 A template for a Kotlin fullstack web application.
