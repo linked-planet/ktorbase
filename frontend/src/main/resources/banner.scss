@@ -1,0 +1,65 @@
+@import 'variables';
+@import 'mixins';
+
+#banner {
+  width: 100%;
+  min-height: 40px;
+  padding-top: 7px;
+  padding-bottom: $content-margin;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  color: $banner-color;
+  font-size: 0.9rem;
+  font-weight: bold;
+
+  h1 {
+    margin: 0 0 0 $content-margin-l;
+    font-size: 1.1rem;
+    line-height: 1rem;
+  }
+
+  button {
+    font-size: 0.8rem;
+    margin-top: 0;
+    padding: $content-padding;
+  }
+}
+
+#banner-menu {
+  padding-left: $content-padding;
+  padding-right: $content-padding;
+
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+
+  .separator {
+    display: inline-block;
+    margin: 0 $content-margin;
+  }
+
+  /* icon */
+  button:hover {
+    .eNIREL {
+      color: $ci-medium;
+    }
+  }
+}
+
+#banner-brand {
+  min-width: 370px;
+  display: flex;
+  align-items: flex-end;
+  margin-left: 18px;
+}
+
+#banner-logo {
+  width: 30px;
+  height: 25px;
+  margin-top: $content-margin;
+  background-image: url('favicon.png');
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-size: contain;
+}

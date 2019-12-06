@@ -1,0 +1,46 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="backend:run" type="JetRunConfigurationType" factoryName="Kotlin">
+    <module name="ktorbase.backend.main" />
+    <extension name="net.ashald.envfile">
+      <option name="IS_ENABLED" value="true" />
+      <option name="IS_SUBST" value="false" />
+      <option name="IS_PATH_MACRO_SUPPORTED" value="true" />
+      <option name="IS_IGNORE_MISSING_FILES" value="false" />
+      <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+      <ENTRIES>
+        <ENTRY IS_ENABLED="true" PARSER="runconfig" />
+        <ENTRY IS_ENABLED="true" PARSER="env" PATH="$ENV_HOME$/ktorbase-test.env" />
+      </ENTRIES>
+    </extension>
+    <option name="VM_PARAMETERS" value="" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <option name="MAIN_CLASS_NAME" value="io.ktor.server.jetty.EngineMain" />
+    <option name="WORKING_DIRECTORY" value="" />
+    <envs>
+      <env name="APP_BASE_URL" value="http://localhost:8080" />
+      <env name="SAML_IDENTITY_PROVIDER_ENTITY_ID" value="http://mock-idp" />
+      <env name="SAML_IDENTITY_PROVIDER_LOGIN_URL" value="http://localhost:8180/SingleSignOnService" />
+      <env name="SAML_IDENTITY_PROVIDER_LOGOUT_URL" value="http://localhost:8180/logout" />
+      <env name="SAML_IDENTITY_PROVIDER_CERTIFICATE" value="MIIDEzCCAfugAwIBAgIJAKoK/heBjcOYMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTExMDEyMTVaFw0yNTExMTAxMDEyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANBGwJ/qpTQNiSgUglSE2UzEkUow+wS8r67etxoEhlzJZfgK/k5TfG1wICDqapHAxEVgUM10aBHRctNocA5wmlHtxdidhzRZroqHwpKy2BmsKX5Z2oK25RLpsyusB1KroemgA/CjUnI6rIL1xxFn3KyOFh1ZBLUQtKNQeMS7HFGgSDAp+sXuTFujz12LFDugX0T0KB5a1+0l8y0PEa0yGa1oi6seONx849ZHxM0PRvUunWkuTM+foZ0jZpFapXe02yWMqhc/2iYMieE/3GvOguJchJt6R+cut8VBb6ubKUIGK7pmoq/TB6DVXpvsHqsDJXechxcicu4pdKVDHSec850CAwEAAaNQME4wHQYDVR0OBBYEFK7RqjoodSYVXGTVEdLf3kJflP/sMB8GA1UdIwQYMBaAFK7RqjoodSYVXGTVEdLf3kJflP/sMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBADNZkxlFXh4F45muCbnQd+WmaXlGvb9tkUyAIxVL8AIu8J18F420vpnGpoUAE+Hy3evBmp2nkrFAgmr055fAjpHeZFgDZBAPCwYd3TNMDeSyMta3Ka+oS7GRFDePkMEm+kH4/rITNKUF1sOvWBTSowk9TudEDyFqgGntcdu/l/zRxvx33y3LMG5USD0x4X4IKjRrRN1BbcKgi8dq10C3jdqNancTuPoqT3WWzRvVtB/q34B7F74/6JzgEoOCEHufBMp4ZFu54P0yEGtWfTwTzuoZobrChVVBt4w/XZagrRtUCDNwRpHNbpjxYudbqLqpi1MQpV9oht/BpTHVJG2i0ro=" />
+      <env name="APPLICATION_SECRET" value="b3695135430c47b499cb7fde33818f98" />
+      <env name="JIRA_BASE_URL" value="http://jira:2990" />
+      <env name="JIRA_USERNAME" value="admin" />
+      <env name="JIRA_PASSWORD" value="admin" />
+      <env name="JIRA_PROJECT_KEY" value="KBA" />
+      <env name="JIRA_ISSUE_TYPE_NAME" value="Incident" />
+      <env name="INSIGHT_SCHEMA_ID" value="1" />
+      <env name="CONFLUENCE_BASE_URL" value="http://confluence:1990" />
+      <env name="CONFLUENCE_USERNAME" value="admin" />
+      <env name="CONFLUENCE_PASSWORD" value="admin" />
+      <env name="CONFLUENCE_KB_SPACE_KEY" value="KBAKB" />
+      <env name="CONFLUENCE_KB_HOME_PAGE_ID" value="1" />
+      <env name="CONFLUENCE_KB_PAGE_ID_WELCOME" value="2" />
+    </envs>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

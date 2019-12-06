@@ -1,0 +1,280 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: >
+  Deploys ktorbase cockpit as well as it's needed infrastructure:
+  Security Group, IAM role, Load Balancer and ECS Cluster.
+  Please note that the ECR must be created separately beforehand.
+
+Parameters:
+  CertificateArn:
+    Type: String
+    Description: SSL Certificate for Load Balancers
+  CockpitBaseUrl:
+    Type: String
+    Description: Base URL of the Cockpit application
+  CockpitCpu:
+    Type: Number
+    Description: CPU resources for the Cockpit application
+    AllowedValues:
+      - 256
+      - 512
+      - 1024
+      - 2048
+      - 4096
+  CockpitDeregistrationDelaySeconds:
+    Type: Number
+    Description: Load balancer deregistration delay for the Cockpit application
+  CockpitImage:
+    Type: String
+    Description: ECR Image of the Cockpit application
+  CockpitMemory:
+    Type: Number
+    Description: Memory resources for the Cockpit application
+    AllowedValues:
+      - 512
+      - 1024
+      - 2048
+      - 3072
+      - 4096
+      - 5120
+      - 6144
+      - 7168
+      - 8192
+  CollectdServerIp:
+    Type: String
+    Description: Collectd Server IP to send metrics to
+  ExternalSubnets:
+    ConstraintDescription: Must be a list of two or more Subnet IDs within the selected VPC.
+    Description: Subnets (two or more) where your user-facing load balancer will be deployed. MUST be within the selected VPC.
+    Type: List<AWS::EC2::Subnet::Id>
+  InternalSubnets:
+    ConstraintDescription: Must be a list of two or more Subnet IDs within the selected VPC.
+    Description: Subnets (two or more) where your cluster nodes and other internal infrastructure will be deployed. MUST be within the selected VPC.
+    Type: List<AWS::EC2::Subnet::Id>
+  ParameterStoreArn:
+    Type: String
+    Description: Controls access to Parameter Store
+  VPC:
+    ConstraintDescription: Must be the ID of a VPC.
+    Description: Virtual Private Cloud
+    Type: AWS::EC2::VPC::Id
+  JiraBaseUrl:
+    Type: String
+    Description: Jira Base Url
+  ConfluenceBaseUrl:
+    Type: String
+    Description: Confluence Base Url
+
+Outputs:
+  SecurityGroupId:
+    Value: !Ref SecurityGroup
+
+Resources:
+  # ------------------------------------------------------------------------
+  # Security Group
+  # ------------------------------------------------------------------------
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupName: !Sub ${AWS::StackName}-security-group
+      GroupDescription: !Sub ${AWS::StackName}-security-group
+      SecurityGroupIngress:
+        - IpProtocol: TCP
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: TCP
+          FromPort: 443
+          ToPort: 443
+          CidrIpv6: ::/0
+
+  SecurityGroupIngressLoop:
+    Type: AWS::EC2::SecurityGroupIngress
+    DependsOn: SecurityGroup
+    Properties:
+      GroupId: !Ref SecurityGroup
+      IpProtocol: -1
+      FromPort: -1
+      ToPort: -1
+      SourceSecurityGroupId: !Ref SecurityGroup
+
+
+  # ------------------------------------------------------------------------
+  # Task Execution Role
+  # ------------------------------------------------------------------------
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-task-execution-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ""
+            Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Policies:
+        - PolicyName: ktorbase-parameters
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameters
+                  - secretsmanager:GetSecretValue
+                  - kms:Decrypt
+                Resource:
+                  - !Ref ParameterStoreArn
+
+
+  # ------------------------------------------------------------------------
+  # ECS Cluster
+  # ------------------------------------------------------------------------
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub ${AWS::StackName}
+
+
+  # ------------------------------------------------------------------------
+  # Cockpit
+  # ------------------------------------------------------------------------
+  CockpitLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub ${AWS::StackName}-cp
+      Type: application
+      IpAddressType: ipv4
+      Scheme: internet-facing
+      SecurityGroups:
+        - !Ref SecurityGroup
+      Subnets: !Ref ExternalSubnets
+
+  CockpitTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId: !Ref VPC
+      Name: !Sub ${AWS::StackName}-cp
+      TargetType: ip
+      Protocol: HTTP
+      Port: 9090
+      HealthCheckProtocol: HTTP
+      HealthCheckPath: /health
+      HealthCheckPort: traffic-port
+      HealthyThresholdCount: 5
+      UnhealthyThresholdCount: 2
+      HealthCheckTimeoutSeconds: 5
+      HealthCheckIntervalSeconds: 30
+      Matcher:
+        HttpCode: 200
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: !Ref CockpitDeregistrationDelaySeconds
+
+  CockpitLoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+        - CertificateArn: !Ref CertificateArn
+      Protocol: HTTPS
+      Port: 443
+      LoadBalancerArn: !Ref CockpitLoadBalancer
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref CockpitTargetGroup
+
+  CockpitLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ktorbase/${AWS::StackName}-cockpit
+
+  CockpitTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub ${AWS::StackName}-cockpit
+      Cpu: !Ref CockpitCpu
+      Memory: !Ref CockpitMemory
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
+      RequiresCompatibilities:
+        - FARGATE
+      ContainerDefinitions:
+        - Name: cockpit
+          Image: !Ref CockpitImage
+          PortMappings:
+            - ContainerPort: 9090
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref CockpitLogGroup
+              awslogs-region: !Sub ${AWS::Region}
+              awslogs-stream-prefix: ktorbase
+          Secrets:
+            - Name: APPLICATION_SECRET
+              ValueFrom: /ktorbase/cockpit/application-secret
+            - Name: JIRA_PASSWORD
+              ValueFrom: /ktorbase/cockpit/jira-password
+            - Name: CONFLUENCE_PASSWORD
+              ValueFrom: /ktorbase/cockpit/confluence-password
+          Environment:
+            - Name: COLLECTD_SERVER_IP
+              Value: !Ref CollectdServerIp
+            - Name: SAML_IDENTITY_PROVIDER_ENTITY_ID
+              Value: "http://mock-idp"
+            - Name: SAML_IDENTITY_PROVIDER_LOGIN_URL
+              Value: "http://localhost:8180/SingleSignOnService"
+            - Name: SAML_IDENTITY_PROVIDER_LOGOUT_URL
+              Value: "http://localhost:8180/logout"
+            - Name: SAML_IDENTITY_PROVIDER_CERTIFICATE
+              Value: "MIIDEzCCAfugAwIBAgIJAKoK/heBjcOYMA0GCSqGSIb3DQEBBQUAMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzAeFw0xNTExMTExMDEyMTVaFw0yNTExMTAxMDEyMTVaMCAxHjAcBgNVBAoMFU9yZ2FuaXphdGlvbiwgQ049T0lEQzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANBGwJ/qpTQNiSgUglSE2UzEkUow+wS8r67etxoEhlzJZfgK/k5TfG1wICDqapHAxEVgUM10aBHRctNocA5wmlHtxdidhzRZroqHwpKy2BmsKX5Z2oK25RLpsyusB1KroemgA/CjUnI6rIL1xxFn3KyOFh1ZBLUQtKNQeMS7HFGgSDAp+sXuTFujz12LFDugX0T0KB5a1+0l8y0PEa0yGa1oi6seONx849ZHxM0PRvUunWkuTM+foZ0jZpFapXe02yWMqhc/2iYMieE/3GvOguJchJt6R+cut8VBb6ubKUIGK7pmoq/TB6DVXpvsHqsDJXechxcicu4pdKVDHSec850CAwEAAaNQME4wHQYDVR0OBBYEFK7RqjoodSYVXGTVEdLf3kJflP/sMB8GA1UdIwQYMBaAFK7RqjoodSYVXGTVEdLf3kJflP/sMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBADNZkxlFXh4F45muCbnQd+WmaXlGvb9tkUyAIxVL8AIu8J18F420vpnGpoUAE+Hy3evBmp2nkrFAgmr055fAjpHeZFgDZBAPCwYd3TNMDeSyMta3Ka+oS7GRFDePkMEm+kH4/rITNKUF1sOvWBTSowk9TudEDyFqgGntcdu/l/zRxvx33y3LMG5USD0x4X4IKjRrRN1BbcKgi8dq10C3jdqNancTuPoqT3WWzRvVtB/q34B7F74/6JzgEoOCEHufBMp4ZFu54P0yEGtWfTwTzuoZobrChVVBt4w/XZagrRtUCDNwRpHNbpjxYudbqLqpi1MQpV9oht/BpTHVJG2i0ro="
+            - Name: APP_BASE_URL
+              Value: !Ref CockpitBaseUrl
+            - Name: APP_SSO_SAML
+              Value: false
+            - Name: JIRA_BASE_URL
+              Value: !Ref JiraBaseUrl
+            - Name: JIRA_USERNAME
+              Value: "admin"
+            - Name: JIRA_PROJECT_KEY
+              Value: "KBA"
+            - Name: JIRA_ISSUE_TYPE_NAME
+              Value: "Incident"
+            - Name: INSIGHT_SCHEMA_ID
+              Value: "1"
+            - Name: CONFLUENCE_BASE_URL
+              Value: !Ref ConfluenceBaseUrl
+            - Name: CONFLUENCE_USERNAME
+              Value: "admin"
+            - Name: CONFLUENCE_KB_SPACE_KEY
+              Value: "KBAKB"
+            - Name: CONFLUENCE_KB_HOME_PAGE_ID
+              Value: "1"
+            - Name: CONFLUENCE_KB_PAGE_ID_WELCOME
+              Value: "2"
+
+  CockpitService:
+    Type: AWS::ECS::Service
+    DependsOn: CockpitLoadBalancerListener
+    Properties:
+      ServiceName: cockpit
+      Cluster: !Ref ECSCluster
+      LaunchType: FARGATE
+      TaskDefinition: !Ref CockpitTaskDefinition
+      DesiredCount: 2
+      LoadBalancers:
+        - ContainerName: cockpit
+          ContainerPort: 9090
+          TargetGroupArn: !Ref CockpitTargetGroup
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - !Ref SecurityGroup
+          Subnets: !Ref InternalSubnets
+      SchedulingStrategy: REPLICA

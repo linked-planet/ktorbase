@@ -1,0 +1,7 @@
+.idea
+.gradle
+*.iml
+*.hprof
+build
+node_modules
+out

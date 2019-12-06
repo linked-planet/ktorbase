@@ -1,0 +1,29 @@
+@import 'variables';
+
+
+%dialog {
+  border: ś$app-dialog-border;
+  padding: $content-padding-l;
+  background-color: $banner-background-color-dark;
+  color: $body-color;
+}
+
+%firefox-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(200, 94, 49);
+    border-radius: 2px;
+
+    &:active {
+      background-color: rgb(234, 114, 69);
+    }
+
+    &:hover {
+      background-color: rgb(234, 114, 69);
+    }
+  }
+}

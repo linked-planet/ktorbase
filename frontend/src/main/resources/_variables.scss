@@ -1,0 +1,47 @@
+// -------------------------------
+// color
+// -------------------------------
+
+$ci-dark: #000024;
+$ci-background: #000034;
+$ci-medium: #666666;
+$ci-light: #bdbdbd;
+
+$fieldset-border-color: $ci-light;
+
+$body-background-color: $ci-background;
+$body-color: $ci-light;
+$body-border-color: $ci-medium;
+
+$banner-color: $ci-medium;
+$banner-background-color: $ci-background;
+$banner-background-color-dark: $ci-dark;
+
+$content-color: $ci-light;
+$content-background-color: $ci-background;
+
+// -------------------------------
+// margin & padding
+// -------------------------------
+$body-margin: 5px;
+$body-margin-xl: 5px * 4;
+$body-padding: 5px;
+$content-padding: 5px;
+$content-padding-l: $content-padding * 2;
+$content-margin: 5px;
+$content-margin-l: $content-margin * 2;
+$content-margin-xl: $content-margin * 4;
+
+// -------------------------------
+// font
+// -------------------------------
+$body-font-family: "Foco", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$body-font-size: 11pt;
+
+// -------------------------------
+// border
+// -------------------------------
+$body-border: 2px solid $body-border-color;
+$content-border: 1px solid $body-border-color;
+$app-dialog-border: 2px groove $body-border-color;
+$fieldset-border: 1px solid $fieldset-border-color;

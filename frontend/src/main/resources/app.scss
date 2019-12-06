@@ -1,0 +1,54 @@
+@import 'variables';
+
+html {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body {
+  width: calc(100% - #{$body-margin-xl});
+  background-position: left;
+  background-size: cover;
+  background-color: $body-background-color;
+  background-repeat: no-repeat;
+  color: $body-color;
+  font-family: $body-font-family;
+  font-size: $body-font-size;
+  flex: 1;
+  margin: 0 $body-margin $body-margin $body-margin;
+  padding: 0;
+  min-height: 0;
+}
+
+.app-body {
+  padding: 0 !important; /* prevent atlaskit modal dialog from adding 20px padding-right out of nowhere */
+}
+
+#gate {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-bottom: 120px; /* to sort of center it */
+}
+
+#content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  color: $content-color;
+}
+
+#main-content {
+  width: 100%;
+  display: flex;
+  border: $body-border;
+  background-color: $content-background-color;
+  flex: 1;
+  min-height: 0;
+}

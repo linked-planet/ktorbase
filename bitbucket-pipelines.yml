@@ -1,0 +1,37 @@
+steps:
+  - build: &build
+      name: build
+      image: linktimelabs/docker-build-kotlin-fullstack:latest
+      caches:
+        - gradle
+        - node
+      script:
+        - gradle build -PdevMode=false
+      artifacts:
+        - build/**
+        - backend/build/**
+        - frontend/build/**
+  - deploy-test: &deploy-test
+      name: deploy-test
+      image: tstrohmeier/awscli:3.7.2
+      deployment: test
+      trigger: manual
+      script:
+        - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
+        - export DOCKER_TAG=$(echo "$BITBUCKET_COMMIT_SHORT-$BITBUCKET_BUILD_NUMBER")
+        - sh pipelines/docker-build-push-aws.sh ${AWS_DEFAULT_REGION} ${AWS_REGISTRY_URL} latest $DOCKER_TAG
+        - sh aws/script/stack-create.sh test
+        - aws ecs update-service --cluster ktorbase-test --service cockpit --force-new-deployment
+        - aws ecs wait services-stable --cluster ktorbase-test --services cockpit
+      services:
+        - docker
+
+pipelines:
+
+  default:
+    - step: *build
+
+  branches:
+    master:
+      - step: *build
+      - step: *deploy-test

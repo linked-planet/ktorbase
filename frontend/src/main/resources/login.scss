@@ -1,0 +1,34 @@
+@import 'variables';
+@import 'mixins';
+
+#login {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-bottom: 120px; /* to sort of center it */
+
+  fieldset {
+    border: $fieldset-border;
+
+    > * {
+      margin-bottom: $content-margin;
+    }
+
+    legend {
+      text-transform: uppercase;
+    }
+  }
+
+  span {
+    display: inline-block;
+    margin-left: $content-margin;
+  }
+
+  ul {
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 50, 0.6);
+    padding-top: $content-padding;
+    padding-bottom: $content-padding;
+    padding-right: $content-padding;
+  }
+}
