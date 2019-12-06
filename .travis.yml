@@ -1,5 +1,6 @@
 language: java
 jdk: openjdk8
+install: true
 
 # see https://guides.gradle.org/executing-gradle-builds-on-travisci/
 before_cache:
