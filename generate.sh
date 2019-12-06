@@ -47,6 +47,10 @@ elif [[ "$GROUP_ID" != "com.linktime"* ]]; then
   rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linktime"
   rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linktime"
   rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linktime"
+elif [[ "$ARTIFACT_ID" != "ktorbase" ]]; then
+  rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linktime/ktorbase"
+  rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linktime/ktorbase"
+  rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linktime/ktorbase"
 fi
 # clean up obsolete files
 rm "$FULL_DEST_FOLDER/generate.sh"
