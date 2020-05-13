@@ -9,7 +9,7 @@
       <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
       <ENTRIES>
         <ENTRY IS_ENABLED="true" PARSER="runconfig" />
-        <ENTRY IS_ENABLED="true" PARSER="env" PATH="$ENV_HOME$/ktorbase-test.env" />
+        <ENTRY IS_ENABLED="true" PARSER="env" PATH="$ENV_HOME$/ktorbase/local.env" />
       </ENTRIES>
     </extension>
     <option name="VM_PARAMETERS" value="" />

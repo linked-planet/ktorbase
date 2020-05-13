@@ -108,6 +108,34 @@ See these issues on GitHub:
 - https://github.com/ktorio/ktor/issues/1137
 - https://github.com/ktorio/ktor/issues/321
 
+## Testing
+[JMeter][jmeter] is used for the testing of the rest endpoints of the backend.
+To avoid installations, versioning problems inside the team etc. we decided to
+use a [JMeter gradle plugin][jmeter-plugin].
+
+Therefore the plugin is installed in backend/build.gradle.kts and configured
+to build external plugins for JMeter into build/jmeter/lib/ext to use them.
+
+Also we created a template named *TemplateTest.xml* und backend/src/test/resources
+which will automatically load with the commands ./gradlew jmGui (graphical interface) and
+./gradlew jmRun (running tests without UI).
+
+Additional you can change the environment on which you want to test by adding a -Denv
+parameter: ./gradlew -Denv=integration jmGui/jmRun
+The default value is *local*.
+
+The configurations/environment variables which are needed by the integration test
+will be loaded from *~/.env/${project_name}/${env}.env*
+This path can be configured by changing the path backend/build.gradle.kts:
+Change this line: *val envFile = "$userHome/.env/$projectName/$env.env"*
+
+The local.env file must contain the following base-set for initial local testing:
+> cockpit_protocol=http \
+cockpit_host=localhost \
+cockpit_port=8080 \
+cockpit_user=admin \
+cockpit_pass=admin
+
 
 ## Template license
 Written in 2019 by [link-time GmbH](https://www.link-time.com).
@@ -130,3 +158,5 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [docker]: https://www.docker.com/
 [aws-ecs]: https://aws.amazon.com/ecs/
 [collectd]: https://collectd.org/
+[jmeter]: https://jmeter.apache.org/index.html
+[jmeter-plugin]: https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin
