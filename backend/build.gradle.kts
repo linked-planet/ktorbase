@@ -9,6 +9,11 @@ plugins {
     kotlin("jvm") version "1.3.50-eap-54"
     application
     id("com.github.johnrengelman.shadow") version "5.1.0"
+    id("net.foragerr.jmeter") version "1.1.0-4.0"
+}
+
+val jmeterPlugins by configurations.creating {
+    setTransitive(false)
 }
 
 dependencies {
@@ -24,6 +29,9 @@ dependencies {
     implementation(group = "io.ktor", name = "ktor-client-logging-jvm", version = ktorVersion)
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
     implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.1.0")
+
+    // jmeter plugins to load
+    jmeterPlugins("org.postgresql", "postgresql", "42.2.2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -44,4 +52,25 @@ tasks.withType<ShadowJar> {
         setPath("META-INF/services")
         include("org.eclipse.jetty.http.HttpFieldPreEncoder")
     }
+}
+
+val initJmLibsTask = task("initJmLibs", Copy::class) {
+    group = "unzip"
+    from(jmeterPlugins.files)
+    into("build/jmeter/lib/ext")
+}
+
+tasks.build.configure {
+    dependsOn(initJmLibsTask)
+}
+
+jmeter {
+    val env = System.getProperty("env", "local")
+    val userHome = System.getProperty("user.home")
+    val projectName = rootProject.name
+    val envFile = "$userHome/.env/$projectName/$env.env"
+    jmTestFiles = listOf(file("src/test/resources/TemplateTest.jmx"))
+    jmUserProperties = listOf("env=$env", "env_file=$envFile")
+    enableReports = true
+    enableExtendedReports = true
 }
