@@ -25,7 +25,7 @@
       <env name="SAML_IDENTITY_PROVIDER_LOGIN_URL" value="http://localhost:8180/SingleSignOnService" />
       <env name="SAML_IDENTITY_PROVIDER_LOGOUT_URL" value="http://localhost:8180/logout" />
       <env name="SAML_IDENTITY_PROVIDER_CERTIFICATE" value="" />
-      <env name="APPLICATION_SECRET" value="b3695135430c47b499cb7fde33818f98" />
+      <env name="APPLICATION_SECRET" value="generate uuid without slashes" />
       <env name="JIRA_BASE_URL" value="http://jira:2990" />
       <env name="JIRA_USERNAME" value="admin" />
       <env name="JIRA_PASSWORD" value="admin" />
