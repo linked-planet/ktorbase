@@ -18,6 +18,8 @@ dependencies {
     implementation(kotlin("stdlib-js", version = kotlinVersion))
     implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core-js", version = "1.1.1")
     implementation(project(":common"))
+    implementation(group = "org.jetbrains", name = "kotlin-redux", version="4.0.0-pre.70-kotlin-1.3.21")
+    implementation(group = "org.jetbrains", name = "kotlin-react-redux", version="5.0.7-pre.70-kotlin-1.3.21")
     compile(group = "org.jetbrains.kotlinx", name = "kotlinx-html-js", version = "0.6.12")
     compile(group = "org.jetbrains", name = "kotlin-react", version = "$reactVersion-pre.80-kotlin-1.3.41")
     compile(group = "org.jetbrains", name = "kotlin-react-dom", version = "$reactVersion-pre.80-kotlin-1.3.41")
@@ -37,13 +39,28 @@ kotlinFrontend {
         // Atlaskit
         dependency("@atlaskit/button", "^13.0.1")
         dependency("@atlaskit/checkbox", "^7.0.0")
+        dependency("@atlaskit/dropdown-menu", "10.0.0")
         dependency("@atlaskit/flag", "^11.0.0")
         dependency("@atlaskit/icon", "^17.0.1")
         dependency("@atlaskit/textfield", "^2.0.0")
         dependency("@atlaskit/textarea", "^2.0.0")
         dependency("@atlaskit/select", "^9.0.1")
         dependency("@atlaskit/modal-dialog", "^9.0.0")
+        dependency("@atlaskit/table-tree", "^8.0.5")
+        dependency("@atlaskit/dynamic-table", "^13.7.7")
+        dependency("@atlaskit/atlassian-navigation", "^0.10.13")
+        dependency("@atlaskit/inline-edit", "^10.0.33")
+        dependency("@atlaskit/logo", "^12.3.5")
+        dependency("@atlaskit/page-layout", "0.8.0")
+        dependency("@atlaskit/avatar", "19.0.0")
+        dependency("@atlaskit/lozenge", "10.0.1")
+        dependency("@atlaskit/popup", "0.6.0")
+        dependency("@atlaskit/menu", "0.5.0")
         dependency("styled-components", "^3.5.0-0")
+
+        // Redux
+        dependency("redux", "4.0.5")
+        dependency("react-redux", "7.2.1")
 
         // Misc
         dependency("uuid", "^3.3.2")

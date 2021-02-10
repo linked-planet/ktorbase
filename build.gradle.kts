@@ -2,7 +2,7 @@ import org.gradle.util.GradleVersion
 
 println("Gradle Version: " + GradleVersion.current().toString())
 
-group = "com.linktime"
+group = "com.linked-planet"
 version = "0.1.0-SNAPSHOT"
 
 ext.set("kotlinVersion", "1.3.50-eap-54")
