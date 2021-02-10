@@ -3,12 +3,11 @@
 
 #banner {
   width: 100%;
-  min-height: 40px;
+  min-height: 30px;
   padding-top: 7px;
   padding-bottom: $content-margin;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  flex-direction: column;
   color: $banner-color;
   font-size: 0.9rem;
   font-weight: bold;
@@ -29,6 +28,8 @@
 #banner-menu {
   padding-left: $content-padding;
   padding-right: $content-padding;
+
+  background-color: transparent;
 
   border-radius: 5px;
   display: flex;

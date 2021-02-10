@@ -68,9 +68,8 @@ jmeter {
     val env = System.getProperty("env", "local")
     val userHome = System.getProperty("user.home")
     val projectName = rootProject.name
-    val envFile = "$userHome/.env/$projectName/$env.env"
     jmTestFiles = listOf(file("src/test/resources/TemplateTest.jmx"))
-    jmUserProperties = listOf("env=$env", "env_file=$envFile")
+    jmUserProperties = listOf("env=$env")
     enableReports = true
     enableExtendedReports = true
 }
