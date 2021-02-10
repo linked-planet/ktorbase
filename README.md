@@ -1,5 +1,4 @@
-# link-time ktor base
-[![Build Status](https://travis-ci.com/link-time/ktorbase.svg?branch=master)](https://travis-ci.com/link-time/ktorbase)
+# linked-planet ktor base
 [![GitHub License](https://img.shields.io/badge/license-CC0%201.0%20Universal-blue.svg?style=flat)](https://creativecommons.org/publicdomain/zero/1.0/legalcode)
 
 A template for a Kotlin fullstack web application.
@@ -145,7 +144,7 @@ cockpit_pass=admin
 
 
 ## Template license
-Written in 2019 by [link-time GmbH](https://www.link-time.com).
+Written in 2020-2021 by [linked-planet GmbH](https://www.linked-planet.com).
 
 To the extent possible under law, the author(s) have dedicated all copyright and related
 and neighboring rights to this template to the public domain worldwide.
