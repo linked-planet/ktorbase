@@ -13,8 +13,6 @@ We also added CI/CD and Docker/AWS deployment-related features.
 To generate a new project based on this template, use `generate.sh`.
 
 - This script will copy the file [local.env](local.env) to `~/$ARTIFACT_ID/local.env`.
-- The [runConfigurations](runConfigurations) folder contains IntelliJ run configurations that
-  can be installed using [setup-idea.sh](setup-idea.sh).
 - The [EnvFile IntelliJ Plugin](https://plugins.jetbrains.com/plugin/7861-envfile)
   is used  in these run configurations, referring to the aforementioned
   local environment file.
