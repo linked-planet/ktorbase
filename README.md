@@ -1,4 +1,5 @@
 # linked-planet ktorbase
+[![Build Status](https://github.com/linked-planet/ktorbase/workflows/Java%20CI/badge.svg)](https://github.com/linked-planet/ktorbase/actions/workflows/gradle-build.yml)
 [![GitHub License](https://img.shields.io/badge/license-CC0%201.0%20Universal-blue.svg?style=flat)](https://creativecommons.org/publicdomain/zero/1.0/legalcode)
 
 A template for a Kotlin fullstack web application.
