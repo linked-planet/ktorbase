@@ -6,7 +6,7 @@
 
 if [ "$#" -ne 3 ]; then
   echo "Usage: $0 <destination-folder> <group-id> <artifact-id>"
-  echo "Example: $0 ~/tmp com.linktime ktorbase"
+  echo "Example: $0 ~/tmp com.linkedplanet ktorbase"
   exit 1
 fi
 
@@ -29,28 +29,28 @@ echo "Renaming folders ..."
 mkdir -p "$FULL_DEST_FOLDER/backend/src/main/kotlin/$NAME_PATH"
 mkdir -p "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$NAME_PATH"
 mkdir -p "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$NAME_PATH"
-mv "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linktime/ktorbase"/* "$FULL_DEST_FOLDER/backend/src/main/kotlin/$NAME_PATH/"
-mv "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linktime/ktorbase"/* "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$NAME_PATH/"
-mv "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linktime/ktorbase"/* "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$NAME_PATH/"
+mv "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/backend/src/main/kotlin/$NAME_PATH/"
+mv "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$NAME_PATH/"
+mv "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$NAME_PATH/"
 
 echo "Renaming cloud formation template ..."
 mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.json.tmpl" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.json.tmpl"
 mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.yml" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.yml"
 
 echo "Clean up ..."
-# clean up com / linktime folder(s) as necessary
+# clean up com / linkedplanet folder(s) as necessary
 if [[ "$GROUP_ID" != "com"* ]]; then
   rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com"
   rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com"
   rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com"
-elif [[ "$GROUP_ID" != "com.linktime"* ]]; then
-  rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linktime"
-  rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linktime"
-  rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linktime"
+elif [[ "$GROUP_ID" != "com.linkedplanet"* ]]; then
+  rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linkedplanet"
+  rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet"
+  rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet"
 elif [[ "$ARTIFACT_ID" != "ktorbase" ]]; then
-  rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linktime/ktorbase"
-  rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linktime/ktorbase"
-  rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linktime/ktorbase"
+  rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linkedplanet/ktorbase"
+  rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet/ktorbase"
+  rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet/ktorbase"
 fi
 # clean up obsolete files
 rm "$FULL_DEST_FOLDER/generate.sh"
@@ -58,11 +58,11 @@ rm "$FULL_DEST_FOLDER/LICENSE"
 rm "$FULL_DEST_FOLDER/.travis.yml"
 
 echo "Replacing group id in source files ..."
-# make sure to skip .kt files, as there might be valid com.linktime imports (from our libraries)
-find "$FULL_DEST_FOLDER" -type f -not -name "*.kt" -exec sed -i "s/com.linktime/$GROUP_ID/g" {} +
+# make sure to skip .kt files, as there might be valid com.linkedplanet imports (from our libraries)
+find "$FULL_DEST_FOLDER" -type f -not -name "*.kt" -exec sed -i "s/com.linkedplanet/$GROUP_ID/g" {} +
 
 echo "Replacing package names and imports in source files ..."
-find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/com.linktime.ktorbase/$NAME/g" {} +
+find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/com.linkedplanet.ktorbase/$NAME/g" {} +
 
 echo "Replacing artifact id in source files ..."
 find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/ktorbase/$ARTIFACT_ID/g" {} +

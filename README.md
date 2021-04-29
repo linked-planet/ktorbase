@@ -4,22 +4,26 @@
 A template for a Kotlin fullstack web application.
 
 You might want to check out [Kotlin Fullstack Sample][kotlin-fullstack-sample], too.  
-In some areas we use a different approach, especially regarding how we use [SCSS][sass].  
-We also added CI/CD and Docker/AWS deployment-related features.
+In some areas we use a different approach, especially regarding how we build / package the app
+and regarding how we use [SCSS][sass].
 
+Additional features because we need them out of the box all the time:
+- Bitbucket Pipelines CI/CD
+- Dockerfile / Docker build
+- AWS ECS Fargate Deployment
+
+You can still use this template perfectly fine if you don't want any of these - just remove the corresponding parts
+after project generation.
 
 
 ## Usage
 To generate a new project based on this template, use `generate.sh`.
 
-- This script will copy the file [local.env](local.env) to `~/$ARTIFACT_ID/local.env`.
-- The [EnvFile IntelliJ Plugin](https://plugins.jetbrains.com/plugin/7861-envfile)
-  is used  in these run configurations, referring to the aforementioned
-  local environment file.
-- This allows to adapt the configuration locally as needed while not
-  interfering with other developers.
-- For this to work, the IntelliJ path variable `ENV_HOME` must also be set
-  to `~/.env`.
+**Example**  
+```
+# <destination-folder> <group-id> <artifact-id>
+./generate.sh ~/tmp com.linkedplanet ktorbase
+```
 
 
 ## Overview
