@@ -1,7 +1,12 @@
-# linked-planet ktor base
+# linked-planet ktorbase
 [![GitHub License](https://img.shields.io/badge/license-CC0%201.0%20Universal-blue.svg?style=flat)](https://creativecommons.org/publicdomain/zero/1.0/legalcode)
 
 A template for a Kotlin fullstack web application.
+
+You might want to check out [Kotlin Fullstack Sample][kotlin-fullstack-sample], too.  
+In some areas we use a different approach, especially regarding how we use [SCSS][sass].  
+We also added CI/CD and Docker/AWS deployment-related features.
+
 
 
 ## Usage
@@ -166,3 +171,4 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [collectd]: https://collectd.org/
 [jmeter]: https://jmeter.apache.org/index.html
 [jmeter-plugin]: https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin
+[kotlin-fullstack-sample]: https://github.com/Kotlin/kotlin-fullstack-sample
