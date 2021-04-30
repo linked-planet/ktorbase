@@ -3,43 +3,46 @@ val jvmTarget: String by project
 val copyJvmTarget = jvmTarget
 
 plugins {
-    kotlin("multiplatform") version "1.3.50-eap-54"
+    kotlin("multiplatform")
 }
 
 kotlin {
-    jvm {
-        compilations.getting {
-            kotlinOptions {
-                jvmTarget = copyJvmTarget
+    jvm()
+    js {
+        browser {
+            testTask {
+                testLogging {
+                    showExceptions = true
+                    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                    showCauses = true
+                    showStackTraces = true
+                }
             }
         }
-    }
-
-    js {
-        configure(listOf(compilations["main"])) {
-            kotlinOptions {
-                metaInfo = true
-                outputFile = "${project.buildDir.path}/js/${project.name}.js"
-                sourceMap = true
-                sourceMapEmbedSources = "always"
-                moduleKind = "commonjs"
-                main = "call"
+        nodejs {
+            testTask {
+                testLogging {
+                    showExceptions = true
+                    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                    showCauses = true
+                    showStackTraces = true
+                }
             }
         }
     }
 
     sourceSets {
-        getting {
+        val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common", version = kotlinVersion))
             }
         }
-        jvm().compilations["main"].defaultSourceSet {
+        val jvmMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
             }
         }
-        js().compilations["main"].defaultSourceSet {
+        val jsMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-js", version = kotlinVersion))
             }

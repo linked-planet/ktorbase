@@ -3,10 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val jvmTarget: String by project
-val ktorVersion = "1.1.3"
 
 plugins {
-    kotlin("jvm") version "1.3.50-eap-54"
+    kotlin("jvm")
     application
     id("com.github.johnrengelman.shadow") version "5.1.0"
     id("net.foragerr.jmeter") version "1.1.0-4.0"
@@ -16,19 +15,22 @@ val jmeterPlugins by configurations.creating {
     setTransitive(false)
 }
 
+val ktorVersion = "1.4.2"
 dependencies {
-    implementation(kotlin("stdlib-jdk8", version = kotlinVersion))
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(project(":common"))
-    implementation(group = "io.ktor", name = "ktor-server-jetty", version = ktorVersion)
-    implementation(group = "io.ktor", name = "ktor-locations", version = ktorVersion)
-    implementation(group = "io.ktor", name = "ktor-html-builder", version = ktorVersion)
-    implementation(group = "io.ktor", name = "ktor-gson", version = ktorVersion)
-    implementation(group = "io.ktor", name = "ktor-client-apache", version = ktorVersion)
-    implementation(group = "io.ktor", name = "ktor-client-gson", version = ktorVersion)
-    implementation(group = "io.ktor", name = "ktor-client-auth-basic", version = ktorVersion)
-    implementation(group = "io.ktor", name = "ktor-client-logging-jvm", version = ktorVersion)
+
+    implementation("io.ktor", "ktor-server-jetty", ktorVersion)
+    implementation("io.ktor", "ktor-locations", ktorVersion)
+    implementation("io.ktor", "ktor-html-builder", ktorVersion)
+    implementation("io.ktor", "ktor-gson", ktorVersion)
+    implementation("io.ktor", "ktor-client-apache", ktorVersion)
+    implementation("io.ktor", "ktor-client-gson", ktorVersion)
+    implementation("io.ktor", "ktor-client-auth-jvm", ktorVersion)
+    implementation("io.ktor", "ktor-client-logging-jvm", ktorVersion)
+    implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-$ktorVersion")
+
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
-    implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.1.0")
 
     // jmeter plugins to load
     jmeterPlugins("org.postgresql", "postgresql", "42.2.2")
@@ -52,6 +54,17 @@ tasks.withType<ShadowJar> {
         setPath("META-INF/services")
         include("org.eclipse.jetty.http.HttpFieldPreEncoder")
     }
+    transform(com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer::class.java) {
+        resource = "reference.conf"
+    }
+}
+
+task("updateBuildVersion") {
+    val buildVersion = System.getProperty("buildVersion", "BUILD_VERSION")
+    File("$projectDir/src/main/resources/application.conf")
+        .apply {
+            this.writeText(this.readText().replace("BUILD_VERSION", buildVersion))
+        }
 }
 
 val initJmLibsTask = task("initJmLibs", Copy::class) {
@@ -66,8 +79,7 @@ tasks.build.configure {
 
 jmeter {
     val env = System.getProperty("env", "local")
-    val userHome = System.getProperty("user.home")
-    val projectName = rootProject.name
+    println("### CONFIGURE JMETER for env: $env")
     jmTestFiles = listOf(file("src/test/resources/TemplateTest.jmx"))
     jmUserProperties = listOf("env=$env")
     enableReports = true

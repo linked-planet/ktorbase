@@ -1,23 +1,18 @@
 package com.linkedplanet.ktorbase.routes
 
-import com.linkedplanet.ktorbase.AppConfig
-import com.linkedplanet.ktorbase.model.Config
-import com.linkedplanet.ktorbase.model.Session
+import com.linkedplanet.ktorbase.config.AppConfig
+import com.linkedplanet.ktorbase.model.*
 import com.linkedplanet.ktorbase.service.SessionService
 import com.linktime.ktor.withSAMLAuth
-import io.ktor.application.call
-import io.ktor.auth.authenticate
-import io.ktor.http.HttpStatusCode
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.http.*
 import io.ktor.locations.*
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.sessions.clear
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.sessions.set
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import kotlinx.coroutines.*
 
 @KtorExperimentalLocationsAPI
 @Location("/session")
@@ -53,7 +48,7 @@ fun Route.session() {
             SessionService.validateSessionExpiration(session)
                 ?.let { SessionService.updateSession(it) }
                 ?.apply {
-                    call.sessions.set (this)
+                    call.sessions.set(this)
                     call.respond(SessionResponse(session, frontendConfig))
                     return@get
                 }
@@ -66,14 +61,14 @@ fun Route.session() {
     }
 
     delete<Logout> {
-        if (com.linkedplanet.ktorbase.AppConfig.ssoSaml) {
-         withSAMLAuth { auth ->
-             call.sessions.clear<Session>()
-             withContext(Dispatchers.IO) {
-                 auth.logout(null, null, null, true, null)
-             }
-             call.respond(HttpStatusCode.OK)
-         }
+        if (AppConfig.ssoSaml) {
+            withSAMLAuth { auth ->
+                call.sessions.clear<Session>()
+                withContext(Dispatchers.IO) {
+                    auth.logout(null, null, null, true, null)
+                }
+                call.respond(HttpStatusCode.OK)
+            }
         } else {
             call.sessions.clear<Session>()
             call.respond(HttpStatusCode.OK)

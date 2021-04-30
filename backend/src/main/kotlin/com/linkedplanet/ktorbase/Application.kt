@@ -1,55 +1,58 @@
 package com.linkedplanet.ktorbase
 
 import com.linkedplanet.ktorbase.model.Session
-import com.linkedplanet.ktorbase.routes.health
-import com.linkedplanet.ktorbase.routes.index
-import com.linkedplanet.ktorbase.routes.saml
-import com.linkedplanet.ktorbase.routes.session
+import com.linkedplanet.ktorbase.routes.*
 import com.linkedplanet.ktorbase.service.SessionService
 import com.typesafe.config.ConfigFactory
-import io.ktor.application.Application
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.auth.Authentication
-import io.ktor.auth.SessionAuthChallenge
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.session
-import io.ktor.client.features.BadResponseStatusException
+import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.gson.gson
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.files
-import io.ktor.http.content.static
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
-import io.ktor.response.respond
-import io.ktor.response.respondText
-import io.ktor.routing.routing
-import io.ktor.sessions.SessionTransportTransformerMessageAuthentication
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.util.KtorExperimentalAPI
-import io.ktor.util.hex
+import io.ktor.gson.*
+import io.ktor.http.*
+import io.ktor.http.content.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import io.ktor.util.*
+import java.util.*
 
 
 @KtorExperimentalAPI
 @KtorExperimentalLocationsAPI
 fun Application.main() {
+
     install(DefaultHeaders)
-    install(CallLogging)
     install(ConditionalHeaders)
+    install(CachingHeaders) {
+        options { outgoingContent ->
+            when (outgoingContent.contentType?.withoutParameters()) {
+                // Disable cache for index.html so the newest frontend will always be downloaded
+                ContentType.Text.Html -> CachingOptions(CacheControl.NoStore(null))
+                else -> CachingOptions(CacheControl.NoCache(null))
+            }
+        }
+    }
+
+    install(CallId) {
+        generate { UUID.randomUUID().toString() }
+    }
+
+    install(CallLogging) {
+        mdc("callId") { call ->
+            call.callId
+        }
+        mdc("action") { call ->
+            call.request.toLogString()
+        }
+    }
+
     install(Compression)
     install(Locations)
     install(XForwardedHeaderSupport)
 
     install(StatusPages) {
         exception<NotImplementedError> { call.respond(HttpStatusCode.NotImplemented) }
-        exception<BadResponseStatusException> {
-            call.response.status(it.statusCode)
-            when (it.statusCode.value) {
-                HttpStatusCode.Unauthorized.value -> call.respondText("Login failed")
-            }
-        }
     }
 
     install(Sessions) {
@@ -63,12 +66,13 @@ fun Application.main() {
 
     install(Authentication) {
         session<Session> {
-            validate {
-                val session = it
-                SessionService.validateSessionExpiration(it)
+            validate { session ->
+                SessionService.validateSessionExpiration(session)
                     ?.let { UserIdPrincipal(it.username) }
             }
-            challenge = SessionAuthChallenge.Unauthorized
+            challenge {
+                call.respond(UnauthorizedResponse())
+            }
         }
     }
 

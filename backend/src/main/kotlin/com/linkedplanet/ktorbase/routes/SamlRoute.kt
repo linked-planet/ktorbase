@@ -1,32 +1,20 @@
 package com.linkedplanet.ktorbase.routes
 
+import com.linkedplanet.ktorbase.config.AppConfig
 import com.linkedplanet.ktorbase.model.Session
 import com.linkedplanet.ktorbase.service.SessionService
-import com.linktime.ktor.SamlConfig
-import com.linktime.ktor.getServletRequest
-import com.linktime.ktor.requireValid
-import com.linktime.ktor.withSAMLAuth
+import com.linktime.ktor.*
 import com.onelogin.saml2.Auth
 import com.onelogin.saml2.settings.Saml2Settings
-import io.ktor.application.ApplicationCall
-import io.ktor.application.call
-import io.ktor.html.respondHtml
-import io.ktor.http.HttpStatusCode
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.locations.post
-import io.ktor.response.respond
-import io.ktor.response.respondRedirect
-import io.ktor.routing.Route
-import io.ktor.sessions.clear
-import io.ktor.sessions.sessions
-import io.ktor.sessions.set
-import io.ktor.util.pipeline.PipelineContext
-import kotlinx.html.body
-import kotlinx.html.li
-import kotlinx.html.p
-import kotlinx.html.ul
+import io.ktor.application.*
+import io.ktor.html.*
+import io.ktor.http.*
+import io.ktor.locations.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import io.ktor.util.pipeline.*
+import kotlinx.html.*
 
 
 const val SAMLEndpointBasePath: String = "/sso/saml"
@@ -137,5 +125,5 @@ fun Route.saml() {
 }
 
 suspend fun PipelineContext<Unit, ApplicationCall>.requireSAMLEnabled(handler: suspend () -> Unit) {
-    if (!com.linkedplanet.ktorbase.AppConfig.ssoSaml) call.respond(HttpStatusCode.BadRequest) else handler()
+    if (!AppConfig.ssoSaml) call.respond(HttpStatusCode.BadRequest) else handler()
 }

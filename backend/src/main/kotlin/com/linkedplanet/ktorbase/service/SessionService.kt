@@ -1,7 +1,7 @@
 package com.linkedplanet.ktorbase.service
 
+import com.linkedplanet.ktorbase.config.SessionConfig
 import com.linkedplanet.ktorbase.model.Session
-import com.linkedplanet.ktorbase.util.SessionConfig
 import org.joda.time.DateTime
 
 object SessionService {
@@ -16,6 +16,6 @@ object SessionService {
         session?.takeIf { DateTime.parse(session.expireDate).isAfterNow }
 
     private fun getExpirationDateString(): String =
-        DateTime.now().plus(SessionConfig().expiration.toMillis()).toString()
+        DateTime.now().plus(SessionConfig.expiration.toMillis()).toString()
 
 }

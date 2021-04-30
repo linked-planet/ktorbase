@@ -1,4 +1,4 @@
-package com.linkedplanet.ktorbase
+package com.linkedplanet.ktorbase.config
 
 import com.typesafe.config.ConfigFactory
 
@@ -10,5 +10,6 @@ object AppConfig {
     val bannerBackgroundColor: String = config.getString("bannerBackgroundColor")
     val bannerMenuBackgroundColor: String = config.getString("bannerMenuBackgroundColor")
     val ssoSaml: Boolean = config.getBoolean("sso.saml")
+    val buildVersion: String = config.getString("buildVersion")
 
 }

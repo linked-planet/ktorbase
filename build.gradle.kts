@@ -5,16 +5,17 @@ println("Gradle Version: " + GradleVersion.current().toString())
 group = "com.linked-planet"
 version = "0.1.0-SNAPSHOT"
 
-ext.set("kotlinVersion", "1.3.50-eap-54")
+ext.set("kotlinVersion", "1.4.0")
 ext.set("jvmTarget", "1.8")
 
 plugins {
+    kotlin("multiplatform") version "1.4.0" apply false
     id("com.github.hierynomus.license") version "0.15.0"
     id("com.github.hierynomus.license-report") version "0.15.0"
     id("com.github.ben-manes.versions") version "0.21.0"
 }
 
-subprojects {
+allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
@@ -23,7 +24,8 @@ subprojects {
         maven { url = uri("https://dl.bintray.com/kotlin/kotlinx.html") }
         maven { url = uri("https://dl.bintray.com/kotlin/ktor") }
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
-        maven { url = uri("https://kotlin.bintray.com/kotlinx") }
+        maven { url = uri("https://dl.bintray.com/kotlin/kotlinx") }
         maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
+        maven { url = uri("https://dl.bintray.com/kotlin/kotlin-dev") }
     }
 }

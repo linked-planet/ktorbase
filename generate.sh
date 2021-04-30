@@ -67,17 +67,10 @@ find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/com.linkedplanet.ktorbase/$NAME
 echo "Replacing artifact id in source files ..."
 find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/ktorbase/$ARTIFACT_ID/g" {} +
 
-local_env_path=~/.env/$ARTIFACT_ID
-local_env_file=$local_env_path/local.env
-echo "Moving local env file to [$local_env_file]"
-mkdir -p $local_env_path
-mv "$FULL_DEST_FOLDER/local.env" $local_env_file
-
 echo "Fresh README.md ..."
 echo "# $ARTIFACT_ID" > "$FULL_DEST_FOLDER/README.md"
 echo "TODO"
 echo "* Say something about this project" >> "$FULL_DEST_FOLDER/README.md"
-echo "* initialize idea by ./setup-idea.sh"
 echo "* initial build the app by ./gradlew clean build"
 
 echo "Done! Have fun hakking! Remember to read the SICP!! :-)"

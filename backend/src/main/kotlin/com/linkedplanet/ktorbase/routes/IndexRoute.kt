@@ -1,41 +1,33 @@
 package com.linkedplanet.ktorbase.routes
 
+import com.linkedplanet.ktorbase.config.AppConfig
 import com.linkedplanet.ktorbase.model.Session
 import com.linkedplanet.ktorbase.service.SessionService
 import com.linktime.ktor.withSAMLAuth
-import io.ktor.application.call
-import io.ktor.html.Placeholder
-import io.ktor.html.Template
-import io.ktor.html.insert
-import io.ktor.html.respondHtmlTemplate
-import io.ktor.http.ContentType
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Location
-import io.ktor.locations.get
-import io.ktor.routing.Route
-import io.ktor.sessions.get
-import io.ktor.sessions.sessions
-import io.ktor.util.InternalAPI
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.ktor.application.*
+import io.ktor.html.*
+import io.ktor.http.*
+import io.ktor.locations.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import kotlinx.coroutines.*
 import kotlinx.html.*
 
 @KtorExperimentalLocationsAPI
 @Location("/")
 data class Index(val auth_fallback: Boolean = false)
 
-@UseExperimental(InternalAPI::class)
 @KtorExperimentalLocationsAPI
 fun Route.index() {
     get<Index> { location ->
         val session = call.sessions.get<Session>()
-        val ssoEnabled = com.linkedplanet.ktorbase.AppConfig.ssoSaml && !location.auth_fallback
+        val ssoEnabled = AppConfig.ssoSaml && !location.auth_fallback
 
         if (SessionService.validateSessionExpiration(session) == null && ssoEnabled) {
             withSAMLAuth { withContext(Dispatchers.IO) { it.login() } }
         } else {
             call.respondHtmlTemplate(IndexPage()) {
-                caption { +com.linkedplanet.ktorbase.AppConfig.title }
+                caption { +AppConfig.title }
             }
         }
     }
@@ -54,7 +46,7 @@ class IndexPage : Template<HTML> {
         }
         body(classes = "app-body") {
             div { id = "content" }
-            script(type = "text/javascript", src = "frontend/frontend.bundle.js", block = {})
+            script(type = "text/javascript", src = "frontend/frontend-${AppConfig.buildVersion}.js", block = {})
         }
     }
 }
