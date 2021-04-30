@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="backend:run" type="JetRunConfigurationType" factoryName="Kotlin">
+  <configuration default="false" name="backend:run" type="JetRunConfigurationType">
     <module name="ktorbase.backend.main" />
     <option name="VM_PARAMETERS" value="" />
     <option name="PROGRAM_PARAMETERS" value="" />
@@ -14,7 +14,7 @@
       <env name="SAML_IDENTITY_PROVIDER_LOGIN_URL" value="http://localhost:8180/SingleSignOnService" />
       <env name="SAML_IDENTITY_PROVIDER_LOGOUT_URL" value="http://localhost:8180/logout" />
       <env name="SAML_IDENTITY_PROVIDER_CERTIFICATE" value="" />
-      <env name="APPLICATION_SECRET" value="generate uuid without slashes" />
+      <env name="APPLICATION_SECRET" value="a38103acb878406bb22c32c12bdfba0b" />
       <env name="JIRA_BASE_URL" value="http://jira:2990" />
       <env name="JIRA_USERNAME" value="admin" />
       <env name="JIRA_PASSWORD" value="admin" />
