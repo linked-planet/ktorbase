@@ -18,6 +18,9 @@ NAME=$GROUP_ID.$ARTIFACT_ID
 FULL_DEST_FOLDER=$DEST_FOLDER/$NAME
 NAME_PATH=$(echo "$NAME" | tr . /)
 
+JAVA_PACKAGE_NAME=$(echo "$NAME" | tr '-' '')
+JAVA_PACKAGE_PATH=$(echo "$NAME_PATH" | tr '-' '')
+
 echo "Copying files to $FULL_DEST_FOLDER ..."
 mkdir -p "$FULL_DEST_FOLDER"
 cp -R . "$FULL_DEST_FOLDER"
@@ -26,12 +29,12 @@ rm -rf "$FULL_DEST_FOLDER/.idea"
 rm -rf "$FULL_DEST_FOLDER/.gradle"
 
 echo "Renaming folders ..."
-mkdir -p "$FULL_DEST_FOLDER/backend/src/main/kotlin/$NAME_PATH"
-mkdir -p "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$NAME_PATH"
-mkdir -p "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$NAME_PATH"
-mv "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/backend/src/main/kotlin/$NAME_PATH/"
-mv "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$NAME_PATH/"
-mv "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$NAME_PATH/"
+mkdir -p "$FULL_DEST_FOLDER/backend/src/main/kotlin/$JAVA_PACKAGE_PATH"
+mkdir -p "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$JAVA_PACKAGE_PATH"
+mkdir -p "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$JAVA_PACKAGE_PATH"
+mv "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/backend/src/main/kotlin/$JAVA_PACKAGE_PATH/"
+mv "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/$JAVA_PACKAGE_PATH/"
+mv "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$JAVA_PACKAGE_PATH/"
 
 echo "Renaming cloud formation template ..."
 mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.json.tmpl" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.json.tmpl"
@@ -61,7 +64,7 @@ echo "Replacing group id in source files ..."
 find "$FULL_DEST_FOLDER" -type f -not -name "*.kt" -exec sed -i "s/com.linkedplanet/$GROUP_ID/g" {} +
 
 echo "Replacing package names and imports in source files ..."
-find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/com.linkedplanet.ktorbase/$NAME/g" {} +
+find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/com.linkedplanet.ktorbase/$JAVA_PACKAGE_NAME/g" {} +
 
 echo "Replacing artifact id in source files ..."
 find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/ktorbase/$ARTIFACT_ID/g" {} +
