@@ -39,5 +39,5 @@ jobs:
       - name: Docker Build
         uses: docker/build-push-action@v2
         with:
-          context: ~/tmp/com.linkedplanet.test-project
+          context: .
           push: false
