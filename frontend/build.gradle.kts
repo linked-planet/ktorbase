@@ -42,7 +42,7 @@ dependencies {
     implementation(project(":common"))
 
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core-js", "1.1.1")
-    implementation("org.jetbrains.kotlinx", "kotlinx-html-js", "0.6.12")
+    implementation("org.jetbrains.kotlinx", "kotlinx-html-js", "0.7.3")
     implementation("org.jetbrains", "kotlin-extensions", "1.0.1-$kotlinWrapperVersion")
     implementation("org.jetbrains", "kotlin-react", "$reactVersion-$kotlinWrapperVersion")
     implementation("org.jetbrains", "kotlin-react-dom", "$reactVersion-$kotlinWrapperVersion")

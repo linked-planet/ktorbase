@@ -15,7 +15,7 @@ val jmeterPlugins by configurations.creating {
     setTransitive(false)
 }
 
-val ktorVersion = "1.4.2"
+val ktorVersion = "1.5.4"
 dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(project(":common"))
@@ -28,7 +28,7 @@ dependencies {
     implementation("io.ktor", "ktor-client-gson", ktorVersion)
     implementation("io.ktor", "ktor-client-auth-jvm", ktorVersion)
     implementation("io.ktor", "ktor-client-logging-jvm", ktorVersion)
-    implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-$ktorVersion")
+    implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-1.4.2")
 
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
 
