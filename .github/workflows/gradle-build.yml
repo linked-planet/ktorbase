@@ -24,11 +24,11 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Generate Project
-        run: ./generate.sh ~/tmp com.linkedplanet test-project
+      - name: Generate & Build
+        run: ./generate.sh ~/tmp com.linkedplanet test-project && cd ~/tmp/com.linkedplanet.test-project && ./gradlew build -PdevMode=false
 
       - name: Gradle Production Build
-        run: cd ~/tmp/com.linkedplanet.test-project && ./gradlew build -PdevMode=false
+        run: ./gradlew build -PdevMode=false
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
