@@ -18,8 +18,8 @@ NAME=$GROUP_ID.$ARTIFACT_ID
 FULL_DEST_FOLDER=$DEST_FOLDER/$NAME
 NAME_PATH=$(echo "$NAME" | tr . /)
 
-JAVA_PACKAGE_NAME=$(echo "$NAME" | tr '-' '')
-JAVA_PACKAGE_PATH=$(echo "$NAME_PATH" | tr '-' '')
+JAVA_PACKAGE_NAME="${NAME//-}"
+JAVA_PACKAGE_PATH="${NAME_PATH//-}"
 
 echo "Copying files to $FULL_DEST_FOLDER ..."
 mkdir -p "$FULL_DEST_FOLDER"
