@@ -28,4 +28,4 @@ jobs:
         run: ./generate.sh ~/tmp com.linkedplanet ktorbase-test
 
       - name: Build with Gradle
-        run: cd ~/tmp/ktorbase-test && ./gradlew build -PdevMode=false
+        run: cd ~/tmp/com.linkedplanet.ktorbase-test && ./gradlew build -PdevMode=false
