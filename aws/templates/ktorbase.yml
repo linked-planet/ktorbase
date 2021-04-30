@@ -58,12 +58,6 @@ Parameters:
     ConstraintDescription: Must be the ID of a VPC.
     Description: Virtual Private Cloud
     Type: AWS::EC2::VPC::Id
-  JiraBaseUrl:
-    Type: String
-    Description: Jira Base Url
-  ConfluenceBaseUrl:
-    Type: String
-    Description: Confluence Base Url
 
 Outputs:
   SecurityGroupId:
@@ -218,45 +212,11 @@ Resources:
           Secrets:
             - Name: APPLICATION_SECRET
               ValueFrom: /ktorbase/cockpit/application-secret
-            - Name: JIRA_PASSWORD
-              ValueFrom: /ktorbase/cockpit/jira-password
-            - Name: CONFLUENCE_PASSWORD
-              ValueFrom: /ktorbase/cockpit/confluence-password
           Environment:
             - Name: COLLECTD_SERVER_IP
               Value: !Ref CollectdServerIp
-            - Name: SAML_IDENTITY_PROVIDER_ENTITY_ID
-              Value: "http://mock-idp"
-            - Name: SAML_IDENTITY_PROVIDER_LOGIN_URL
-              Value: "http://localhost:8180/SingleSignOnService"
-            - Name: SAML_IDENTITY_PROVIDER_LOGOUT_URL
-              Value: "http://localhost:8180/logout"
-            - Name: SAML_IDENTITY_PROVIDER_CERTIFICATE
-              Value: ""
             - Name: APP_BASE_URL
               Value: !Ref CockpitBaseUrl
-            - Name: APP_SSO_SAML
-              Value: false
-            - Name: JIRA_BASE_URL
-              Value: !Ref JiraBaseUrl
-            - Name: JIRA_USERNAME
-              Value: "admin"
-            - Name: JIRA_PROJECT_KEY
-              Value: "KBA"
-            - Name: JIRA_ISSUE_TYPE_NAME
-              Value: "Incident"
-            - Name: INSIGHT_SCHEMA_ID
-              Value: "1"
-            - Name: CONFLUENCE_BASE_URL
-              Value: !Ref ConfluenceBaseUrl
-            - Name: CONFLUENCE_USERNAME
-              Value: "admin"
-            - Name: CONFLUENCE_KB_SPACE_KEY
-              Value: "KBAKB"
-            - Name: CONFLUENCE_KB_HOME_PAGE_ID
-              Value: "1"
-            - Name: CONFLUENCE_KB_PAGE_ID_WELCOME
-              Value: "2"
 
   CockpitService:
     Type: AWS::ECS::Service

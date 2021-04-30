@@ -9,24 +9,7 @@
     <option name="MAIN_CLASS_NAME" value="io.ktor.server.jetty.EngineMain" />
     <option name="WORKING_DIRECTORY" value="" />
     <envs>
-      <env name="APP_BASE_URL" value="http://localhost:8080" />
-      <env name="SAML_IDENTITY_PROVIDER_ENTITY_ID" value="http://mock-idp" />
-      <env name="SAML_IDENTITY_PROVIDER_LOGIN_URL" value="http://localhost:8180/SingleSignOnService" />
-      <env name="SAML_IDENTITY_PROVIDER_LOGOUT_URL" value="http://localhost:8180/logout" />
-      <env name="SAML_IDENTITY_PROVIDER_CERTIFICATE" value="" />
       <env name="APPLICATION_SECRET" value="a38103acb878406bb22c32c12bdfba0b" />
-      <env name="JIRA_BASE_URL" value="http://jira:2990" />
-      <env name="JIRA_USERNAME" value="admin" />
-      <env name="JIRA_PASSWORD" value="admin" />
-      <env name="JIRA_PROJECT_KEY" value="KBA" />
-      <env name="JIRA_ISSUE_TYPE_NAME" value="Incident" />
-      <env name="INSIGHT_SCHEMA_ID" value="1" />
-      <env name="CONFLUENCE_BASE_URL" value="http://confluence:1990" />
-      <env name="CONFLUENCE_USERNAME" value="admin" />
-      <env name="CONFLUENCE_PASSWORD" value="admin" />
-      <env name="CONFLUENCE_KB_SPACE_KEY" value="KBAKB" />
-      <env name="CONFLUENCE_KB_HOME_PAGE_ID" value="1" />
-      <env name="CONFLUENCE_KB_PAGE_ID_WELCOME" value="2" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />
