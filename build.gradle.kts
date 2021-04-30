@@ -6,7 +6,7 @@ group = "com.linked-planet"
 version = "0.1.0-SNAPSHOT"
 
 ext.set("kotlinVersion", "1.4.0")
-ext.set("jvmTarget", "1.8")
+ext.set("jvmTarget", "1.8") // ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
 
 plugins {
     kotlin("multiplatform") version "1.4.0" apply false

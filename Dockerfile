@@ -1,13 +1,10 @@
 # cannot use alpine because collectd-java plugin is missing there :-(
-FROM openjdk:8-jre
+FROM openjdk:11-jre
 
 # install & configure collectd
 RUN apt-get update && apt-get install -y \
     collectd \
     && rm -rf /var/lib/apt/lists/*
-
-# https://github.com/collectd/collectd/issues/1965
-RUN ln -s /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64/server/libjvm.so /usr/lib/libjvm.so
 
 # add application user
 ENV APPLICATION_USER app
