@@ -55,7 +55,6 @@ fi
 # clean up obsolete files
 rm "$FULL_DEST_FOLDER/generate.sh"
 rm "$FULL_DEST_FOLDER/LICENSE"
-rm "$FULL_DEST_FOLDER/.travis.yml"
 
 echo "Replacing group id in source files ..."
 # make sure to skip .kt files, as there might be valid com.linkedplanet imports (from our libraries)
