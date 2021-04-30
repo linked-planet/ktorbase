@@ -24,5 +24,8 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      - name: Generate
+        run: ./generate.sh ~/tmp com.linkedplanet ktorbase
+
       - name: Build with Gradle
-        run: ./gradlew build -PdevMode=false
+        run: cd ~/tmp/ktorbase && ./gradlew build -PdevMode=false
