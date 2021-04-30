@@ -25,7 +25,9 @@ USER $APPLICATION_USER
 # install application
 COPY docker-build/collectd.conf /app/collectd.conf
 COPY backend/build/libs/backend-all.jar /app
-COPY frontend/build/bundle/* /app/frontend/
+COPY frontend/build/distributions/*.jpg /app/frontend/
+COPY frontend/build/distributions/*.png /app/frontend/
+COPY frontend/build/distributions/*.js /app/frontend/
 COPY docker-build/start.sh /app
 
 # set working directory into application directory
