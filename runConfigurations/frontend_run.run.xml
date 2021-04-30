@@ -15,14 +15,14 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="run" />
+          <option value="browserDevelopmentRun" />
         </list>
       </option>
       <option name="vmOptions" value="" />
     </ExternalSystemSettings>
-    <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
-    <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="frontend:stop" run_configuration_type="GradleRunConfiguration" />
-    </method>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <method v="2" />
   </configuration>
 </component>
