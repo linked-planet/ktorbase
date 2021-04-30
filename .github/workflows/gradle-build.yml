@@ -1,4 +1,4 @@
-name: Java CI
+name: CI Pipeline
 
 on: [ push ]
 
@@ -24,8 +24,20 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Generate
+      - name: Generate Project
         run: ./generate.sh ~/tmp com.linkedplanet test-project
 
-      - name: Build with Gradle
+      - name: Gradle Production Build
         run: cd ~/tmp/com.linkedplanet.test-project && ./gradlew build -PdevMode=false
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Docker Build
+        uses: docker/build-push-action@v2
+        with:
+          context: ~/tmp/com.linkedplanet.test-project/.
+          push: false
