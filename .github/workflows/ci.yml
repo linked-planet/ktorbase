@@ -3,7 +3,9 @@ name: CI Pipeline
 on: [ push ]
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -52,3 +54,27 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+
+  aws-deploy:
+
+    runs-on: ubuntu-latest
+
+    services:
+      localstack:
+        image: localstack/localstack
+        env:
+          SERVICES: cloudformation
+          DEFAULT_REGION: eu-central-1
+
+    steps:
+
+      - name: Deploy CloudFormation
+        uses: tstrohmeier/awscli:3.7.2
+        # redirect aws cli to localstack and execute deploy script
+        run: |
+          mv /usr/local/bin/aws /usr/local/bin/aws.orig
+          echo '#!/bin/sh' > /usr/local/bin/aws
+          echo 'aws.orig --endpoint-url localstack:4566 "$@"' >> /usr/local/bin/aws
+          chmod 755 /usr/local/bin/aws
+          ./pipelines/deploy.sh test latest
