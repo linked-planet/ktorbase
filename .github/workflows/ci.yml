@@ -53,6 +53,7 @@ jobs:
 
   integration-test:
 #    needs: build
+    runs-on: ubuntu-latest
     container: curlimages/curl
     services:
       ktorbase:
