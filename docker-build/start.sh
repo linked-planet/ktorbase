@@ -25,5 +25,4 @@ java \
     -Dcom.sun.management.jmxremote.rmi.port=3333 \
     -Dcom.sun.management.jmxremote.ssl=false \
     -Dcom.sun.management.jmxremote.authenticate=false \
-    -server \
     -jar "$JAVA_OPTS" backend-all.jar
