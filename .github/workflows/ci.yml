@@ -57,11 +57,13 @@ jobs:
     services:
       ktorbase:
         image: linkedplanet/ktorbase:latest
+        ports:
+          9090:9090
         env:
           APPLICATION_SECRET: a38103acb878406bb22c32c12bdfba0b
     steps:
       - name: Smoketest
-        run: curl --fail http://localhost:9090/health
+        run: curl -S --fail http://localhost:9090/health
 
 
   aws-deploy:
