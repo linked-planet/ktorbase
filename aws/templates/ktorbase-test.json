@@ -1,7 +1,7 @@
 [
   {
     "ParameterKey": "CertificateArn",
-    "ParameterValue": "arn:aws:acm:eu-central-1:123456789012:certificate/6634c16b-9416-4e47-91c3-7e9a1234952d"
+    "ParameterValue": "arn:aws:acm:eu-central-1:000000000000:certificate/6634c16b-9416-4e47-91c3-7e9a1234952d"
   },
   {
     "ParameterKey": "ServiceCpu",
@@ -45,7 +45,7 @@
   },
   {
     "ParameterKey": "ParameterStoreArn",
-    "ParameterValue": "arn:aws:acm:eu-central-1:123456789012:parameter/ktorbase/*"
+    "ParameterValue": "arn:aws:acm:eu-central-1:000000000000:parameter/ktorbase/*"
   },
   {
     "ParameterKey": "VPC",
