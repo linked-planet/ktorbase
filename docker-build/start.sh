@@ -17,11 +17,10 @@ sed -i "s/{SERVER_IP}/$COLLECTD_SERVER_IP/g" /app/collectd.conf
 collectd -C /app/collectd.conf
 
 # java: run
-java \
+java $JAVA_OPTS \
     -Dcom.sun.management.jmxremote \
     -Dcom.sun.management.jmxremote.port=3333 \
     -Dcom.sun.management.jmxremote.rmi.port=3333 \
     -Dcom.sun.management.jmxremote.ssl=false \
     -Dcom.sun.management.jmxremote.authenticate=false \
-    "$JAVA_OPTS" \
     -jar backend-all.jar
