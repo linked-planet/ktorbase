@@ -4,27 +4,55 @@
 
 A template for a Kotlin fullstack web application.
 
-You might want to check out [Kotlin Fullstack Sample][kotlin-fullstack-sample], too.  
-In some areas we use a different approach, especially regarding how we build / package the app
-and regarding how we use [SCSS][sass].
 
-Additional features because we need them out of the box all the time:
-- Bitbucket Pipelines CI/CD
-- Dockerfile / Docker build
-- AWS ECS Fargate Deployment
+## Features
+- Docker - [Dockerfile](Dockerfile)
+- AWS ECS Fargate Deployment via CloudFormation - [ktorbase.yml](aws/templates/ktorbase.yml)
+- Bitbucket Pipelines CI/CD - [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
+- collectd Metrics - [collectd.conf](docker-build/collectd.conf)
+- SAML Integration - [ktor-onelogin-saml][ktor-onelogin-saml]
+- [Typesafe Config][tsconfig]
+- Atlaskit Frontend Widgets - [Atlaskit by Atlassian][atlaskit]
 
 You can still use this template perfectly fine if you don't want any of these - just remove the corresponding parts
 after project generation.
 
+See also official [Kotlin Fullstack Sample][kotlin-fullstack-sample].
+
 
 ## Usage
-To generate a new project based on this template, use `generate.sh`.
 
-**Example**  
+### Generate a new project
+Use `generate.sh`:
 ```
 # <destination-folder> <group-id> <artifact-id>
 ./generate.sh ~/tmp com.linkedplanet ktorbase
 ```
+
+### Running
+*Note: This template can be run directly, which is useful to try it or to
+test changes.  
+The following commands work the same regardless.*
+
+#### via Gradle
+```
+export APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b
+./gradlew -t backend:run
+```
+```
+./gradlew -t frontend:browserDevelopmentRun
+```
+**Important: Make sure to create your own `APPLICATION_SECRET` for deployments.
+It is used to encrypt the data stored within the session cookie.**
+
+To access the application:
+- http://localhost:9090 (backend)
+- http://localhost:8080 (frontend)
+
+#### via IntelliJ
+Two run configurations are immediately after the project is imported:
+- backend:run
+- frontend:run
 
 
 ## Overview
@@ -39,88 +67,85 @@ as is standard in Kotlin projects.
 
 
 ## Backend
-The backend contains two packages:
-
-- `gateway`: All code for calling HTTP APIs of other services
-- `routes`: HTTP API provided by the backend to the frontend
-
-The initial HTML is delivered to the client via the `IndexRoute`.
+The initial HTML is delivered to the client via the
+[IndexRoute](backend/src/main/kotlin/com/linkedplanet/ktorbase/routes/IndexRoute.kt).
 This will cause the client to load the JavaScript frontend
 application, which is bundled by the Gradle build into the single
-file `frontend/frontend.bundle.js`.
+file `frontend-BUILD_VERSION.js`.
+
+*Note: The `BUILD_VERSION` is appended to the file name to force
+Browsers to download the latest JavaScript code after a redeployment,
+making sure that there is no outdated JavaScript code on clients.*
 
 From there, the client can login / logout via the endpoints declared
-in `SessionRoute`.
+in [SessionRoute](backend/src/main/kotlin/com/linkedplanet/ktorbase/routes/SessionRoute.kt).
 
 Configuration is done via `application.conf`
 (see [Typesafe Config][tsconfig]).
 
 There is also a mechanism to send configuration to the frontend
-application, whereby the config data is send as part of the JSON
-response of `SessionRoute` endpoints.
+application, whereby the config data is sent as part of the JSON
+response of [SessionRoute](backend/src/main/kotlin/com/linkedplanet/ktorbase/routes/SessionRoute.kt)
+endpoints.
 
-Note that we are using `Jetty` as `ktor` engine, because we usually also
-need [SAML Authentication][ktor-onelogin-saml].
+Note that we are using [Jetty][jetty] as [ktor][ktor] engine, because we usually also
+need [SAML Authentication][ktor-onelogin-saml], which introduces this
+limitation.
 
 
 ## Frontend
 The frontend shows a simple login form. If you provide credentials
 `admin` / `admin`, the login will succeed, causing the form to
-disappear and the main page content to be displayed.
+disappear, and the main page content to be displayed.
 
 If you refresh the page after successful login, you will still be
 logged in, as the generated backend is fully configured for
 session cookie-based authentication.
 
-To render widgets, the [Atlaskit by Atlassian][atlaskit] frontend
+To render widgets, the [Atlaskit][atlaskit] frontend
 components library is used. Of course, you can replace these if you
 want to use something else.
 
 The build is configured to use [Sassy CSS][sass].  
-Also see [Sass vs. SCSS: which syntax is better?][sassy-vs-scss]
+(*see [Sass vs. SCSS: which syntax is better?][sassy-vs-scss]*)
 
-There are some utility classes `DevOptions` and `GlobalOptions`
+There are some utility classes
 that can be used to enable developer features like letting specific
 routes fail, or introducing random HTTP delay. We find these
 useful for testing how our applications behave in error situations.
 There might be more elegant ways or tools for doing this - use them
-at your own discretion, or delete them if you don't want them.
+at your own discretion, or delete them if you don't want them:
+- [DevOptions](frontend/src/main/kotlin/com/linkedplanet/ktorbase/DevOptions.kt)
+- [GlobalOptions](frontend/src/main/kotlin/com/linkedplanet/ktorbase/GlobalOptions.kt)
+- [Async](frontend/src/main/kotlin/com/linkedplanet/ktorbase/util/Async.kt)
 
-The `Async` utility object can be used to asynchronously send
-HTTP requests, while only executing callbacks on success for the
-latest request of that type.
-
-Consider a dropdown that causes an HTTP request to be sent on selection
-change. If the user changes the selection in quick succession, multiple
-HTTP requests will be in flight. The responses for these requests are
-not guaranteed to arrive in order. But to be consistent, the UI must
-only update in accordance with the latest selection. Thus, the `complete`
-function takes care of discarding success responses of obsolete requests.
-
-We don't claim that this is the best way to handle these situations. But
-so far, it works for us very reliably. If you know how to do things in a
-better way, please tell us :-)
+We don't claim that these are the best ways to handle these situations. So far,
+they worked for us very reliably. If you know how to do things in a better way,
+please tell us :-)
 
 
 ## Deployment
 [Bitbucket Pipelines][bitbucket-pipelines] is used to build a
 [Docker][docker] image and deploy the application on
-[AWS Elastic Container Service][aws-ecs].
+[AWS Elastic Container Service][aws-ecs] via [AWS CloudFormation][aws-cloudformation].
 
-- If you don't use Bitbucket Pipelines, delete `bitbucket-pipelines.yml`
+- If you don't use Bitbucket Pipelines, delete [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
 - If you don't use AWS (or you don't want to use our template), delete
-  the `aws` folder
-- If you don't use Docker either, delete the `docker-build` directory
-  as well as the `Dockerfile`, too
+  the [aws](aws) folder
+- If you don't use Docker either, delete the [docker-build](docker-build) directory
+  and the [Dockerfile](Dockerfile)
 
-Note that the `Dockerfile` is installing [collectd][collectd].
+Note that the [Dockerfile](Dockerfile) is installing [collectd][collectd].
 Adapt accordingly, if you don't want it.
 
-We are running on OpenJDK8, as ktor is not yet ready for Java >= 9.
-See these issues on GitHub:
-
+We are running on JDK 11, but the application is compiled with JDK 8 due to the following
+ktor issues:
 - https://github.com/ktorio/ktor/issues/1137
 - https://github.com/ktorio/ktor/issues/321
+
+AWS configuration parameters are stored within the repository in JSON files per
+environment (see [ktorbase-test.json](aws/templates/ktorbase-test.json)).
+
 
 ## Testing
 [JMeter][jmeter] is used for the testing of the rest endpoints of the backend.
@@ -171,7 +196,9 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [bitbucket-pipelines]: https://bitbucket.org/product/features/pipelines
 [docker]: https://www.docker.com/
 [aws-ecs]: https://aws.amazon.com/ecs/
+[aws-cloudformation]: https://aws.amazon.com/cloudformation/
 [collectd]: https://collectd.org/
 [jmeter]: https://jmeter.apache.org/index.html
 [jmeter-plugin]: https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin
-[kotlin-fullstack-sample]: https://github.com/Kotlin/kotlin-fullstack-sample
+[kotlin-fullstack-sample]: https://github.com/Kotlin/kotlin-full-stack-application-demo
+[jetty]: https://www.eclipse.org/jetty/
