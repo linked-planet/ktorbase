@@ -77,6 +77,6 @@ jobs:
         run: |
           mv /usr/local/bin/aws /usr/local/bin/aws.orig
           echo '#!/bin/sh' > /usr/local/bin/aws
-          echo 'aws.orig --endpoint-url localstack:4566 "$@"' >> /usr/local/bin/aws
+          echo 'aws.orig --endpoint-url "http://localstack:4566" "$@"' >> /usr/local/bin/aws
           chmod 755 /usr/local/bin/aws
           ./pipelines/deploy.sh test latest
