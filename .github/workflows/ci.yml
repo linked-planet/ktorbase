@@ -55,10 +55,11 @@ jobs:
 #    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Smoketest
-        run: |
-          docker run -d -p 9090:9090 -e APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b linkedplanet/ktorbase:latest
-          curl -S --fail --retry 5 http://localhost:9090/health
+      - name: Start KtorBase
+        run: docker run -d -p 9090:9090 -e APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b linkedplanet/ktorbase:latest
+
+      - name: Check Health
+        run: curl -S --fail --retry 5 http://localhost:9090/health
 
 
   aws-deploy:
