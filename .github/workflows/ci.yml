@@ -64,7 +64,7 @@ jobs:
           APPLICATION_SECRET: a38103acb878406bb22c32c12bdfba0b
     steps:
       - name: Smoketest
-        run: http://ktorbase:9090/health
+        run: curl -S --fail --retry 5 http://ktorbase:9090/health
 
 
   aws-deploy:
