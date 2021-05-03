@@ -1,0 +1,94 @@
+[
+  {
+    "ParameterKey": "CertificateArn",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "ServiceCpu",
+    "ParameterValue": "512"
+  },
+  {
+    "ParameterKey": "ServiceDeregistrationDelaySeconds",
+    "ParameterValue": "10"
+  },
+  {
+    "ParameterKey": "ServiceDeploymentMinimumPercent",
+    "ParameterValue": "100"
+  },
+  {
+    "ParameterKey": "ServiceDeploymentMaximumPercent",
+    "ParameterValue": "200"
+  },
+  {
+    "ParameterKey": "ServiceImageName",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "ServiceImageVersion",
+    "ParameterValue": "latest"
+  },
+  {
+    "ParameterKey": "ServiceMemory",
+    "ParameterValue": "1024"
+  },
+  {
+    "ParameterKey": "ServiceNodeCount",
+    "ParameterValue": "1"
+  },
+  {
+    "ParameterKey": "ExternalSubnets",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "InternalSubnets",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "ParameterStoreArn",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "VPC",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "AppBannerBackgroundColor",
+    "ParameterValue": "rgba(0, 255, 0, 0.5)"
+  },
+  {
+    "ParameterKey": "AppBannerMenuBackgroundColor",
+    "ParameterValue": "rgba(0, 125, 0, 0.6)"
+  },
+  {
+    "ParameterKey": "AppBaseUrl",
+    "ParameterValue": "https://ktorbase-test.linked-planet.com"
+  },
+  {
+    "ParameterKey": "AppSsoSaml",
+    "ParameterValue": "false"
+  },
+  {
+    "ParameterKey": "AppTitle",
+    "ParameterValue": "linked-planet KtorBase - Test"
+  },
+  {
+    "ParameterKey": "CollectdServerIp",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "SamlIdentityProviderCertificate",
+    "ParameterValue": ""
+  },
+  {
+    "ParameterKey": "SamlIdentityProviderEntityId",
+    "ParameterValue": "http://mock-idp"
+  },
+  {
+    "ParameterKey": "SamlIdentityProviderLoginUrl",
+    "ParameterValue": "http://localhost:8180/SingleSignOnService"
+  },
+  {
+    "ParameterKey": "SamlIdentityProviderLogoutUrl",
+    "ParameterValue": "http://localhost:8180/logout"
+  }
+]

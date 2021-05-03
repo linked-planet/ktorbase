@@ -1,35 +1,48 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Description: >
-  Deploys ktorbase cockpit as well as it's needed infrastructure:
+  Deploys KtorBase and it's needed infrastructure:
   Security Group, IAM role, Load Balancer and ECS Cluster.
-  Please note that the ECR must be created separately beforehand.
+  Also adds a lambda that pushes an SNS topic when the application logs errors.
+  Please note that the ECR repository and the Systems Manager parameter store
+  must be created separately beforehand.
 
 Parameters:
+  # ------------------------------------------------------------------------
+  # Infrastructure-related parameters
+  # ------------------------------------------------------------------------
   CertificateArn:
     Type: String
     Description: SSL Certificate for Load Balancers
-  CockpitBaseUrl:
-    Type: String
-    Description: Base URL of the Cockpit application
-  CockpitCpu:
+  ServiceCpu:
     Type: Number
-    Description: CPU resources for the Cockpit application
+    Description: CPU resources for the application
     AllowedValues:
       - 256
       - 512
       - 1024
       - 2048
       - 4096
-  CockpitDeregistrationDelaySeconds:
+  ServiceDeregistrationDelaySeconds:
     Type: Number
-    Description: Load balancer deregistration delay for the Cockpit application
-  CockpitImage:
+    Description: Load balancer deregistration delay for the application
+  ServiceDeploymentMinimumPercent:
+    Type: Number
+    Description: Minimum tasks required to run during deployment (percentage)
+    Default: 100
+  ServiceDeploymentMaximumPercent:
+    Type: Number
+    Description: Maximum tasks required to run during deployment (percentage)
+    Default: 200
+  ServiceImageName:
     Type: String
-    Description: ECR Image of the Cockpit application
-  CockpitMemory:
+    Description: Name of the application ECR Image
+  ServiceImageVersion:
+    Type: String
+    Description: Version tag of the application ECR Image
+  ServiceMemory:
     Type: Number
-    Description: Memory resources for the Cockpit application
+    Description: Memory resources for the application
     AllowedValues:
       - 512
       - 1024
@@ -40,9 +53,9 @@ Parameters:
       - 6144
       - 7168
       - 8192
-  CollectdServerIp:
-    Type: String
-    Description: Collectd Server IP to send metrics to
+  ServiceNodeCount:
+    Type: Number
+    Description: How many nodes to run for the application
   ExternalSubnets:
     ConstraintDescription: Must be a list of two or more Subnet IDs within the selected VPC.
     Description: Subnets (two or more) where your user-facing load balancer will be deployed. MUST be within the selected VPC.
@@ -58,10 +71,50 @@ Parameters:
     ConstraintDescription: Must be the ID of a VPC.
     Description: Virtual Private Cloud
     Type: AWS::EC2::VPC::Id
+  # ------------------------------------------------------------------------
+  # App-related parameters
+  # ------------------------------------------------------------------------
+  AppBannerBackgroundColor:
+    Type: String
+    Description: Value for CSS `background-color` property of the banner, used for coloring based on environment
+  AppBannerMenuBackgroundColor:
+    Type: String
+    Description: Value for CSS `background-color` property of the banner menu, used for coloring based on environment
+  AppBaseUrl:
+    Type: String
+    Description: Base URL under which the application will be reachable, needed to be known by the application for linking back to itself
+  AppSsoSaml:
+    Type: String
+    AllowedValues: [ "true", "false" ]
+    Default: "false"
+    Description: Set true to enable SAML SSO
+  AppTitle:
+    Type: String
+    Description: Title as shown in browser window
+  CollectdServerIp:
+    Type: String
+    Description: Collectd Server IP to send metrics to
+  # ------------------------------------------------------------------------
+  # SAML-related parameters
+  # ------------------------------------------------------------------------
+  SamlIdentityProviderCertificate:
+    Type: String
+    Description: X509 Certificate String
+  SamlIdentityProviderEntityId:
+    Type: String
+    Description: Identity provider URL to fetch SAML metadata from
+  SamlIdentityProviderLoginUrl:
+    Type: String
+    Description: Where to redirect users for single login service
+  SamlIdentityProviderLogoutUrl:
+    Type: String
+    Description: Where to redirect users for single logout service
 
 Outputs:
   SecurityGroupId:
     Value: !Ref SecurityGroup
+  ServiceDnsName:
+    Value: !GetAtt ServiceLoadBalancer.DNSName
 
 Resources:
   # ------------------------------------------------------------------------
@@ -114,7 +167,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
       Policies:
-        - PolicyName: ktorbase-parameters
+        - PolicyName: parameter-store-read
           PolicyDocument:
             Version: 2012-10-17
             Statement:
@@ -128,6 +181,25 @@ Resources:
 
 
   # ------------------------------------------------------------------------
+  # Task Role
+  # ------------------------------------------------------------------------
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${AWS::StackName}-task-role
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ""
+            Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+
+  # ------------------------------------------------------------------------
   # ECS Cluster
   # ------------------------------------------------------------------------
   ECSCluster:
@@ -137,12 +209,12 @@ Resources:
 
 
   # ------------------------------------------------------------------------
-  # Cockpit
+  # Service
   # ------------------------------------------------------------------------
-  CockpitLoadBalancer:
+  ServiceLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      Name: !Sub ${AWS::StackName}-cp
+      Name: !Sub ${AWS::StackName}
       Type: application
       IpAddressType: ipv4
       Scheme: internet-facing
@@ -150,11 +222,11 @@ Resources:
         - !Ref SecurityGroup
       Subnets: !Ref ExternalSubnets
 
-  CockpitTargetGroup:
+  ServiceTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       VpcId: !Ref VPC
-      Name: !Sub ${AWS::StackName}-cp
+      Name: !Sub ${AWS::StackName}
       TargetType: ip
       Protocol: HTTP
       Port: 9090
@@ -169,68 +241,88 @@ Resources:
         HttpCode: 200
       TargetGroupAttributes:
         - Key: deregistration_delay.timeout_seconds
-          Value: !Ref CockpitDeregistrationDelaySeconds
+          Value: !Ref ServiceDeregistrationDelaySeconds
 
-  CockpitLoadBalancerListener:
+  ServiceLoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       Certificates:
         - CertificateArn: !Ref CertificateArn
       Protocol: HTTPS
       Port: 443
-      LoadBalancerArn: !Ref CockpitLoadBalancer
+      LoadBalancerArn: !Ref ServiceLoadBalancer
       DefaultActions:
         - Type: forward
-          TargetGroupArn: !Ref CockpitTargetGroup
+          TargetGroupArn: !Ref ServiceTargetGroup
 
-  CockpitLogGroup:
+  ServiceLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub ktorbase/${AWS::StackName}-cockpit
+      LogGroupName: !Sub ${AWS::StackName}
 
-  CockpitTaskDefinition:
+  ServiceTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: !Sub ${AWS::StackName}-cockpit
-      Cpu: !Ref CockpitCpu
-      Memory: !Ref CockpitMemory
+      Family: !Sub ${AWS::StackName}
+      Cpu: !Ref ServiceCpu
+      Memory: !Ref ServiceMemory
       NetworkMode: awsvpc
+      TaskRoleArn: !GetAtt TaskRole.Arn
       ExecutionRoleArn: !GetAtt TaskExecutionRole.Arn
       RequiresCompatibilities:
         - FARGATE
       ContainerDefinitions:
-        - Name: cockpit
-          Image: !Ref CockpitImage
+        - Name: service
+          Image: !Sub "${ServiceImageName}:${ServiceImageVersion}"
           PortMappings:
             - ContainerPort: 9090
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: !Ref CockpitLogGroup
+              awslogs-group: !Ref ServiceLogGroup
               awslogs-region: !Sub ${AWS::Region}
-              awslogs-stream-prefix: ktorbase
+              awslogs-stream-prefix: !Sub ${AWS::StackName}
           Secrets:
             - Name: APPLICATION_SECRET
-              ValueFrom: /ktorbase/cockpit/application-secret
+              ValueFrom: /ktorbase/application-secret
           Environment:
+            - Name: APP_BANNER_BACKGROUND_COLOR
+              Value: !Ref AppBannerBackgroundColor
+            - Name: APP_BANNER_MENU_BACKGROUND_COLOR
+              Value: !Ref AppBannerMenuBackgroundColor
+            - Name: APP_BASE_URL
+              Value: !Ref AppBaseUrl
+            - Name: APP_SSO_SAML
+              Value: !Ref AppSsoSaml
+            - Name: APP_TITLE
+              Value: !Ref AppTitle
             - Name: COLLECTD_SERVER_IP
               Value: !Ref CollectdServerIp
-            - Name: APP_BASE_URL
-              Value: !Ref CockpitBaseUrl
+            - Name: SAML_IDENTITY_PROVIDER_CERTIFICATE
+              Value: !Ref SamlIdentityProviderCertificate
+            - Name: SAML_IDENTITY_PROVIDER_ENTITY_ID
+              Value: !Ref SamlIdentityProviderEntityId
+            - Name: SAML_IDENTITY_PROVIDER_LOGIN_URL
+              Value: !Ref SamlIdentityProviderLoginUrl
+            - Name: SAML_IDENTITY_PROVIDER_LOGOUT_URL
+              Value: !Ref SamlIdentityProviderLogoutUrl
 
-  CockpitService:
+  ServiceService:
     Type: AWS::ECS::Service
-    DependsOn: CockpitLoadBalancerListener
+    DependsOn: ServiceLoadBalancerListener
     Properties:
-      ServiceName: cockpit
+      ServiceName: service
       Cluster: !Ref ECSCluster
+      DeploymentConfiguration:
+        MaximumPercent: !Ref ServiceDeploymentMaximumPercent
+        MinimumHealthyPercent: !Ref ServiceDeploymentMinimumPercent
       LaunchType: FARGATE
-      TaskDefinition: !Ref CockpitTaskDefinition
-      DesiredCount: 2
+      TaskDefinition: !Ref ServiceTaskDefinition
+      DesiredCount: !Ref ServiceNodeCount
       LoadBalancers:
-        - ContainerName: cockpit
+        - ContainerName: service
           ContainerPort: 9090
-          TargetGroupArn: !Ref CockpitTargetGroup
+          TargetGroupArn: !Ref ServiceTargetGroup
       NetworkConfiguration:
         AwsvpcConfiguration:
           AssignPublicIp: DISABLED
@@ -238,3 +330,120 @@ Resources:
             - !Ref SecurityGroup
           Subnets: !Ref InternalSubnets
       SchedulingStrategy: REPLICA
+
+
+  # ------------------------------------------------------------------------
+  # LogAlert
+  # ------------------------------------------------------------------------
+  LogAlertLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub lambda/${AWS::StackName}
+
+  LogAlertTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ""
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      RoleName: !Sub ${AWS::StackName}-log-alert-task-execution-role
+      Policies:
+        - PolicyName: lambda-log-alert
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:PutLogEvents
+                  - logs:CreateLogStream
+                  - logs:CreateLogGroup
+                Resource:
+                  - !GetAtt LogAlertLogGroup.Arn
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                Resource:
+                  - "*"
+              - Effect: Allow
+                Action:
+                  - sns:*
+                Resource:
+                  - "*"
+
+  LogAlertErrorMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: "ERROR"
+      LogGroupName: !Ref ServiceLogGroup
+      MetricTransformations:
+        - MetricName: !Sub "${AWS::StackName}-error"
+          MetricNamespace: "LogMetrics"
+          MetricValue: 1
+
+  LogAlertExceptionMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      FilterPattern: "Exception"
+      LogGroupName: !Ref ServiceLogGroup
+      MetricTransformations:
+        - MetricName: !Sub "${AWS::StackName}-exception"
+          MetricNamespace: "LogMetrics"
+          MetricValue: 1
+
+  LogAlertSnsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub ${AWS::StackName}-error
+
+  LogAlertLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: !Sub "
+          const AWS = require(\"aws-sdk\");
+          const zlib = require(\"zlib\");
+
+          exports.handler = function(event, context) {
+            const payload = Buffer.from(event.awslogs.data, \"base64\");
+            const parsed = JSON.parse(zlib.gunzipSync(payload).toString(\"utf8\"));
+            const stringified = parsed.logEvents.map(e => \"- \" + JSON.stringify(e));
+            const listLogEvents = stringified.join(\"\\n\");
+
+            console.log('Decoded payload:', listLogEvents);
+
+            const sns = new AWS.SNS();
+            var params = {
+              Message: \"Service ${AWS::StackName} reported ERROR:\\n\\n\" + listLogEvents,
+              Subject: \"Service Monitoring - ERROR - ${AWS::StackName}\",
+              TopicArn: \"arn:aws:sns:eu-central-1:486044316608:${AWS::StackName}-error\"
+            };
+            sns.publish(params, context.done);
+          };"
+      Handler: "index.handler"
+      Role: !GetAtt LogAlertTaskExecutionRole.Arn
+      Runtime: nodejs12.x
+      Tags:
+        - Key: "lambda-console:blueprint"
+          Value: "cloudwatch-logs-process-data"
+
+  LogAlertLambdaCloudwatchInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref LogAlertLambda
+      Principal: logs.amazonaws.com
+      Action: lambda:InvokeFunction
+      SourceArn: !GetAtt ServiceLogGroup.Arn
+
+  LogAlertSubscription:
+    Type: AWS::Logs::SubscriptionFilter
+    Properties:
+      DestinationArn: !GetAtt LogAlertLambda.Arn
+      FilterPattern: "ERROR"
+      LogGroupName: !Ref ServiceLogGroup

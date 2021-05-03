@@ -1,3 +1,9 @@
+deploy-script-test: &deploy-script-test
+  script:
+    - git submodule update --init --recursive --remote
+    - DOCKER_TAG_TEST=$(cat docker-tag-test)
+    - sh pipelines/deploy.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_TEST}
+
 steps:
   - build: &build
       name: build
@@ -6,38 +12,64 @@ steps:
         - gradle
         - node
       script:
-        - gradle build -PdevMode=false
+        - gradle clean updateBuildVersion build -DbuildVersion="$BITBUCKET_COMMIT" -PdevMode=false
       artifacts:
         - build/**
         - backend/build/**
         - frontend/build/**
-  - docker-push: &docker-push
-      name: docker-push
+
+  - docker: &docker-build-push
+      name: docker-build-push
       image: tstrohmeier/awscli:3.7.2
       script:
         - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
-        - export DOCKER_TAG=$(echo "$BITBUCKET_COMMIT_SHORT-$BITBUCKET_BUILD_NUMBER")
-        - sh pipelines/docker-build-push-aws.sh ${AWS_DEFAULT_REGION} ${AWS_REGISTRY_URL} latest $DOCKER_TAG
+        - export DOCKER_TAG_TEST=$(echo "test-$BITBUCKET_COMMIT_SHORT-$BITBUCKET_BUILD_NUMBER")
+        - sh pipelines/docker-build-push-aws.sh latest ${DOCKER_TAG_TEST}
+        - echo "${DOCKER_TAG_TEST}" > docker-tag-test
       services:
         - docker
-  - deploy-test: &deploy-test
-      name: deploy-test
+      artifacts:
+        - docker-tag-test
+
+  - deploy-test-auto: &deploy-test-auto
+      name: deploy-test-auto
       image: tstrohmeier/awscli:3.7.2
       deployment: test
+      <<: *deploy-script-test
+
+  - deploy-test-manual: &deploy-test-manual
+      name: deploy-test-manual
+      image: tstrohmeier/awscli:3.7.2
       trigger: manual
+      deployment: test
+      <<: *deploy-script-test
+
+  - deploy-prod-manual: &deploy-prod-manual
+      name: deploy-prod-manual
+      image: tstrohmeier/awscli:3.7.2
+      trigger: manual
+      deployment: prod
       script:
-        - sh aws/script/stack-create.sh test
-        - aws ecs update-service --cluster ktorbase-test --service cockpit --force-new-deployment
-        - aws ecs wait services-stable --cluster ktorbase-test --services cockpit
+        - git submodule update --init --recursive --remote
+        - DOCKER_TAG_TEST=$(cat docker-tag-test)
+        - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
+        - export DOCKER_TAG_PROD=$(echo "prod-$BITBUCKET_COMMIT_SHORT-$BITBUCKET_BUILD_NUMBER")
+        - sh pipelines/docker-tag-push-aws.sh ${DOCKER_TAG_TEST} ${DOCKER_TAG_PROD}
+        - sh pipelines/deploy.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_PROD}
+      services:
+        - docker
 
 
 pipelines:
 
   default:
     - step: *build
+    - step: *docker-build-push
+    - step: *deploy-test-manual
 
   branches:
     master:
       - step: *build
-      - step: *docker-push
-      - step: *deploy-test
+      - step: *docker-build-push
+      - step: *deploy-test-auto
+      - step: *deploy-prod-manual
