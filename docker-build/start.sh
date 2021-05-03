@@ -25,9 +25,5 @@ java \
     -Dcom.sun.management.jmxremote.rmi.port=3333 \
     -Dcom.sun.management.jmxremote.ssl=false \
     -Dcom.sun.management.jmxremote.authenticate=false \
-    -Xms1G \
-    -Xmx1G \
     -server \
-    -XX:+UseG1GC \
-    -XX:MaxGCPauseMillis=100 \
-    -jar backend-all.jar
+    -jar "$JAVA_OPTS" backend-all.jar

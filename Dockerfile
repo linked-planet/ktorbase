@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
 ENV APPLICATION_USER app
 RUN useradd -ms /bin/bash $APPLICATION_USER
 
+# add possibility to change java command line arguments
+ENV JAVA_OPTS=""
+
 # create installation directory & assign permissions
 RUN mkdir /app
 RUN mkdir /app/frontend
