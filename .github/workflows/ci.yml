@@ -52,7 +52,7 @@ jobs:
 
 
   integration-test:
-#    needs: build
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Start KtorBase
