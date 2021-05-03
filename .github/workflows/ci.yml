@@ -54,17 +54,11 @@ jobs:
   integration-test:
 #    needs: build
     runs-on: ubuntu-latest
-    container: curlimages/curl
-    services:
-      ktorbase:
-        image: linkedplanet/ktorbase:latest
-        ports:
-          - 9090:9090
-        env:
-          APPLICATION_SECRET: a38103acb878406bb22c32c12bdfba0b
     steps:
       - name: Smoketest
-        run: curl -S --fail --retry 5 http://ktorbase:9090/health
+        run: |
+          docker run -d -p 9090:9090 -e APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b linkedplanet/ktorbase:latest
+          curl -S --fail --retry 5 http://ktorbase:9090/health
 
 
   aws-deploy:
