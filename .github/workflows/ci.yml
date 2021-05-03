@@ -58,8 +58,7 @@ jobs:
       ktorbase:
         image: linkedplanet/ktorbase:latest
         env:
-          SERVICES: cloudformation
-          DEFAULT_REGION: eu-central-1
+          APPLICATION_SECRET: a38103acb878406bb22c32c12bdfba0b
     steps:
       - name: Smoketest
         run: curl --fail http://ktorbase:9090/health
