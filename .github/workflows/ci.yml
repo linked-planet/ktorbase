@@ -72,11 +72,12 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Deploy CloudFormation
-        # redirect aws cli to localstack and execute deploy script
-        run: |
+      - name: Redirect AWS CLI to LocalStack
+      - run: |
           mv /usr/local/bin/aws /usr/local/bin/aws.orig
           echo '#!/bin/sh' > /usr/local/bin/aws
-          echo 'aws.orig --endpoint-url "http://localstack:4566" "$@"' >> /usr/local/bin/aws
+          echo 'aws.orig --endpoint-url "http://localstack:4566" --region "eu-central-1" "$@"' >> /usr/local/bin/aws
           chmod 755 /usr/local/bin/aws
-          ./pipelines/deploy.sh test latest
+
+      - name: Deploy CloudFormation
+        run: ./pipelines/deploy.sh test latest
