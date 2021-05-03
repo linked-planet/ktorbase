@@ -10,6 +10,8 @@ if [ "$#" -ne 3 ]; then
   exit 1
 fi
 
+set -e
+
 DEST_FOLDER=$1
 GROUP_ID=$2
 ARTIFACT_ID=$3
@@ -37,7 +39,7 @@ mv "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet/ktorbase"/* 
 mv "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet/ktorbase"/* "$FULL_DEST_FOLDER/frontend/src/main/kotlin/$JAVA_PACKAGE_PATH/"
 
 echo "Renaming cloud formation template ..."
-mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.json.tmpl" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.json.tmpl"
+mv "$FULL_DEST_FOLDER/aws/templates/ktorbase-test.json" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID-test.json"
 mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.yml" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.yml"
 
 echo "Clean up ..."
