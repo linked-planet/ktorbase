@@ -6,6 +6,17 @@ import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.startCoroutine
 import kotlin.js.Promise
 
+/*
+ * Utility that can be used to asynchronously send HTTP requests, while only
+ * executing callbacks on success for the latest request of that type.
+ *
+ * Consider a dropdown that causes an HTTP request to be sent on selection
+ * change. If the user changes the selection in quick succession, multiple
+ * HTTP requests will be in flight. The responses for these requests are
+ * not guaranteed to arrive in order. But to be consistent, the UI must
+ * only update in accordance with the latest selection. Thus, the `complete`
+ * function takes care of discarding success responses of obsolete requests.
+ */
 object Async {
 
     private var taskId: MutableMap<String, Int> = mutableMapOf()
