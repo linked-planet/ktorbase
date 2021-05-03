@@ -5,9 +5,7 @@ on: [ push ]
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
 
@@ -52,24 +50,31 @@ jobs:
           push: true
           tags: linkedplanet/ktorbase:latest
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  integration-test:
+    needs: build
+    runs-on: ubuntu-latest
+    services:
+      ktorbase:
+        image: linkedplanet/ktorbase:latest
+        env:
+          SERVICES: cloudformation
+          DEFAULT_REGION: eu-central-1
+    steps:
+      - name: Smoketest
+        run: curl --fail http://ktorbase:9090/health
 
 
   aws-deploy:
-
     runs-on: ubuntu-latest
     container: tstrohmeier/awscli:3.7.2
-
     services:
       localstack:
         image: localstack/localstack
         env:
           SERVICES: cloudformation
           DEFAULT_REGION: eu-central-1
-
     steps:
-
       - uses: actions/checkout@v2
 
       - name: Redirect AWS CLI to LocalStack
