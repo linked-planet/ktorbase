@@ -1,4 +1,3 @@
-# cannot use alpine because collectd-java plugin is missing there :-(
 FROM openjdk:11-jre
 
 # install & configure collectd
