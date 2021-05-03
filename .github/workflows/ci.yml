@@ -58,7 +58,7 @@ jobs:
 
   aws-deploy:
 
-    runs-on: ubuntu-latest
+    runs-on: tstrohmeier/awscli:3.7.2
 
     services:
       localstack:
@@ -69,12 +69,12 @@ jobs:
 
     steps:
 
-      - name: Deploy CloudFormation
-        uses: tstrohmeier/awscli:3.7.2
-        # redirect aws cli to localstack and execute deploy script
+      - name: Redirect AWS CLI to LocalStack
         run: |
           mv /usr/local/bin/aws /usr/local/bin/aws.orig
           echo '#!/bin/sh' > /usr/local/bin/aws
           echo 'aws.orig --endpoint-url localstack:4566 "$@"' >> /usr/local/bin/aws
           chmod 755 /usr/local/bin/aws
-          ./pipelines/deploy.sh test latest
+
+      - name: Deploy CloudFormation
+        run: ./pipelines/deploy.sh test latest
