@@ -58,7 +58,7 @@ jobs:
       ktorbase:
         image: linkedplanet/ktorbase:latest
         ports:
-          9090:9090
+          - 9090:9090
         env:
           APPLICATION_SECRET: a38103acb878406bb22c32c12bdfba0b
     steps:
