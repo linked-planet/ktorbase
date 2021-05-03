@@ -76,8 +76,12 @@ jobs:
         run: |
           mv /usr/local/bin/aws /usr/local/bin/aws.orig
           echo '#!/bin/sh' > /usr/local/bin/aws
-          echo 'aws.orig --endpoint-url "http://localstack:4566" --region "eu-central-1" "$@"' >> /usr/local/bin/aws
+          echo 'aws.orig --endpoint-url "http://localstack:4566" "$@"' >> /usr/local/bin/aws
           chmod 755 /usr/local/bin/aws
 
       - name: Deploy CloudFormation
+        env:
+          AWS_ACCESS_KEY_ID: foo
+          AWS_SECRET_ACCESS_KEY: bar
+          AWS_DEFAULT_REGION: eu-central-1
         run: ./pipelines/deploy.sh test latest
