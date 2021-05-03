@@ -50,7 +50,7 @@ To access the application:
 - http://localhost:8080 (frontend)
 
 #### via IntelliJ
-Two run configurations are immediately after the project is imported:
+Two run configurations are available automatically after the project is imported:
 - backend:run
 - frontend:run
 
@@ -80,7 +80,7 @@ making sure that there is no outdated JavaScript code on clients.*
 From there, the client can login / logout via the endpoints declared
 in [SessionRoute](backend/src/main/kotlin/com/linkedplanet/ktorbase/routes/SessionRoute.kt).
 
-Configuration is done via `application.conf`
+Configuration is done via [application.conf](backend/src/main/resources/application.conf)
 (see [Typesafe Config][tsconfig]).
 
 There is also a mechanism to send configuration to the frontend
@@ -136,9 +136,9 @@ please tell us :-)
   and the [Dockerfile](Dockerfile)
 
 Note that the [Dockerfile](Dockerfile) is installing [collectd][collectd].
-Adapt accordingly, if you don't want it.
+Adapt accordingly if you don't want it.
 
-We are running on JDK 11, but the application is compiled with JDK 8 due to the following
+We are running on JRE 11, but the application is compiled with JDK 8 due to the following
 ktor issues:
 - https://github.com/ktorio/ktor/issues/1137
 - https://github.com/ktorio/ktor/issues/321
