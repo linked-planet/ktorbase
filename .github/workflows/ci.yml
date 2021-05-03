@@ -52,7 +52,7 @@ jobs:
 
 
   integration-test:
-    needs: build
+#    needs: build
     container: curlimages/curl
     services:
       ktorbase:
