@@ -17,8 +17,6 @@ sed -i "s/{SERVER_IP}/$COLLECTD_SERVER_IP/g" /app/collectd.conf
 collectd -C /app/collectd.conf
 
 # java: run
-# https://medium.com/adorsys/jvm-memory-settings-in-a-container-environment-64b0840e1d9e \
-# https://blog.codecentric.de/2014/08/string-deduplication-ein-neues-feature-java-8-update-20/ \
 java \
     -Dcom.sun.management.jmxremote \
     -Dcom.sun.management.jmxremote.port=3333 \
