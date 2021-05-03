@@ -3,6 +3,7 @@ deploy-script-test: &deploy-script-test
     - git submodule update --init --recursive --remote
     - DOCKER_TAG_TEST=$(cat docker-tag-test)
     - sh pipelines/deploy.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_TEST}
+    - sh pipelines/deploy-wait.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_TEST}
 
 steps:
   - build: &build

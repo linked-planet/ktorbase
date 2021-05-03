@@ -1,7 +1,7 @@
 [
   {
     "ParameterKey": "CertificateArn",
-    "ParameterValue": ""
+    "ParameterValue": "arn:aws:acm:eu-central-1:123456789012:certificate/6634c16b-9416-4e47-91c3-7e9a1234952d"
   },
   {
     "ParameterKey": "ServiceCpu",
@@ -21,7 +21,7 @@
   },
   {
     "ParameterKey": "ServiceImageName",
-    "ParameterValue": ""
+    "ParameterValue": "linkedplanet/ktorbase"
   },
   {
     "ParameterKey": "ServiceImageVersion",
@@ -37,19 +37,19 @@
   },
   {
     "ParameterKey": "ExternalSubnets",
-    "ParameterValue": ""
+    "ParameterValue": "subnet-6634c16b94164e479, subnet-6634c16b94164e479"
   },
   {
     "ParameterKey": "InternalSubnets",
-    "ParameterValue": ""
+    "ParameterValue": "subnet-6634c16b94164e479, subnet-6634c16b94164e479"
   },
   {
     "ParameterKey": "ParameterStoreArn",
-    "ParameterValue": ""
+    "ParameterValue": "arn:aws:acm:eu-central-1:123456789012:parameter/ktorbase/*"
   },
   {
     "ParameterKey": "VPC",
-    "ParameterValue": ""
+    "ParameterValue": "vpc-6634c16b94164e479"
   },
   {
     "ParameterKey": "AppBannerBackgroundColor",
@@ -73,7 +73,7 @@
   },
   {
     "ParameterKey": "CollectdServerIp",
-    "ParameterValue": ""
+    "ParameterValue": "127.0.0.1"
   },
   {
     "ParameterKey": "SamlIdentityProviderCertificate",

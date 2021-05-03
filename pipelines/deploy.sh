@@ -102,20 +102,3 @@ for CHANGE_SET in $CHANGE_SETS; do
   echo "$STACK_NAME: Deleting change set: ${CHANGE_SET} ..."
   aws cloudformation delete-change-set --change-set-name "${CHANGE_SET}"
 done
-
-# --------------------------------------------------------------------------------
-# WAIT FOR POTENTIAL CF UPDATES TO COMPLETE
-# - actually quite unfortunate, because we have to distinguish waiting for
-#   create-complete or update-complete
-# - to avoid the trouble, we sleep a while and then simply wait for
-#   ecs services to become stable
-# - note that we cannot wait immediately for ecs services stable since they will be
-#   stable until cloud formation kills the nodes - this happens quite quickly
-#   but not immediately
-# -> see https://github.com/aws/aws-cli/issues/2887
-# --------------------------------------------------------------------------------
-echoDemarcation "Wait for deployment operations to complete ..."
-sleep 20
-aws ecs wait services-stable --cluster "$STACK_NAME" --services service
-
-set +e
