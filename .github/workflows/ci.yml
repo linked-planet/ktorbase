@@ -70,6 +70,8 @@ jobs:
 
     steps:
 
+      - uses: actions/checkout@v2
+
       - name: Deploy CloudFormation
         # redirect aws cli to localstack and execute deploy script
         run: |
