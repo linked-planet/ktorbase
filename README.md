@@ -1,5 +1,5 @@
 # KtorBase
-[![Build Status](https://github.com/linked-planet/ktorbase/workflows/CI%20Pipeline/badge.svg)](https://github.com/linked-planet/ktorbase/actions/workflows/gradle-build.yml)
+[![Build Status](https://github.com/linked-planet/ktorbase/workflows/CI%20Pipeline/badge.svg)](https://github.com/linked-planet/ktorbase/actions/workflows/ci.yml)
 [![GitHub License](https://img.shields.io/badge/license-CC0%201.0%20Universal-blue.svg?style=flat)](https://creativecommons.org/publicdomain/zero/1.0/legalcode)
 
 A template for a Kotlin fullstack web application.
@@ -147,34 +147,32 @@ AWS configuration parameters are stored within the repository in JSON files per
 environment (see [ktorbase-test.json](aws/templates/ktorbase-test.json)).
 
 
-## Testing
+## Integration Test
 [JMeter][jmeter] is used for the testing of the rest endpoints of the backend.
-To avoid installations, versioning problems inside the team etc. we decided to
-use a [JMeter gradle plugin][jmeter-plugin].
 
-Therefore the plugin is installed in backend/build.gradle.kts and configured
-to build external plugins for JMeter into build/jmeter/lib/ext to use them.
+### Run JMeter via Gradle
 
-Also we created a template named *TemplateTest.xml* und backend/src/test/resources
-which will automatically load with the commands ./gradlew jmGui (graphical interface) and
-./gradlew jmRun (running tests without UI).
+#### Headless
+`./gradlew jmRun`
 
-Additional you can change the environment on which you want to test by adding a -Denv
-parameter: ./gradlew -Denv=integration jmGui/jmRun
-The default value is *local*.
+#### GUI
+`./gradlew jmGui`
 
-The configurations/environment variables which are needed by the integration test
-will be loaded from *~/.env/${project_name}/${env}.env*
-This path can be configured by changing the path backend/build.gradle.kts:
-Change this line: *val envFile = "$userHome/.env/$projectName/$env.env"*
+#### Environment
+If nothing else is specified, the default value for `env` is `local` and the
+[local.env](backend/src/test/resources/local.env) within the repository is used.
 
-The local.env file must contain the following base-set for initial local testing:
-> service_protocol=http \
-service_host=localhost \
-service_port=8080 \
-service_user=admin \
-service_pass=admin
+Change the environment to run tests against by setting the `env` parameter:  
+`./gradlew jmRun -Denv=qa`
 
+By convention the environment files are expected to be stored in:  
+`~/.env/<project_name>/<env>.env`
+
+### Example JMeter Test
+Included is an example test that will perform a login via the session REST
+endpoint.  
+To prove that everything works, this test is also run by the template project
+itself (see [GitHub Actions CI Workflow](https://github.com/linked-planet/ktorbase/actions/workflows/ci.yml)).
 
 ## Template license
 Written in 2020-2021 by [linked-planet GmbH](https://www.linked-planet.com).
