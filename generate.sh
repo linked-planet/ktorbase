@@ -24,7 +24,7 @@ JAVA_PACKAGE_NAME="${NAME//-}"
 JAVA_PACKAGE_PATH="${NAME_PATH//-}"
 
 echo "Clean potential output from template builds first ..."
-./gradlew clean
+./gradlew clean -PdevMode=false
 
 echo "Copying files to $FULL_DEST_FOLDER ..."
 mkdir -p "$FULL_DEST_FOLDER"
