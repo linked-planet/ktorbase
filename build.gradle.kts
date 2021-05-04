@@ -1,6 +1,7 @@
 import org.gradle.util.GradleVersion
 
 println("Gradle Version: " + GradleVersion.current().toString())
+println("Java Version: " + JavaVersion.current().toString())
 
 group = "com.linked-planet"
 version = "0.1.0-SNAPSHOT"
