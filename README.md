@@ -146,6 +146,21 @@ ktor issues:
 AWS configuration parameters are stored within the repository in JSON files per
 environment (see [ktorbase-test.json](aws/templates/ktorbase-test.json)).
 
+Note that we are also publishing the Docker image for the template itself via
+Dockerhub:  
+[linkedplanet/ktorbase](https://hub.docker.com/repository/docker/linkedplanet/ktorbase)  
+
+Try it:  
+```
+docker run -it \
+  -p 9090:9090 \
+  -e APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b \
+  linkedplanet/ktorbase:latest
+```
+
+**Important: Make sure to create your own `APPLICATION_SECRET` for deployments.
+It is used to encrypt the data stored within the session cookie.**
+
 
 ## Integration Test
 [JMeter][jmeter] is used for the testing of the rest endpoints of the backend.
@@ -174,7 +189,7 @@ endpoint.
 To prove that everything works, this test is also run by the template project
 itself (see [GitHub Actions CI Workflow](https://github.com/linked-planet/ktorbase/actions/workflows/ci.yml)).
 
-## Template license
+## Template License
 Written in 2020-2021 by [linked-planet GmbH](https://www.linked-planet.com).
 
 To the extent possible under law, the author(s) have dedicated all copyright and related
