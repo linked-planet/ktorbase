@@ -169,11 +169,11 @@ This path can be configured by changing the path backend/build.gradle.kts:
 Change this line: *val envFile = "$userHome/.env/$projectName/$env.env"*
 
 The local.env file must contain the following base-set for initial local testing:
-> cockpit_protocol=http \
-cockpit_host=localhost \
-cockpit_port=8080 \
-cockpit_user=admin \
-cockpit_pass=admin
+> service_protocol=http \
+service_host=localhost \
+service_port=8080 \
+service_user=admin \
+service_pass=admin
 
 
 ## Template license

@@ -1,5 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.file.File.Companion.userHome
 
 val kotlinVersion: String by project
 val jvmTarget: String by project
@@ -11,11 +12,10 @@ plugins {
     id("net.foragerr.jmeter") version "1.1.0-4.0"
 }
 
-val jmeterPlugins by configurations.creating {
-    setTransitive(false)
-}
-
 val ktorVersion = "1.5.4"
+val jmeterPlugins: Configuration by configurations.creating {
+    isTransitive = false
+}
 dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(project(":common"))
@@ -31,9 +31,6 @@ dependencies {
     implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-1.4.2")
 
     implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
-
-    // jmeter plugins to load
-    jmeterPlugins("org.postgresql", "postgresql", "42.2.2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -61,12 +58,22 @@ tasks.withType<ShadowJar> {
 
 task("updateBuildVersion") {
     val buildVersion = System.getProperty("buildVersion", "BUILD_VERSION")
-    File("$projectDir/src/main/resources/application.conf")
+    file("src/main/resources/application.conf")
         .apply {
-            this.writeText(this.readText().replace("BUILD_VERSION", buildVersion))
+            writeText(readText().replace("BUILD_VERSION", buildVersion))
         }
 }
 
+/* -------------------------------------------------------------------------------------------
+ * JMETER
+ * -----------------------------------------------------------------------------------------*/
+/* Copy jmeter plugins added via project dependencies into the proper folder
+   **Example:**
+   dependencies {
+     ...
+     jmeterPlugins("org.postgresql", "postgresql", "42.2.2")
+   }
+ */
 val initJmLibsTask = task("initJmLibs", Copy::class) {
     group = "unzip"
     from(jmeterPlugins.files)
@@ -79,9 +86,18 @@ tasks.build.configure {
 
 jmeter {
     val env = System.getProperty("env", "local")
-    println("### CONFIGURE JMETER for env: $env")
-    jmTestFiles = listOf(file("src/test/resources/TemplateTest.jmx"))
-    jmUserProperties = listOf("env=$env")
+    // env files for different test environments by convention stored at ~/.env/<project>
+    val envFile = "$userHome/.env/${project.parent!!.name}/$env.env".takeIf { env != "local" }
+        ?: file("src/test/resources/local.env").path
+
+    println("### CONFIGURE JMETER ENVIRONMENT: $env - $envFile")
+    assert(File(envFile).exists())
+
+    jmTestFiles = file("src/test/resources").walkTopDown()
+        .filter { it.extension == "jmx" }
+        .onEach { println("- ${it.name}") }
+        .toList()
+    jmUserProperties = listOf("env=$env", "env_file=$envFile")
     enableReports = true
     enableExtendedReports = true
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.9" jmeter="4.0 r1823414">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.2">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -43,22 +43,6 @@
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
       </Arguments>
-      <hashTree/>
-      <JDBCDataSource guiclass="TestBeanGUI" testclass="JDBCDataSource" testname="DB_Config" enabled="true">
-        <boolProp name="autocommit">true</boolProp>
-        <stringProp name="checkQuery"></stringProp>
-        <stringProp name="connectionAge">5000</stringProp>
-        <stringProp name="dataSource">db</stringProp>
-        <stringProp name="dbUrl">${db_host}</stringProp>
-        <stringProp name="driver">org.postgresql.Driver</stringProp>
-        <boolProp name="keepAlive">true</boolProp>
-        <stringProp name="password">${db_pass}</stringProp>
-        <stringProp name="poolMax">0</stringProp>
-        <stringProp name="timeout">10000</stringProp>
-        <stringProp name="transactionIsolation">DEFAULT</stringProp>
-        <stringProp name="trimInterval">60000</stringProp>
-        <stringProp name="username">${db_user}</stringProp>
-      </JDBCDataSource>
       <hashTree/>
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="Test_Results_Viewer" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
@@ -134,7 +118,7 @@
             <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">${basepath}/results/logging.log</stringProp>
+        <stringProp name="filename">${basepath}/jmeter-${__time(yyyy-MM-dd-HH-mm-ss,)}.log</stringProp>
       </ResultCollector>
       <hashTree/>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TestSzenario" enabled="true">
@@ -183,14 +167,14 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{ &apos;username&apos;: &apos;${cockpit_user}&apos;, &apos;password&apos;: &apos;${cockpit_pass}&apos;}</stringProp>
+                <stringProp name="Argument.value">{ &apos;username&apos;: &apos;${service_user}&apos;, &apos;password&apos;: &apos;${service_pass}&apos;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${cockpit_host}</stringProp>
-          <stringProp name="HTTPSampler.port">${cockpit_port}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${cockpit_protocol}</stringProp>
+          <stringProp name="HTTPSampler.domain">${service_host}</stringProp>
+          <stringProp name="HTTPSampler.port">${service_port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${service_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/session</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
@@ -214,7 +198,7 @@
           <hashTree/>
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Update_Cookie_Data" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">true</stringProp>
-            <stringProp name="RegexExtractor.refname">cockpit_cookie</stringProp>
+            <stringProp name="RegexExtractor.refname">service_cookie</stringProp>
             <stringProp name="RegexExtractor.regex">SESSION=([^;]*);</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">EMPTY</stringProp>
@@ -229,9 +213,9 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${cockpit_host}</stringProp>
-          <stringProp name="HTTPSampler.port">${cockpit_port}</stringProp>
-          <stringProp name="HTTPSampler.protocol">${cockpit_protocol}</stringProp>
+          <stringProp name="HTTPSampler.domain">${service_host}</stringProp>
+          <stringProp name="HTTPSampler.port">${service_port}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${service_protocol}</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">/health</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -247,8 +231,8 @@
           <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="SessionCookie" enabled="true">
             <collectionProp name="CookieManager.cookies">
               <elementProp name="SESSION" elementType="Cookie" testname="SESSION">
-                <stringProp name="Cookie.value">${cockpit_cookie}</stringProp>
-                <stringProp name="Cookie.domain">${cockpit_host}</stringProp>
+                <stringProp name="Cookie.value">${service_cookie}</stringProp>
+                <stringProp name="Cookie.domain">${service_host}</stringProp>
                 <stringProp name="Cookie.path">/</stringProp>
                 <boolProp name="Cookie.secure">false</boolProp>
                 <longProp name="Cookie.expires">0</longProp>
@@ -271,7 +255,7 @@
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="CheckHealthCheckMessage_OK" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="541207369">cockpit: ok</stringProp>
+              <stringProp name="-1929230409">service: ok</stringProp>
             </collectionProp>
             <stringProp name="Assertion.custom_message"></stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
