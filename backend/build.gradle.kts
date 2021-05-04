@@ -8,7 +8,7 @@ val jvmTarget: String by project
 plugins {
     kotlin("jvm")
     application
-    id("com.github.johnrengelman.shadow") version "5.1.0"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     id("net.foragerr.jmeter") version "1.1.0-4.0"
 }
 
@@ -39,12 +39,12 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClassName = "io.ktor.server.jetty.EngineMain"
+    mainClass.set("io.ktor.server.jetty.EngineMain")
 }
 
 tasks.withType<ShadowJar> {
-    baseName = project.name
-    classifier = "all"
+    archiveBaseName.set(project.name)
+    archiveClassifier.set("all")
     // to make gradle work with embedded ktor jetty server
     // https://stackoverflow.com/questions/48636944/how-to-avoid-a-java-lang-exceptionininitializererror-when-trying-to-run-a-ktor-a/48698984#48698984
     mergeServiceFiles {
