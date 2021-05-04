@@ -26,7 +26,7 @@ class LoginComponent : RComponent<RProps, LoginComponent.State>() {
             div {
                 attrs.id = "login"
                 form {
-                    fieldSet {
+                    fieldset {
                         legend { +"Login" }
                         attrs.disabled = state.disabled
                         Textfield {

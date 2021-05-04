@@ -27,10 +27,10 @@ kotlin {
     }
 }
 
-val kotlinWrapperVersion = "pre.114-kotlin-$kotlinVersion"
-val reduxVersion = "4.0.0"
-val reactVersion = "16.13.1"
-val reactReduxVersion = "5.0.7"
+val kotlinWrapperVersion = "pre.154-kotlin-$kotlinVersion"
+val reduxVersion = "4.0.5"
+val reactVersion = "17.0.2"
+val reactReduxVersion = "7.2.3"
 dependencies {
     implementation(kotlin("stdlib-js", kotlinVersion))
     implementation(project(":common"))
