@@ -66,7 +66,7 @@ The generated project consists of:
 as is standard in Kotlin projects.
 
 
-## Backend
+### Backend
 The initial HTML is delivered to the client via the
 [IndexRoute](backend/src/main/kotlin/com/linkedplanet/ktorbase/routes/IndexRoute.kt).
 This will cause the client to load the JavaScript frontend
@@ -93,7 +93,7 @@ need [SAML Authentication][ktor-onelogin-saml], which introduces this
 limitation.
 
 
-## Frontend
+### Frontend
 The frontend shows a simple login form. If you provide credentials
 `admin` / `admin`, the login will succeed, causing the form to
 disappear, and the main page content to be displayed.
