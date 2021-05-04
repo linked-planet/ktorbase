@@ -52,14 +52,28 @@ jobs:
 
 
   integration-test:
-    needs: build
+#    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Start KtorBase
         run: docker run -d -p 9090:9090 -e APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b linkedplanet/ktorbase:latest
 
-      - name: Check Health
+      - name: Await Start-up
         run: wget --tries 10 http://localhost:9090/health
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: JMeter Tests
+        run: ./gradlew jmRun
 
 
   aws-deploy:
