@@ -146,9 +146,8 @@ ktor issues:
 AWS configuration parameters are stored within the repository in JSON files per
 environment (see [ktorbase-test.json](aws/templates/ktorbase-test.json)).
 
-Note that we are also publishing the Docker image for the template itself via
-Dockerhub:  
-[linkedplanet/ktorbase](https://hub.docker.com/repository/docker/linkedplanet/ktorbase)  
+Note that we are also publishing the Docker image for the template itself:  
+[Docker Hub - linkedplanet/ktorbase](https://hub.docker.com/repository/docker/linkedplanet/ktorbase)  
 
 ```
 docker run -it \
