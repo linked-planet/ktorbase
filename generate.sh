@@ -23,12 +23,20 @@ NAME_PATH=$(echo "$NAME" | tr . /)
 JAVA_PACKAGE_NAME="${NAME//-}"
 JAVA_PACKAGE_PATH="${NAME_PATH//-}"
 
+echo "Clean potential output from template builds first ..."
+./gradlew clean
+
 echo "Copying files to $FULL_DEST_FOLDER ..."
 mkdir -p "$FULL_DEST_FOLDER"
 cp -R . "$FULL_DEST_FOLDER"
+
+echo "Clean up non-needed files & folders ..."
 rm -rf "$FULL_DEST_FOLDER/.git"
 rm -rf "$FULL_DEST_FOLDER/.idea"
 rm -rf "$FULL_DEST_FOLDER/.gradle"
+rm -rf "$FULL_DEST_FOLDER/.github"
+rm "$FULL_DEST_FOLDER/generate.sh"
+rm "$FULL_DEST_FOLDER/LICENSE"
 
 echo "Renaming folders ..."
 mkdir -p "$FULL_DEST_FOLDER/backend/src/main/kotlin/$JAVA_PACKAGE_PATH"
@@ -42,8 +50,7 @@ echo "Renaming cloud formation template ..."
 mv "$FULL_DEST_FOLDER/aws/templates/ktorbase-test.json" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID-test.json"
 mv "$FULL_DEST_FOLDER/aws/templates/ktorbase.yml" "$FULL_DEST_FOLDER/aws/templates/$ARTIFACT_ID.yml"
 
-echo "Clean up ..."
-# clean up com / linkedplanet folder(s) as necessary
+echo "Clean up obsolete package folders as necessary ..."
 if [[ "$GROUP_ID" != "com"* ]]; then
   rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com"
   rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com"
@@ -57,9 +64,6 @@ elif [[ "$ARTIFACT_ID" != "ktorbase" ]]; then
   rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet/ktorbase"
   rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet/ktorbase"
 fi
-# clean up obsolete files
-rm "$FULL_DEST_FOLDER/generate.sh"
-rm "$FULL_DEST_FOLDER/LICENSE"
 
 echo "Replacing group id in source files ..."
 # make sure to skip .kt files, as there might be valid com.linkedplanet imports (from our libraries)
@@ -73,9 +77,6 @@ find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/ktorbase/$ARTIFACT_ID/g" {} +
 
 echo "Fresh README.md ..."
 echo "# $ARTIFACT_ID" > "$FULL_DEST_FOLDER/README.md"
-echo "TODO"
-echo "* Say something about this project" >> "$FULL_DEST_FOLDER/README.md"
-echo "* initial build the app by ./gradlew clean build"
 
 echo "Done! Have fun hakking! Remember to read the SICP!! :-)"
 
