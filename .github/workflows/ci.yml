@@ -95,6 +95,9 @@ jobs:
           echo 'aws.orig --endpoint-url "http://localstack:4566" "$@"' >> /usr/local/bin/aws
           chmod 755 /usr/local/bin/aws
 
+      - name: Wait for LocalStack
+        run: sleep 15
+
       - name: Deploy CloudFormation
         env:
           AWS_ACCESS_KEY_ID: foo
