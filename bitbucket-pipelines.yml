@@ -13,7 +13,7 @@ steps:
         - gradle
         - node
       script:
-        - gradle clean updateBuildVersion build -DbuildVersion="$BITBUCKET_COMMIT" -PdevMode=false
+        - gradle clean updateBuildVersion build -DbuildVersion="$BITBUCKET_COMMIT"
       artifacts:
         - build/**
         - backend/build/**

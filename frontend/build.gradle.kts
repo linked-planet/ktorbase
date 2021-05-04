@@ -1,12 +1,7 @@
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig.Mode
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.*
 
 val buildVersion: String = System.getProperty("buildVersion", "BUILD_VERSION")
 val kotlinVersion: String by project
-val devMode: Boolean = (ext.get("devMode") as String).toBoolean()
-
-println("Dev Mode: $devMode")
 
 plugins {
     kotlin("js")
@@ -26,7 +21,6 @@ kotlin {
             }
             webpackTask {
                 outputFileName = "${project.name}-$buildVersion.js"
-                mode = if (devMode) Mode.DEVELOPMENT else Mode.PRODUCTION
             }
         }
         binaries.executable()

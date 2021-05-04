@@ -26,10 +26,10 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate & Build
-        run: ./generate.sh ~/tmp com.linkedplanet test-project && cd ~/tmp/com.linkedplanet.test-project && ./gradlew build -PdevMode=false
+        run: ./generate.sh ~/tmp com.linkedplanet test-project && cd ~/tmp/com.linkedplanet.test-project && ./gradlew build
 
       - name: Gradle Production Build
-        run: ./gradlew build -PdevMode=false
+        run: ./gradlew build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -73,7 +73,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: JMeter Tests
-        run: ./gradlew jmRun -PdevMode=false
+        run: ./gradlew jmRun
 
 
   aws-deploy:
