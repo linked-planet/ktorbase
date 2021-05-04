@@ -5,7 +5,7 @@ import java.time.Duration
 
 object SessionConfig {
 
-    private val config: Config = ConfigFactory.parseResourcesAnySyntax("session").resolve().getConfig("session")
+    private val config: Config = ConfigFactory.load().getConfig("session")
     val expiration: Duration = config.getDuration("expiration")
 
 }
