@@ -150,7 +150,6 @@ Note that we are also publishing the Docker image for the template itself via
 Dockerhub:  
 [linkedplanet/ktorbase](https://hub.docker.com/repository/docker/linkedplanet/ktorbase)  
 
-Try it:  
 ```
 docker run -it \
   -p 9090:9090 \
