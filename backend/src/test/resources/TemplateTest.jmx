@@ -150,18 +150,18 @@
           <stringProp name="footer"></stringProp>
         </kg.apc.jmeter.reporters.FlexibleFileWriter>
         <hashTree/>
-        <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="TestHealthCheck" enabled="true">
+        <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="TestLogin" enabled="true">
           <collectionProp name="ModuleController.node_path">
             <stringProp name="764597751">Test Plan</stringProp>
             <stringProp name="764597751">Test Plan</stringProp>
-            <stringProp name="700381178">TestHealthCheck</stringProp>
+            <stringProp name="73596745">Login</stringProp>
           </collectionProp>
         </ModuleController>
         <hashTree/>
       </hashTree>
       <TestFragmentController guiclass="TestFragmentControllerGui" testclass="TestFragmentController" testname="Login" enabled="true"/>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login_Cockpit" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login_Service" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
             <collectionProp name="Arguments.arguments">
