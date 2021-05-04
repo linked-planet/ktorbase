@@ -1,15 +1,13 @@
 package com.linkedplanet.ktorbase
 
-import com.linkedplanet.ktorbase.reducers.ChaosModeHandler
 import com.linkedplanet.ktorbase.component.main.mainComponent
+import com.linkedplanet.ktorbase.reducers.ChaosModeHandler
+import kotlinx.browser.*
 import org.w3c.dom.url.URLSearchParams
 import react.*
 import react.dom.render
-import react.redux.provider
-import react.redux.rConnect
+import react.redux.*
 import redux.*
-import kotlin.browser.document
-import kotlin.browser.window
 
 val appStore = createStore<AppState, RAction, dynamic>(
     appReducers(), AppState(), compose(

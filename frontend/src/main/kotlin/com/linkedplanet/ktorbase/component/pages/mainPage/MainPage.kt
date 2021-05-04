@@ -1,14 +1,11 @@
 package com.linkedplanet.ktorbase.component.pages.mainPage
 
 import com.linkedplanet.ktorbase.AppState
-import com.linkedplanet.ktorbase.model.Config
-import com.linkedplanet.ktorbase.model.Session
+import com.linkedplanet.ktorbase.model.*
 import react.*
-import react.dom.div
-import react.dom.span
+import react.dom.*
 import react.redux.rConnect
-import redux.RAction
-import redux.WrapperAction
+import redux.*
 
 interface MainPageStateProps : RProps {
     var session: Session?

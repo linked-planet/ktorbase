@@ -1,8 +1,7 @@
 package com.linkedplanet.ktorbase.reducers
 
 import com.linkedplanet.ktorbase.appStore
-import com.linkedplanet.ktorbase.model.Notification
-import com.linkedplanet.ktorbase.model.NotificationType
+import com.linkedplanet.ktorbase.model.*
 import redux.RAction
 
 // ACTIONS

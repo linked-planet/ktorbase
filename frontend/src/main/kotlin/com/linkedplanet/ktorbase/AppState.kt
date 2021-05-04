@@ -1,12 +1,9 @@
 package com.linkedplanet.ktorbase
 
 import com.linkedplanet.ktorbase.component.main.MainComponent
-import com.linkedplanet.ktorbase.model.Config
-import com.linkedplanet.ktorbase.model.Notification
-import com.linkedplanet.ktorbase.model.Session
+import com.linkedplanet.ktorbase.model.*
 import com.linkedplanet.ktorbase.reducers.*
-import redux.Reducer
-import redux.combineReducers
+import redux.*
 import kotlin.reflect.KProperty1
 
 data class AppState(

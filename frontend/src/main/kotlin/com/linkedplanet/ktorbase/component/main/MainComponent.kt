@@ -1,29 +1,19 @@
 package com.linkedplanet.ktorbase.component.main
 
-import com.linkedplanet.ktorbase.reducers.SessionHandler
 import com.linkedplanet.ktorbase.AppState
 import com.linkedplanet.ktorbase.component.banner.bannerComponent
 import com.linkedplanet.ktorbase.component.login.loginComponent
 import com.linkedplanet.ktorbase.component.pages.mainPage.mainPage
-import com.linkedplanet.ktorbase.model.Config
-import com.linkedplanet.ktorbase.model.Notification
-import com.linkedplanet.ktorbase.model.NotificationType
-import com.linkedplanet.ktorbase.model.Session
-import com.linkedplanet.ktorbase.reducers.NotificationHandler
-import imports.atlaskit.flag.AutoDismissFlag
-import imports.atlaskit.flag.FlagGroup
-import imports.atlaskit.icon.CheckCircleIcon
-import imports.atlaskit.icon.ErrorIcon
-import imports.atlaskit.icon.QuestionCircleIcon
-import imports.atlaskit.icon.WarningIcon
+import com.linkedplanet.ktorbase.model.*
+import com.linkedplanet.ktorbase.reducers.*
+import imports.atlaskit.flag.*
+import imports.atlaskit.icon.*
+import kotlinx.browser.*
 import kotlinx.html.id
 import react.*
 import react.dom.div
 import react.redux.rConnect
-import redux.RAction
-import redux.WrapperAction
-import kotlin.browser.document
-import kotlin.browser.localStorage
+import redux.*
 
 interface MainStateProps : RProps {
     var screen: MainComponent.Screen

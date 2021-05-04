@@ -2,12 +2,11 @@ package com.linkedplanet.ktorbase.reducers
 
 import com.linkedplanet.ktorbase.appStore
 import com.linkedplanet.ktorbase.component.main.MainComponent
-import com.linkedplanet.ktorbase.model.NotificationType
-import com.linkedplanet.ktorbase.model.Session
+import com.linkedplanet.ktorbase.model.*
 import com.linkedplanet.ktorbase.request.SessionRequest
 import com.linkedplanet.ktorbase.util.Async
+import kotlinx.browser.localStorage
 import redux.RAction
-import kotlin.browser.localStorage
 
 // ACTIONS
 class SaveSessionAction(val session: Session?) : RAction

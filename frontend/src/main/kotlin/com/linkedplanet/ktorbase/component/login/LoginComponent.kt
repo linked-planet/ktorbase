@@ -2,16 +2,14 @@ package com.linkedplanet.ktorbase.component.login
 
 import com.linkedplanet.ktorbase.reducers.SessionHandler
 import imports.atlaskit.textfield.Textfield
-import kotlinx.html.ButtonType
-import kotlinx.html.id
+import kotlinx.browser.*
+import kotlinx.html.*
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLInputElement
 import react.*
 import react.dom.*
 import react.redux.rConnect
 import redux.WrapperAction
-import kotlin.browser.document
-import kotlin.browser.localStorage
 
 val loginComponent: RClass<RProps> =
     rConnect<LoginComponent, WrapperAction>()(LoginComponent::class.js.unsafeCast<RClass<RProps>>())

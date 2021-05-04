@@ -1,11 +1,10 @@
 package com.linkedplanet.ktorbase.util
 
 
-import com.linkedplanet.ktorbase.DevOptions
-import com.linkedplanet.ktorbase.GlobalOptions
+import com.linkedplanet.ktorbase.*
+import kotlinx.browser.window
 import kotlinx.coroutines.await
 import org.w3c.fetch.*
-import kotlin.browser.window
 import kotlin.js.json
 import kotlin.random.Random
 

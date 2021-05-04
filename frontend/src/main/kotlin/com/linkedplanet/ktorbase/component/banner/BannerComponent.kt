@@ -1,24 +1,17 @@
 package com.linkedplanet.ktorbase.component.banner
 
-import com.linkedplanet.ktorbase.reducers.SessionHandler
 import com.linkedplanet.ktorbase.AppState
-import com.linkedplanet.ktorbase.model.Config
-import com.linkedplanet.ktorbase.model.Session
-import imports.atlaskit.menu.LinkItem
-import imports.atlaskit.menu.MenuGroup
-import imports.atlaskit.navigation.AtlassianNavigation
-import imports.atlaskit.navigation.CustomProductHome
-import imports.atlaskit.navigation.Profile
+import com.linkedplanet.ktorbase.model.*
+import com.linkedplanet.ktorbase.reducers.SessionHandler
+import imports.atlaskit.menu.*
+import imports.atlaskit.navigation.*
 import imports.atlaskit.popup.Popup
 import kotlinext.js.Object
 import kotlinx.html.id
 import react.*
-import react.dom.div
-import react.dom.img
-import react.dom.jsStyle
+import react.dom.*
 import react.redux.rConnect
-import redux.RAction
-import redux.WrapperAction
+import redux.*
 
 interface BannerStateProps : RProps {
     var session: Session?
