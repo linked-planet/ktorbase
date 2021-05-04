@@ -77,6 +77,7 @@ jobs:
 
 
   aws-deploy:
+    needs: build
     runs-on: ubuntu-latest
     container: tstrohmeier/awscli:3.7.2
     services:
