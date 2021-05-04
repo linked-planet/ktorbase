@@ -52,11 +52,11 @@ class BannerComponent(props: BannerProps) : RComponent<BannerProps, BannerCompon
                 attrs.label = "Test"
                 attrs.renderProductHome = {
                     CustomProductHome {
-                        attrs.iconAlt = "http://localhost:8080/frontend/favicon.png"
-                        attrs.iconUrl = "http://localhost:8080/frontend/favicon.png"
-                        attrs.logoAlt = "http://localhost:8080/frontend/favicon.png"
-                        attrs.logoUrl = "http://localhost:8080/frontend/favicon.png"
-                        attrs.siteTitle = "Cockpit"
+                        attrs.iconAlt = "frontend/favicon.png"
+                        attrs.iconUrl = "frontend/favicon.png"
+                        attrs.logoAlt = "frontend/favicon.png"
+                        attrs.logoUrl = "frontend/favicon.png"
+                        attrs.siteTitle = "KtorBase"
                     }
                 }
                 if (config != null && session != null) {

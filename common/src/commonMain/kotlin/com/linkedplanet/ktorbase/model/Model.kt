@@ -29,7 +29,8 @@ data class Notification(
 
 data class Config(
     val bannerBackgroundColor: String,
-    val bannerMenuBackgroundColor: String
+    val bannerMenuBackgroundColor: String,
+    val buildVersion: String
 )
 
 // --------------------------------------------------------

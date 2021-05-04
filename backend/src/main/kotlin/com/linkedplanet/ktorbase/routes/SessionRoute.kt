@@ -24,7 +24,8 @@ object Logout
 
 val frontendConfig = Config(
     AppConfig.bannerBackgroundColor,
-    AppConfig.bannerMenuBackgroundColor
+    AppConfig.bannerMenuBackgroundColor,
+    AppConfig.buildVersion
 )
 
 @KtorExperimentalLocationsAPI
