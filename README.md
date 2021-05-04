@@ -37,7 +37,7 @@ The following commands work the same regardless.*
 #### via Gradle
 ```
 export APPLICATION_SECRET=0000000000000000000000000000000
-./gradlew -t backend:run
+./gradlew -t -Dio.ktor.development=true backend:run
 ```
 ```
 ./gradlew -t frontend:browserDevelopmentRun
@@ -53,6 +53,8 @@ To access the application:
 Two run configurations are available automatically after the project is imported:
 - backend:run
 - frontend:run
+
+Make sure to delegate IntelliJ *build and run* to Gradle via the IntelliJ settings.
 
 
 ## Overview

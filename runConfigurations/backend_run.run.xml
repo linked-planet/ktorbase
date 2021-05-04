@@ -1,20 +1,30 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="backend:run" type="JetRunConfigurationType">
-    <module name="ktorbase.backend.main" />
-    <option name="VM_PARAMETERS" value="" />
-    <option name="PROGRAM_PARAMETERS" value="" />
-    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-    <option name="ALTERNATIVE_JRE_PATH" />
-    <option name="PASS_PARENT_ENVS" value="true" />
-    <option name="MAIN_CLASS_NAME" value="io.ktor.server.jetty.EngineMain" />
-    <option name="WORKING_DIRECTORY" value="" />
-    <envs>
-      <env name="DEVELOPMENT_MODE" value="true" />
-      <env name="APPLICATION_SECRET" value="0000000000000000000000000000000" />
-      <env name="APP_TITLE" value="KtorBase - Local" />
-    </envs>
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
+  <configuration default="false" name="backend:run" type="GradleRunConfiguration" factoryName="Gradle">
+    <ExternalSystemSettings>
+      <option name="env">
+        <map>
+          <entry key="APPLICATION_SECRET" value="0000000000000000000000000000000" />
+          <entry key="APP_TITLE" value="KtorBase - Local" />
+          <entry key="GRADLE_OPTS" value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005" />
+        </map>
+      </option>
+      <option name="executionName" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$/backend" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="scriptParameters" value="-t -Dio.ktor.development=true" />
+      <option name="taskDescriptions">
+        <list />
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value="run" />
+        </list>
+      </option>
+      <option name="vmOptions" value="" />
+    </ExternalSystemSettings>
+    <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+    <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+    <DebugAllEnabled>false</DebugAllEnabled>
+    <method v="2" />
   </configuration>
 </component>
