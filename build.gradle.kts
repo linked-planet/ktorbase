@@ -13,7 +13,7 @@ plugins {
     kotlin("multiplatform") version "1.4.32" apply false
     id("com.github.hierynomus.license") version "0.15.0"
     id("com.github.hierynomus.license-report") version "0.15.0"
-    id("com.github.ben-manes.versions") version "0.21.0"
+    id("com.github.ben-manes.versions") version "0.38.0"
 }
 
 allprojects {
