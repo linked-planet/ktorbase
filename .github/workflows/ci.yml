@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Start KtorBase
-        run: docker run -d -p 9090:9090 -e APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b linkedplanet/ktorbase:latest
+        run: docker run -d -p 9090:9090 -e APPLICATION_SECRET=0000000000000000000000000000000 linkedplanet/ktorbase:latest
 
       - name: Await Start-up
         run: wget --tries 10 http://localhost:9090/health

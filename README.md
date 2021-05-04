@@ -36,7 +36,7 @@ The following commands work the same regardless.*
 
 #### via Gradle
 ```
-export APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b
+export APPLICATION_SECRET=0000000000000000000000000000000
 ./gradlew -t backend:run
 ```
 ```
@@ -152,7 +152,7 @@ Note that we are also publishing the Docker image for the template itself:
 ```
 docker run -it \
   -p 9090:9090 \
-  -e APPLICATION_SECRET=a38103acb878406bb22c32c12bdfba0b \
+  -e APPLICATION_SECRET=0000000000000000000000000000000 \
   linkedplanet/ktorbase:latest
 ```
 

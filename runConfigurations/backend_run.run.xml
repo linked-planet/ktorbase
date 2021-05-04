@@ -9,7 +9,7 @@
     <option name="MAIN_CLASS_NAME" value="io.ktor.server.jetty.EngineMain" />
     <option name="WORKING_DIRECTORY" value="" />
     <envs>
-      <env name="APPLICATION_SECRET" value="a38103acb878406bb22c32c12bdfba0b" />
+      <env name="APPLICATION_SECRET" value="0000000000000000000000000000000" />
       <env name="APP_TITLE" value="KtorBase - Local" />
     </envs>
     <method v="2">
