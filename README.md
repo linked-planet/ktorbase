@@ -15,7 +15,7 @@ A template for a Kotlin fullstack web application.
 - collectd Metrics via AWS CloudWatch Agent
   - [collectd.conf](docker-build/collectd.conf)
   - [amazon-cloudwatch-agent.json](docker-build/amazon-cloudwatch-agent.json)
-- [Ktor OneLogin SAML Integration] [ktor-onelogin-saml]
+- [Ktor OneLogin SAML Integration][ktor-onelogin-saml]
 - [Typesafe Config][tsconfig]
   - [application.conf](backend/src/main/resources/application.conf)
 - [Atlaskit Frontend Widgets][atlaskit]
