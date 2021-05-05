@@ -184,7 +184,7 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [atlaskit]: https://atlaskit.atlassian.com/
 [sass]: https://sass-lang.com/
 [sassy-vs-scss]: http://thesassway.com/editorial/sass-vs-scss-which-syntax-is-better
-[ktor-onelogin-saml]: https://github.com/link-time/ktor-onelogin-saml
+[ktor-onelogin-saml]: https://github.com/linked-planet/ktor-onelogin-saml
 [bitbucket-pipelines]: https://bitbucket.org/product/features/pipelines
 [docker]: https://www.docker.com/
 [aws-ecs]: https://aws.amazon.com/ecs/
