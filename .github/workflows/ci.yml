@@ -72,8 +72,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: JMeter Tests
-        run: ./gradlew jmRun
+      - name: Run Integration Tests
+        run: ./gradlew integrationTest
 
 
   aws-deploy:

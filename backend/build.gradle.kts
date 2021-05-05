@@ -1,6 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.konan.file.File.Companion.userHome
 
 val kotlinVersion: String by project
 val jvmTarget: String by project
@@ -9,13 +8,9 @@ plugins {
     kotlin("jvm")
     application
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("net.foragerr.jmeter") version "1.1.0-4.0"
 }
 
 val ktorVersion = "1.5.4"
-val jmeterPlugins: Configuration by configurations.creating {
-    isTransitive = false
-}
 dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(project(":common"))
@@ -30,7 +25,11 @@ dependencies {
     implementation("io.ktor", "ktor-client-logging-jvm", ktorVersion)
     implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-1.4.2")
 
-    implementation(group = "ch.qos.logback", name = "logback-classic", version = "1.2.3")
+    implementation("ch.qos.logback", "logback-classic", "1.2.3")
+
+    testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.7.1")
+    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.7.1")
+    testImplementation("io.rest-assured", "rest-assured", "4.3.3")
 }
 
 tasks.withType<KotlinCompile> {
@@ -64,40 +63,20 @@ task("updateBuildVersion") {
         }
 }
 
-/* -------------------------------------------------------------------------------------------
- * JMETER
- * -----------------------------------------------------------------------------------------*/
-/* Copy jmeter plugins added via project dependencies into the proper folder
-   **Example:**
-   dependencies {
-     ...
-     jmeterPlugins("org.postgresql", "postgresql", "42.2.2")
-   }
- */
-val initJmLibsTask = task("initJmLibs", Copy::class) {
-    group = "unzip"
-    from(jmeterPlugins.files)
-    into("build/jmeter/lib/ext")
+sourceSets {
+    create("integrationTest") {
+        kotlin {
+            compileClasspath += main.get().output + configurations.testRuntimeClasspath.get()
+            runtimeClasspath += output + compileClasspath
+        }
+    }
 }
 
-tasks.build.configure {
-    dependsOn(initJmLibsTask)
-}
-
-jmeter {
-    val env = System.getProperty("env", "local")
-    // env files for different test environments by convention stored at ~/.env/<project>
-    val envFile = "$userHome/.env/${project.parent!!.name}/$env.env".takeIf { env != "local" }
-        ?: file("src/test/resources/local.env").path
-
-    println("### CONFIGURE JMETER ENVIRONMENT: $env - $envFile")
-    assert(File(envFile).exists())
-
-    jmTestFiles = file("src/test/resources").walkTopDown()
-        .filter { it.extension == "jmx" }
-        .onEach { println("- ${it.name}") }
-        .toList()
-    jmUserProperties = listOf("env=$env", "env_file=$envFile")
-    enableReports = true
-    enableExtendedReports = true
+val integrationTest = task<Test>("integrationTest") {
+    description = "Run all integration tests"
+    group = "verification"
+    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+    classpath = sourceSets["integrationTest"].runtimeClasspath
+    mustRunAfter(tasks["test"])
+    useJUnitPlatform()
 }

@@ -162,33 +162,6 @@ docker run -it \
 It is used to encrypt the data stored within the session cookie.**
 
 
-## Integration Test
-[JMeter][jmeter] is used for the testing of the rest endpoints of the backend.
-
-### Run JMeter via Gradle
-
-#### Headless
-`./gradlew jmRun`
-
-#### GUI
-`./gradlew jmGui`
-
-#### Environment
-If nothing else is specified, the default value for `env` is `local` and the
-[local.env](backend/src/test/resources/local.env) within the repository is used.
-
-Change the environment to run tests against by setting the `env` parameter:  
-`./gradlew jmRun -Denv=qa`
-
-By convention the environment files are expected to be stored in:  
-`~/.env/<project_name>/<env>.env`
-
-### Example JMeter Test
-Included is an example test that will perform a login via the session REST
-endpoint.  
-To prove that everything works, this test is also run by the template project
-itself (see [GitHub Actions CI Workflow](https://github.com/linked-planet/ktorbase/actions/workflows/ci.yml)).
-
 ## Template License
 Written in 2020-2021 by [linked-planet GmbH](https://www.linked-planet.com).
 
@@ -211,7 +184,5 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [aws-ecs]: https://aws.amazon.com/ecs/
 [aws-cloudformation]: https://aws.amazon.com/cloudformation/
 [collectd]: https://collectd.org/
-[jmeter]: https://jmeter.apache.org/index.html
-[jmeter-plugin]: https://github.com/jmeter-gradle-plugin/jmeter-gradle-plugin
 [kotlin-fullstack-sample]: https://github.com/Kotlin/kotlin-full-stack-application-demo
 [jetty]: https://www.eclipse.org/jetty/

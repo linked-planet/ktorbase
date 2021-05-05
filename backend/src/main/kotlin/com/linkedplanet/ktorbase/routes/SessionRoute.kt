@@ -14,12 +14,14 @@ import io.ktor.routing.*
 import io.ktor.sessions.*
 import kotlinx.coroutines.*
 
+const val SESSION_ENDPOINT_PATH = "/session"
+
 @KtorExperimentalLocationsAPI
-@Location("/session")
+@Location(SESSION_ENDPOINT_PATH)
 object Login
 
 @KtorExperimentalLocationsAPI
-@Location("/session")
+@Location(SESSION_ENDPOINT_PATH)
 object Logout
 
 val frontendConfig = Config(
