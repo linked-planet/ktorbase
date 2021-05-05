@@ -6,13 +6,19 @@ A template for a Kotlin fullstack web application.
 
 
 ## Features
-- Docker - [Dockerfile](Dockerfile)
-- AWS ECS Fargate Deployment via CloudFormation - [ktorbase.yml](aws/templates/ktorbase.yml)
-- Bitbucket Pipelines CI/CD - [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
-- collectd Metrics - [collectd.conf](docker-build/collectd.conf)
-- SAML Integration - [ktor-onelogin-saml][ktor-onelogin-saml]
+- Docker
+  - [Dockerfile](Dockerfile)
+- AWS ECS Fargate Deployment via CloudFormation
+  - [ktorbase.yml](aws/templates/ktorbase.yml)
+- Bitbucket Pipelines CI/CD
+  - [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
+- collectd Metrics via AWS CloudWatch Agent
+  - [collectd.conf](docker-build/collectd.conf)
+  - [amazon-cloudwatch-agent.json](docker-build/amazon-cloudwatch-agent.json)
+- [Ktor OneLogin SAML Integration] [ktor-onelogin-saml]
 - [Typesafe Config][tsconfig]
-- Atlaskit Frontend Widgets - [Atlaskit by Atlassian][atlaskit]
+  - [application.conf](backend/src/main/resources/application.conf)
+- [Atlaskit Frontend Widgets][atlaskit]
 
 You can still use this template perfectly fine if you don't want any of these - just remove the corresponding parts
 after project generation.
