@@ -1,11 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Description: >
-  Deploys KtorBase and it's needed infrastructure:
-  Security Group, IAM role, Load Balancer and ECS Cluster.
+  Deploys the application and it's needed infrastructure:
+  Security Group, IAM role, Load Balancer.
   Also adds a lambda that pushes an SNS topic when the application logs errors.
-  Please note that the ECR repository and the Systems Manager parameter store
-  must be created separately beforehand.
+  ECS Cluster, ECR repository and the Parameter Store must be created separately beforehand.
 
 Parameters:
   # ------------------------------------------------------------------------
@@ -13,7 +12,23 @@ Parameters:
   # ------------------------------------------------------------------------
   CertificateArn:
     Type: String
-    Description: SSL Certificate for Load Balancers
+    Description: SSL Certificate for Load Balancer
+  CwAgentSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: Security Group of the CloudWatch Agent (will be granted access to the Prometheus metrics port)
+  EcsCluster:
+    Type: String
+    Description: ECS Cluster (short name or full ARN) to run the service in
+  Environment:
+    Type: String
+    Description: The environment to be deployed
+    AllowedValues:
+      - test
+      - prod
+  JmxMetricsPort:
+    Type: Number
+    Description: Port number for the JMX metrics endpoint, intended to be scraped by the CloudWatch Agent
+    Default: 9404
   ServiceCpu:
     Type: Number
     Description: CPU resources for the application
@@ -67,7 +82,7 @@ Parameters:
   ParameterStoreArn:
     Type: String
     Description: Controls access to Parameter Store
-  VPC:
+  VpcId:
     ConstraintDescription: Must be the ID of a VPC.
     Description: Virtual Private Cloud
     Type: AWS::EC2::VPC::Id
@@ -91,9 +106,6 @@ Parameters:
   AppTitle:
     Type: String
     Description: Title as shown in browser window
-  CollectdServerIp:
-    Type: String
-    Description: Collectd Server IP to send metrics to
   # ------------------------------------------------------------------------
   # SAML-related parameters
   # ------------------------------------------------------------------------
@@ -116,6 +128,10 @@ Outputs:
   ServiceDnsName:
     Value: !GetAtt ServiceLoadBalancer.DNSName
 
+Conditions:
+  IsProdCondition:
+    !Equals [!Ref Environment, prod]
+
 Resources:
   # ------------------------------------------------------------------------
   # Security Group
@@ -135,6 +151,10 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIpv6: ::/0
+        - IpProtocol: TCP
+          FromPort: !Ref JmxMetricsPort
+          ToPort: !Ref JmxMetricsPort
+          SourceSecurityGroupId: !Ref CwAgentSecurityGroupId
 
   SecurityGroupIngressLoop:
     Type: AWS::EC2::SecurityGroupIngress
@@ -200,15 +220,6 @@ Resources:
 
 
   # ------------------------------------------------------------------------
-  # ECS Cluster
-  # ------------------------------------------------------------------------
-  ECSCluster:
-    Type: AWS::ECS::Cluster
-    Properties:
-      ClusterName: !Sub ${AWS::StackName}
-
-
-  # ------------------------------------------------------------------------
   # Service
   # ------------------------------------------------------------------------
   ServiceLoadBalancer:
@@ -225,7 +236,7 @@ Resources:
   ServiceTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref VpcId
       Name: !Sub ${AWS::StackName}
       TargetType: ip
       Protocol: HTTP
@@ -284,7 +295,7 @@ Resources:
               awslogs-stream-prefix: !Sub ${AWS::StackName}
           Secrets:
             - Name: APPLICATION_SECRET
-              ValueFrom: /ktorbase/application-secret
+              ValueFrom: !If [IsProdCondition, /ktorbase-prod/application-secret, /ktorbase-test/application-secret]
           Environment:
             - Name: APP_BANNER_BACKGROUND_COLOR
               Value: !Ref AppBannerBackgroundColor
@@ -296,8 +307,6 @@ Resources:
               Value: !Ref AppSsoSaml
             - Name: APP_TITLE
               Value: !Ref AppTitle
-            - Name: COLLECTD_SERVER_IP
-              Value: !Ref CollectdServerIp
             - Name: SAML_IDENTITY_PROVIDER_CERTIFICATE
               Value: !Ref SamlIdentityProviderCertificate
             - Name: SAML_IDENTITY_PROVIDER_ENTITY_ID
@@ -306,13 +315,16 @@ Resources:
               Value: !Ref SamlIdentityProviderLoginUrl
             - Name: SAML_IDENTITY_PROVIDER_LOGOUT_URL
               Value: !Ref SamlIdentityProviderLogoutUrl
+          DockerLabels:
+            Java_EMF_Metrics: true
+            ECS_PROMETHEUS_EXPORTER_PORT: !Ref JmxMetricsPort
 
   ServiceService:
     Type: AWS::ECS::Service
     DependsOn: ServiceLoadBalancerListener
     Properties:
       ServiceName: service
-      Cluster: !Ref ECSCluster
+      Cluster: !Ref EcsCluster
       DeploymentConfiguration:
         MaximumPercent: !Ref ServiceDeploymentMaximumPercent
         MinimumHealthyPercent: !Ref ServiceDeploymentMinimumPercent

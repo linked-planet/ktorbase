@@ -1,18 +1,14 @@
 FROM openjdk:11-jre
 
-# install collectd
-RUN apt-get update && apt-get install -y \
-    collectd \
-    && rm -rf /var/lib/apt/lists/*
-
-# install cloudwatch-agent
-RUN wget --no-verbose "https://s3.eu-central-1.amazonaws.com/amazoncloudwatch-agent-eu-central-1/debian/amd64/latest/amazon-cloudwatch-agent.deb" \
-    && dpkg -i -E amazon-cloudwatch-agent.deb \
-    && rm amazon-cloudwatch-agent.deb
-
-# configure cloudwatch-agent
-RUN mkdir -p /opt/aws/amazon-cloudwatch-agent/etc/
-COPY docker-build/amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/
+# install prometheus jmx exporter
+ENV JMX_PROMETHEUS_VERSION="0.15.0"
+ENV JMX_PROMETHEUS_PORT=9404
+RUN mkdir -p /opt/jmx_exporter
+RUN wget --no-verbose \
+    https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/$JMX_PROMETHEUS_VERSION/jmx_prometheus_javaagent-$JMX_PROMETHEUS_VERSION.jar \
+    -O /opt/jmx_exporter/jmx_prometheus_javaagent-$JMX_PROMETHEUS_VERSION.jar
+COPY docker-build/jmx-exporter.yml /opt/jmx_exporter/config.yml
+RUN chmod -R o+x /opt/jmx_exporter
 
 # add application user
 ENV APPLICATION_USER app
@@ -24,14 +20,10 @@ ENV JAVA_OPTS=""
 # create installation directory & assign permissions
 RUN mkdir /app
 RUN mkdir /app/frontend
-RUN mkdir /var/run/collectd
 RUN chown -R $APPLICATION_USER /app
 RUN chown -R $APPLICATION_USER /var/log
-RUN chown -R $APPLICATION_USER /var/run/collectd
-RUN chown -R $APPLICATION_USER /var/lib/collectd
 
 # install application
-COPY docker-build/collectd.conf /app/collectd.conf
 COPY backend/build/libs/backend-all.jar /app
 COPY frontend/build/distributions/*.js frontend/build/distributions/*.png frontend/build/distributions/*.jpg /app/frontend/
 COPY docker-build/start.sh /app

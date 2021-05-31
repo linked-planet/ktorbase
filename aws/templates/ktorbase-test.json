@@ -4,6 +4,18 @@
     "ParameterValue": "arn:aws:acm:eu-central-1:000000000000:certificate/6634c16b-9416-4e47-91c3-7e9a1234952d"
   },
   {
+    "ParameterKey": "CwAgentSecurityGroupId",
+    "ParameterValue": "sg-00000000000000000"
+  },
+  {
+    "ParameterKey": "EcsCluster",
+    "ParameterValue": "ktorbase"
+  },
+  {
+    "ParameterKey": "Environment",
+    "ParameterValue": "test"
+  },
+  {
     "ParameterKey": "ServiceCpu",
     "ParameterValue": "512"
   },
@@ -48,7 +60,7 @@
     "ParameterValue": "arn:aws:acm:eu-central-1:000000000000:parameter/ktorbase/*"
   },
   {
-    "ParameterKey": "VPC",
+    "ParameterKey": "VpcId",
     "ParameterValue": "vpc-6634c16b94164e479"
   },
   {
@@ -70,10 +82,6 @@
   {
     "ParameterKey": "AppTitle",
     "ParameterValue": "linked-planet KtorBase - Test"
-  },
-  {
-    "ParameterKey": "CollectdServerIp",
-    "ParameterValue": "127.0.0.1"
   },
   {
     "ParameterKey": "SamlIdentityProviderCertificate",

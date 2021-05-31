@@ -50,6 +50,9 @@ DEPLOY_RES=$(
     --no-fail-on-empty-changeset \
     --parameter-overrides \
     "CertificateArn=$(getCfParam CertificateArn)" \
+    "CwAgentSecurityGroupId=$(getCfParam CwAgentSecurityGroupId)" \
+    "EcsCluster=$(getCfParam EcsCluster)" \
+    "Environment=$(getCfParam Environment)" \
     "ServiceCpu=$(getCfParam ServiceCpu)" \
     "ServiceDeregistrationDelaySeconds=$(getCfParam ServiceDeregistrationDelaySeconds)" \
     "ServiceDeploymentMinimumPercent=$(getCfParam ServiceDeploymentMinimumPercent)" \
@@ -61,13 +64,12 @@ DEPLOY_RES=$(
     "ExternalSubnets=$(getCfParam ExternalSubnets)" \
     "InternalSubnets=$(getCfParam InternalSubnets)" \
     "ParameterStoreArn=$(getCfParam ParameterStoreArn)" \
-    "VPC=$(getCfParam VPC)" \
+    "VpcId=$(getCfParam VpcId)" \
     "AppBannerBackgroundColor=$(getCfParam AppBannerBackgroundColor)" \
     "AppBannerMenuBackgroundColor=$(getCfParam AppBannerMenuBackgroundColor)" \
     "AppBaseUrl=$(getCfParam AppBaseUrl)" \
     "AppSsoSaml=$(getCfParam AppSsoSaml)" \
     "AppTitle=$(getCfParam AppTitle)" \
-    "CollectdServerIp=$(getCfParam CollectdServerIp)" \
     "SamlIdentityProviderCertificate=$(getCfParam SamlIdentityProviderCertificate)" \
     "SamlIdentityProviderEntityId=$(getCfParam SamlIdentityProviderEntityId)" \
     "SamlIdentityProviderLoginUrl=$(getCfParam SamlIdentityProviderLoginUrl)" \
