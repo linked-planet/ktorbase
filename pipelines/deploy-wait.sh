@@ -16,6 +16,17 @@ ENV=$1
 STACK_NAME=$BASE_NAME-$ENV
 
 # --------------------------------------------------------------------------------
+# HELPER FUNCTIONS
+# --------------------------------------------------------------------------------
+echoDemarcation() {
+  TEXT=$1
+  echo
+  echo "--------------------------------------------------------------------------"
+  echo "$STACK_NAME: $TEXT"
+  echo "--------------------------------------------------------------------------"
+}
+
+# --------------------------------------------------------------------------------
 # WAIT FOR POTENTIAL CF UPDATES TO COMPLETE
 # - actually quite unfortunate, because we have to distinguish waiting for
 #   create-complete or update-complete
