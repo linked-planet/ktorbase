@@ -26,7 +26,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate & Build
-        run: ./generate.sh ~/tmp com.linkedplanet test-project && cd ~/tmp/com.linkedplanet.test-project && ./gradlew build
+        run: ./generate.sh ~/tmp com.linked-planet test-project && cd ~/tmp/com.linked-planet.test-project && ./gradlew build
 
       - name: Gradle Production Build
         run: ./gradlew build
