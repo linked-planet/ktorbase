@@ -32,7 +32,7 @@ See also official [Kotlin Fullstack Sample][kotlin-fullstack-sample].
 Use `generate.sh`:
 ```
 # <destination-folder> <group-id> <artifact-id>
-./generate.sh ~/tmp com.linkedplanet ktorbase
+./generate.sh ~/tmp com.linked-planet ktorbase
 ```
 
 ### Running
