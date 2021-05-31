@@ -10,11 +10,11 @@ A template for a Kotlin fullstack web application.
   - [Dockerfile](Dockerfile)
 - AWS ECS Fargate Deployment via CloudFormation
   - [ktorbase.yml](aws/templates/ktorbase.yml)
+- [AWS Container Insights Prometheus Metrics Monitoring][aws-prometheus]
+  - [jmx-exporter.yml](docker-build/jmx-exporter.yml)
+  - [start.sh](docker-build/start.sh)
 - Bitbucket Pipelines CI/CD
   - [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
-- collectd Metrics via AWS CloudWatch Agent
-  - [collectd.conf](docker-build/collectd.conf)
-  - [amazon-cloudwatch-agent.json](docker-build/amazon-cloudwatch-agent.json)
 - [Ktor OneLogin SAML Integration][ktor-onelogin-saml]
 - [Typesafe Config][tsconfig]
   - [application.conf](backend/src/main/resources/application.conf)
@@ -133,6 +133,7 @@ please tell us :-)
 
 
 ## Deployment
+### Overview
 [Bitbucket Pipelines][bitbucket-pipelines] is used to build a
 [Docker][docker] image and deploy the application on
 [AWS Elastic Container Service][aws-ecs] via [AWS CloudFormation][aws-cloudformation].
@@ -143,20 +144,28 @@ please tell us :-)
 - If you don't use Docker either, delete the [docker-build](docker-build) directory
   and the [Dockerfile](Dockerfile)
 
-Note that the [Dockerfile](Dockerfile) is installing [collectd][collectd].
-Adapt accordingly if you don't want it.
-
+### Java Version
 We are running on JRE 11, but the application is compiled with JDK 8 due to the following
 ktor issues:
 - https://github.com/ktorio/ktor/issues/1137
 - https://github.com/ktorio/ktor/issues/321
 
+### Configuration
 AWS configuration parameters are stored within the repository in JSON files per
 environment (see [ktorbase-test.json](aws/templates/ktorbase-test.json)).
 
-Note that we are also publishing the Docker image for the template itself:  
-[Docker Hub - linkedplanet/ktorbase](https://hub.docker.com/repository/docker/linkedplanet/ktorbase)  
+These variables are passed as parameter values for the cloud formation template
+via script to the AWS CLI (see [deploy.sh](pipelines/deploy.sh)).
 
+Some of these variables directly affect the resources created by CloudFormation,
+others are picked up by the application. Those that are relevant for the application
+will be passed as environment variables into the Docker container, such that they will
+then be picked up by [application.conf](backend/src/main/resources/application.conf).
+
+
+## Try it
+We are also publishing the Docker image for the template itself:  
+[Docker Hub - linkedplanet/ktorbase](https://hub.docker.com/repository/docker/linkedplanet/ktorbase)  
 ```
 docker run -it \
   -p 9090:9090 \
@@ -166,6 +175,7 @@ docker run -it \
 
 **Important: Make sure to create your own `APPLICATION_SECRET` for deployments.
 It is used to encrypt the data stored within the session cookie.**
+
 
 
 ## Template License
@@ -192,3 +202,4 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [collectd]: https://collectd.org/
 [kotlin-fullstack-sample]: https://github.com/Kotlin/kotlin-full-stack-application-demo
 [jetty]: https://www.eclipse.org/jetty/
+[aws-prometheus]: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus.html
