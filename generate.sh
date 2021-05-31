@@ -6,7 +6,7 @@
 
 if [ "$#" -ne 3 ]; then
   echo "Usage: $0 <destination-folder> <group-id> <artifact-id>"
-  echo "Example: $0 ~/tmp com.linked-planet ktorbase"
+  echo "Example: $0 ~/tmp com.linked-planet example-project"
   exit 1
 fi
 
@@ -22,6 +22,12 @@ NAME_PATH=$(echo "$NAME" | tr . /)
 
 JAVA_PACKAGE_NAME="${NAME//-}"
 JAVA_PACKAGE_PATH="${NAME_PATH//-}"
+echo "NAME: $NAME"
+echo "NAME PATH: $NAME_PATH"
+echo "FULL DEST FOLDER: $FULL_DEST_FOLDER"
+echo "JAVA PACKAGE NAME: $JAVA_PACKAGE_NAME"
+echo "JAVA PACKAGE PATH: $JAVA_PACKAGE_PATH"
+echo
 
 echo "Clean potential output from template builds first ..."
 ./gradlew clean
@@ -55,7 +61,7 @@ if [[ "$GROUP_ID" != "com"* ]]; then
   rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com"
   rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com"
   rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com"
-elif [[ "$GROUP_ID" != "com.linkedplanet"* ]]; then
+elif [[ "$GROUP_ID" != "com.linked-planet"* ]]; then
   rm -r "$FULL_DEST_FOLDER/backend/src/main/kotlin/com/linkedplanet"
   rm -r "$FULL_DEST_FOLDER/common/src/commonMain/kotlin/com/linkedplanet"
   rm -r "$FULL_DEST_FOLDER/frontend/src/main/kotlin/com/linkedplanet"
