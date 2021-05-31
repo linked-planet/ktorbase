@@ -39,6 +39,6 @@ echoDemarcation() {
 # --------------------------------------------------------------------------------
 echoDemarcation "Wait for deployment operations to complete ..."
 sleep 20
-aws ecs wait services-stable --cluster "$STACK_NAME" --services service
+aws ecs wait services-stable --cluster "$STACK_NAME" --services "$STACK_NAME-service"
 
 set +e

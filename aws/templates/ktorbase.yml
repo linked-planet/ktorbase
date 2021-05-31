@@ -323,7 +323,7 @@ Resources:
     Type: AWS::ECS::Service
     DependsOn: ServiceLoadBalancerListener
     Properties:
-      ServiceName: service
+      ServiceName: !Sub "${AWS::StackName}-service"
       Cluster: !Ref EcsCluster
       DeploymentConfiguration:
         MaximumPercent: !Ref ServiceDeploymentMaximumPercent
