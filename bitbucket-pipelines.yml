@@ -1,6 +1,5 @@
 deploy-script-test: &deploy-script-test
   script:
-    - git submodule update --init --recursive --remote
     - DOCKER_TAG_TEST=$(cat docker-tag-test)
     - sh pipelines/deploy.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_TEST}
     - sh pipelines/deploy-wait.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_TEST}
@@ -8,24 +7,32 @@ deploy-script-test: &deploy-script-test
 steps:
   - build: &build
       name: build
-      image: linktimelabs/docker-build-kotlin-fullstack:latest
+      image: atlassian/default-image:2
       caches:
         - gradle
         - node
       script:
-        - gradle clean updateBuildVersion build -DbuildVersion="$BITBUCKET_COMMIT"
+        - COMMIT_MESSAGE=`git log --format=%B -n 1 $BITBUCKET_COMMIT`
+        - case $COMMIT_MESSAGE in "[skip build]"*) true;; *)
+          ./gradlew clean updateBuildVersion build -DbuildVersion="$BITBUCKET_COMMIT"
+          ;;
+          esac
       artifacts:
         - build/**
         - backend/build/**
         - frontend/build/**
 
-  - docker: &docker-build-push
+  - docker-build-push: &docker-build-push
       name: docker-build-push
-      image: tstrohmeier/awscli:3.7.2
+      image: atlassian/pipelines-awscli:latest
       script:
         - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
         - export DOCKER_TAG_TEST=$(echo "test-$BITBUCKET_COMMIT_SHORT-$BITBUCKET_BUILD_NUMBER")
-        - sh pipelines/docker-build-push-aws.sh latest ${DOCKER_TAG_TEST}
+        - COMMIT_MESSAGE=`git log --format=%B -n 1 $BITBUCKET_COMMIT`
+        - case
+          $COMMIT_MESSAGE in "[skip build]"*) sh pipelines/docker-tag-push-aws.sh latest ${DOCKER_TAG_TEST};;
+          *) sh pipelines/docker-build-push-aws.sh latest ${DOCKER_TAG_TEST};;
+          esac
         - echo "${DOCKER_TAG_TEST}" > docker-tag-test
       services:
         - docker
@@ -34,24 +41,23 @@ steps:
 
   - deploy-test-auto: &deploy-test-auto
       name: deploy-test-auto
-      image: tstrohmeier/awscli:3.7.2
-      deployment: test
+      image: atlassian/pipelines-awscli:latest
+      deployment: Test
       <<: *deploy-script-test
 
   - deploy-test-manual: &deploy-test-manual
       name: deploy-test-manual
-      image: tstrohmeier/awscli:3.7.2
+      image: atlassian/pipelines-awscli:latest
       trigger: manual
-      deployment: test
+      deployment: Test
       <<: *deploy-script-test
 
   - deploy-prod-manual: &deploy-prod-manual
       name: deploy-prod-manual
-      image: tstrohmeier/awscli:3.7.2
+      image: atlassian/pipelines-awscli:latest
       trigger: manual
-      deployment: prod
+      deployment: Prod
       script:
-        - git submodule update --init --recursive --remote
         - DOCKER_TAG_TEST=$(cat docker-tag-test)
         - export BITBUCKET_COMMIT_SHORT=$(echo $BITBUCKET_COMMIT | cut -c1-7)
         - export DOCKER_TAG_PROD=$(echo "prod-$BITBUCKET_COMMIT_SHORT-$BITBUCKET_BUILD_NUMBER")
