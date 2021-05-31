@@ -6,7 +6,7 @@
 
 if [ "$#" -ne 3 ]; then
   echo "Usage: $0 <destination-folder> <group-id> <artifact-id>"
-  echo "Example: $0 ~/tmp com.linkedplanet ktorbase"
+  echo "Example: $0 ~/tmp com.linked-planet ktorbase"
   exit 1
 fi
 
