@@ -422,7 +422,7 @@ Resources:
             var params = {
               Message: \"Service ${AWS::StackName} reported ERROR:\\n\\n\" + listLogEvents,
               Subject: \"Service Monitoring - ERROR - ${AWS::StackName}\",
-              TopicArn: \"arn:aws:sns:eu-central-1:486044316608:${AWS::StackName}-error\"
+              TopicArn: \"arn:aws:sns:eu-central-1:${AWS::AccountId}:${AWS::StackName}-error\"
             };
             sns.publish(params, context.done);
           };"
