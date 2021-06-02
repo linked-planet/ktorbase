@@ -14,8 +14,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
+
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/com.linked-planet.example-project
+          key: ${{ runner.os }}-${{ env.GITHUB_RUN_NUMBER }}-example
 
       # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
       - name: Set up JDK 8
@@ -60,8 +64,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
+
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/com.linked-planet.example-project
+          key: ${{ runner.os }}-${{ env.GITHUB_RUN_NUMBER }}-example
 
       - name: Deploy CloudFormation
         env:
@@ -82,8 +90,12 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
+
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/com.linked-planet.example-project
+          key: ${{ runner.os }}-${{ env.GITHUB_RUN_NUMBER }}-example
 
       - name: Run Integration Tests
         env:
