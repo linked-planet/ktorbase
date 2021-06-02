@@ -25,7 +25,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate & Gradle Build
-        run: ./generate.sh /tmp/. com.linked-planet example-project && cd /tmp/com.linked-planet.example-project && ./gradlew build
+        run: ./generate.sh /tmp com.linked-planet example-project && cd /tmp/com.linked-planet.example-project && ./gradlew build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
