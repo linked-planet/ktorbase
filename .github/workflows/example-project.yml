@@ -14,8 +14,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            ~/com.linked-planet.example-project
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
           restore-keys: |
             ${{ runner.os }}-gradle-
 
@@ -63,7 +62,7 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
             ~/com.linked-planet.example-project
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
           restore-keys: |
             ${{ runner.os }}-gradle-
 
@@ -87,7 +86,7 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
             ~/com.linked-planet.example-project
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
           restore-keys: |
             ${{ runner.os }}-gradle-
 
