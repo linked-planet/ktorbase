@@ -14,6 +14,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
+            /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
           restore-keys: |
             ${{ runner.os }}-gradle-
