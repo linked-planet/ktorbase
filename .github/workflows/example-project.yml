@@ -16,8 +16,6 @@ jobs:
             ~/.gradle/wrapper
             /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
       - name: Set up JDK 8
@@ -64,8 +62,6 @@ jobs:
             ~/.gradle/wrapper
             /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Deploy CloudFormation
         env:
@@ -88,8 +84,6 @@ jobs:
             ~/.gradle/wrapper
             /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Run Integration Tests
         env:

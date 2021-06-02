@@ -15,8 +15,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-ktorbase
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
       - name: Set up JDK 8
@@ -66,8 +64,6 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-ktorbase
-          restore-keys: |
-            ${{ runner.os }}-gradle-
 
       - name: Run Integration Tests
         run: ./gradlew integrationTest
