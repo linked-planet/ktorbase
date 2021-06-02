@@ -1,0 +1,55 @@
+name: KtorBase-Example
+
+on: [ push ]
+
+jobs:
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
+
+      # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Generate & Gradle Build
+        run: ./generate.sh /tmp com.linked-planet ktorbase-example && cd /tmp/com.linked-planet.ktorbase-example && ./gradlew build
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Docker Build and Push
+        working-directory: /tmp/com.linked-planet.ktorbase-example
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: ./pipelines/docker-build-push-aws.sh latest
+
+      - name: Deploy CloudFormation
+        working-directory: /tmp/com.linked-planet.ktorbase-example
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: ./pipelines/deploy.sh test latest
+
+      - name: Run Integration Tests
+        working-directory: /tmp/com.linked-planet.ktorbase-example
+        env:
+          BACKEND_BASE_URL: http://localhost
+        run: ./gradlew integrationTest

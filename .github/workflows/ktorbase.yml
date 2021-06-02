@@ -4,7 +4,7 @@ on: [ push ]
 
 jobs:
 
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,25 +45,11 @@ jobs:
           push: true
           tags: linkedplanet/ktorbase:latest
 
-
-  docker-integration-test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Start KtorBase
         run: docker run -d -p 9090:9090 -e APPLICATION_SECRET=0000000000000000000000000000000 linkedplanet/ktorbase:latest
 
       - name: Await Start-up
         run: wget --tries 10 http://localhost:9090/health
-
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-ktorbase
 
       - name: Run Integration Tests
         run: ./gradlew integrationTest
