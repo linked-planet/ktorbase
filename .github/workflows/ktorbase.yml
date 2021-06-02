@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: KtorBase
 
 on: [ push ]
 
@@ -25,10 +25,7 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
-      - name: Generate & Build
-        run: ./generate.sh ~/tmp com.linked-planet example-project && cd ~/tmp/com.linked-planet.example-project && ./gradlew build
-
-      - name: Gradle Production Build
+      - name: Gradle Build
         run: ./gradlew build
 
       - name: Set up QEMU
@@ -43,7 +40,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Docker Build
+      - name: Docker Build and Push
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -51,7 +48,7 @@ jobs:
           tags: linkedplanet/ktorbase:latest
 
 
-  integration-test:
+  docker-integration-test:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -74,34 +71,3 @@ jobs:
 
       - name: Run Integration Tests
         run: ./gradlew integrationTest
-
-
-  aws-deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    container: tstrohmeier/awscli:3.7.2
-    services:
-      localstack:
-        image: localstack/localstack
-        env:
-          SERVICES: cloudformation
-          DEFAULT_REGION: eu-central-1
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Redirect AWS CLI to LocalStack
-        run: |
-          mv /usr/local/bin/aws /usr/local/bin/aws.orig
-          echo '#!/bin/sh' > /usr/local/bin/aws
-          echo 'aws.orig --endpoint-url "http://localstack:4566" "$@"' >> /usr/local/bin/aws
-          chmod 755 /usr/local/bin/aws
-
-      - name: Wait for LocalStack
-        run: sleep 15
-
-      - name: Deploy CloudFormation
-        env:
-          AWS_ACCESS_KEY_ID: foo
-          AWS_SECRET_ACCESS_KEY: bar
-          AWS_DEFAULT_REGION: eu-central-1
-        run: ./pipelines/deploy.sh test latest
