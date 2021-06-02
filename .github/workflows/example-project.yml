@@ -46,7 +46,7 @@ jobs:
         with:
           context: /tmp/com.linked-planet.example-project
           push: true
-          tags: ktorbase/example-project:latest
+          tags: ${{ secrets.AWS_ECR_REGISTRY }}/ktorbase/example-project:latest
 
 
   aws-deploy:
