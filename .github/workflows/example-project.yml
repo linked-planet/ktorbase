@@ -26,7 +26,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate & Gradle Build
-        run: ./generate.sh ~/. com.linked-planet example-project && cd ~/com.linked-planet.example-project && ./gradlew build
+        run: ./generate.sh /tmp/. com.linked-planet example-project && cd /tmp/com.linked-planet.example-project && ./gradlew build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -44,7 +44,7 @@ jobs:
       - name: Docker Build and Push
         uses: docker/build-push-action@v2
         with:
-          context: ~/com.linked-planet.example-project
+          context: /tmp/com.linked-planet.example-project
           push: true
           tags: ktorbase/example-project:latest
 
@@ -61,7 +61,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            ~/com.linked-planet.example-project
+            /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -85,7 +85,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            ~/com.linked-planet.example-project
+            /tmp/com.linked-planet.example-project
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -93,4 +93,4 @@ jobs:
       - name: Run Integration Tests
         env:
           BACKEND_BASE_URL: http://localhost
-        run: cd ~/com.linked-planet.example-project && ./gradlew integrationTest
+        run: cd /tmp/com.linked-planet.example-project && ./gradlew integrationTest
