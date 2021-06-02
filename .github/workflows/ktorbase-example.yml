@@ -26,7 +26,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Generate & Gradle Build
-        run: ./generate.sh /tmp com.linked-planet ktorbase-example && cd /tmp/com.linked-planet.ktorbase-example && ./gradlew build
+        run: ./generate.sh /tmp com.linked-planet ktor-example && cd /tmp/com.linked-planet.ktor-example && ./gradlew build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -35,7 +35,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: Docker Build and Push
-        working-directory: /tmp/com.linked-planet.ktorbase-example
+        working-directory: /tmp/com.linked-planet.ktor-example
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -43,7 +43,7 @@ jobs:
         run: ./pipelines/docker-build-push-aws.sh latest
 
       - name: Deploy CloudFormation
-        working-directory: /tmp/com.linked-planet.ktorbase-example
+        working-directory: /tmp/com.linked-planet.ktor-example
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -51,7 +51,7 @@ jobs:
         run: ./pipelines/deploy.sh test latest
 
       - name: Run Integration Tests
-        working-directory: /tmp/com.linked-planet.ktorbase-example
+        working-directory: /tmp/com.linked-planet.ktor-example
         env:
           BACKEND_BASE_URL: http://localhost
         run: ./gradlew integrationTest
