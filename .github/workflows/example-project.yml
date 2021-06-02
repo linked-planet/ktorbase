@@ -16,10 +16,13 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
 
+      - name: Save $GITHUB_RUN_NUMBER
+        run: echo $GITHUB_RUN_NUMBER > run.number
+
       - uses: actions/cache@v2
         with:
           path: /tmp/com.linked-planet.example-project
-          key: ${{ runner.os }}-${{ env.GITHUB_RUN_NUMBER }}-example
+          key: ${{ runner.os }}-${{ hashFiles('run.number') }}-example
 
       # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
       - name: Set up JDK 8
@@ -66,10 +69,13 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
 
+      - name: Save $GITHUB_RUN_NUMBER
+        run: echo $GITHUB_RUN_NUMBER > run.number
+
       - uses: actions/cache@v2
         with:
           path: /tmp/com.linked-planet.example-project
-          key: ${{ runner.os }}-${{ env.GITHUB_RUN_NUMBER }}-example
+          key: ${{ runner.os }}-${{ hashFiles('run.number') }}-example
 
       - name: Deploy CloudFormation
         env:
@@ -92,10 +98,13 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
 
+      - name: Save $GITHUB_RUN_NUMBER
+        run: echo $GITHUB_RUN_NUMBER > run.number
+
       - uses: actions/cache@v2
         with:
           path: /tmp/com.linked-planet.example-project
-          key: ${{ runner.os }}-${{ env.GITHUB_RUN_NUMBER }}-example
+          key: ${{ runner.os }}-${{ hashFiles('run.number') }}-example
 
       - name: Run Integration Tests
         env:
