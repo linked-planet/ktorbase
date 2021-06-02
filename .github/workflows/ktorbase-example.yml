@@ -14,7 +14,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}-example
+          key: ${{ runner.os }}-gradle-example-ktorbase-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-example-ktorbase-
 
       # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
       - name: Set up JDK 8
