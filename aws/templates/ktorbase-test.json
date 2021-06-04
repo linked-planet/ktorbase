@@ -9,7 +9,7 @@
   },
   {
     "ParameterKey": "EcsCluster",
-    "ParameterValue": "ktorbase"
+    "ParameterValue": "arn:aws:ecs:eu-central-1:276003551821:cluster/ktorbase"
   },
   {
     "ParameterKey": "Environment",
