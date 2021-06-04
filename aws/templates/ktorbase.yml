@@ -139,7 +139,7 @@ Resources:
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId: !Ref VPC
+      VpcId: !Ref VpcId
       GroupName: !Sub ${AWS::StackName}-security-group
       GroupDescription: !Sub ${AWS::StackName}-security-group
       SecurityGroupIngress:
