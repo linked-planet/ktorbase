@@ -57,7 +57,7 @@
   },
   {
     "ParameterKey": "ParameterStoreArn",
-    "ParameterValue": "arn:aws:acm:eu-central-1:276003551821:parameter/ktorbase-test/*"
+    "ParameterValue": "arn:aws:ssm:eu-central-1:276003551821:parameter/ktorbase-test/*"
   },
   {
     "ParameterKey": "VpcId",
