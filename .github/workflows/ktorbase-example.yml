@@ -54,5 +54,5 @@ jobs:
       - name: Run Integration Tests
         working-directory: /tmp/com.linked-planet.ktor-example
         env:
-          BACKEND_BASE_URL: http://localhost
+          BACKEND_BASE_URL: https://ktorbase.opencpms.io/
         run: ./gradlew integrationTest
