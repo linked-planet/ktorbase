@@ -33,7 +33,7 @@
   },
   {
     "ParameterKey": "ServiceImageName",
-    "ParameterValue": "276003551821.dkr.ecr.eu-central-1.amazonanaws.com/ktorbase/service"
+    "ParameterValue": "276003551821.dkr.ecr.eu-central-1.amazonaws.com/ktorbase/service"
   },
   {
     "ParameterKey": "ServiceImageVersion",
