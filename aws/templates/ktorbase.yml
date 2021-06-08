@@ -183,7 +183,6 @@ Resources:
               - sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
       Policies:
         - PolicyName: parameter-store-read
           PolicyDocument:
