@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -39,11 +39,12 @@ echoDemarcation() {
 # --------------------------------------------------------------------------------
 echoDemarcation "Wait for deployment operations to complete ..."
 
-if ! aws cloudformation describe-stacks --stack-name "$STACK_NAME" ; then
-  echo "Stack does not exist, waiting for creation completion ..."
+STACK_STATE=$(aws cloudformation describe-stacks --stack-name "$STACK_NAME" --query 'Stacks[].StackStatus' --output text)
+if [[ $STACK_STATE =~ "CREATE" ]] ; then
+  echo "Stack does not exist, waiting for creation ..."
   aws cloudformation wait stack-create-complete --stack-name "$STACK_NAME"
 else
-  echo "Stack exists, waiting for update completion ..."
+  echo "Stack exists, waiting for update ..."
   aws cloudformation wait stack-update-complete --stack-name "$STACK_NAME"
 fi
 
