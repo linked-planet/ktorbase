@@ -33,7 +33,7 @@
   },
   {
     "ParameterKey": "ServiceImageName",
-    "ParameterValue": "linkedplanet/ktorbase"
+    "ParameterValue": "276003551821.dkr.ecr.eu-central-1.amazonanaws.com/linkedplanet/ktorbase"
   },
   {
     "ParameterKey": "ServiceImageVersion",
