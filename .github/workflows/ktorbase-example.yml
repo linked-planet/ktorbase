@@ -55,4 +55,5 @@ jobs:
         working-directory: /tmp/com.linked-planet.ktor-example
         env:
           BACKEND_BASE_URL: https://ktorbase.opencpms.io/
+          BACKEND_PORT: 443
         run: ./gradlew integrationTest
