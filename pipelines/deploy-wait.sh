@@ -40,12 +40,17 @@ echoDemarcation() {
 echoDemarcation "Wait for deployment operations to complete ..."
 
 STACK_STATE=$(aws cloudformation describe-stacks --stack-name "$STACK_NAME" --query 'Stacks[].StackStatus' --output text)
-if [[ $STACK_STATE =~ "CREATE" ]] ; then
+if [ "$STACK_STATE" == "CREATE_IN_PROGRESS" ] ; then
   echo "Stack does not exist, waiting for creation ..."
   aws cloudformation wait stack-create-complete --stack-name "$STACK_NAME"
-else
+elif [ "$STACK_STATE" == "UPDATE_IN_PROGRESS" ] ; then
   echo "Stack exists, waiting for update ..."
   aws cloudformation wait stack-update-complete --stack-name "$STACK_NAME"
+elif [ "$STACK_STATE" == "CREATE_COMPLETE" ] || [ "$STACK_STATE" == "UPDATE_COMPLETE" ] ; then
+  echo "Stack was up to date, continuing ..."
+else
+  echo "Unexpected state - stopping with error ..."
+  exit 1
 fi
 
 set +e
