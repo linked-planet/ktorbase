@@ -1,5 +1,6 @@
 # KtorBase
-[![Build Status](https://github.com/linked-planet/ktorbase/workflows/CI%20Pipeline/badge.svg)](https://github.com/linked-planet/ktorbase/actions/workflows/ci.yml)
+[![Build Status](https://github.com/linked-planet/ktorbase/actions/workflows/ktorbase.yml/badge.svg)](https://github.com/linked-planet/ktorbase/actions/workflows/ktorbase.yml)
+[![KtorBase-Example](https://github.com/linked-planet/ktorbase/actions/workflows/ktorbase-example.yml/badge.svg)](https://github.com/linked-planet/ktorbase/actions/workflows/ktorbase-example.yml)
 [![GitHub License](https://img.shields.io/badge/license-CC0%201.0%20Universal-blue.svg?style=flat)](https://creativecommons.org/publicdomain/zero/1.0/legalcode)
 
 A template for a Kotlin fullstack web application.
