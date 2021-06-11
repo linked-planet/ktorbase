@@ -16,7 +16,7 @@ DOCKER_IMAGE_NAME=${DOCKER_REGISTRY_NAME}/${DOCKER_PROJECT_NAME}
 AWS_DOCKER_IMAGE_NAME="${AWS_REGISTRY_URL}/${DOCKER_IMAGE_NAME}"
 
 # aws login
-eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}" --no-include-email)"
+aws ecr get-login-password | docker login --username AWS --password-stdin ${AWS_REGISTRY_URL}
 
 # docker
 docker pull "${AWS_DOCKER_IMAGE_NAME}:${EXISTING_TAG}"

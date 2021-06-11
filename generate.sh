@@ -73,7 +73,7 @@ fi
 
 echo "Replacing group id in source files ..."
 # make sure to skip .kt files, as there might be valid com.linkedplanet imports (from our libraries)
-find "$FULL_DEST_FOLDER" -type f -not -name "*.kt" -exec sed -i "s/com.linkedplanet/$GROUP_ID/g" {} +
+find "$FULL_DEST_FOLDER" -type f -not -name "*.kt" -exec sed -i "s/com.linked-planet/$GROUP_ID/g" {} +
 
 echo "Replacing package names and imports in source files ..."
 find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/com.linkedplanet.ktorbase/$JAVA_PACKAGE_NAME/g" {} +

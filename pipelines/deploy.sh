@@ -67,7 +67,6 @@ DEPLOY_RES=$(
     "VpcId=$(getCfParam VpcId)" \
     "AppBannerBackgroundColor=$(getCfParam AppBannerBackgroundColor)" \
     "AppBannerMenuBackgroundColor=$(getCfParam AppBannerMenuBackgroundColor)" \
-    "AppBaseUrl=$(getCfParam AppBaseUrl)" \
     "AppSsoSaml=$(getCfParam AppSsoSaml)" \
     "AppTitle=$(getCfParam AppTitle)" \
     "SamlIdentityProviderCertificate=$(getCfParam SamlIdentityProviderCertificate)" \

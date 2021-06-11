@@ -1,15 +1,15 @@
 [
   {
     "ParameterKey": "CertificateArn",
-    "ParameterValue": "arn:aws:acm:eu-central-1:000000000000:certificate/6634c16b-9416-4e47-91c3-7e9a1234952d"
+    "ParameterValue": "arn:aws:acm:eu-central-1:276003551821:certificate/400168d2-fd3a-417f-907d-e6b192ac3279"
   },
   {
     "ParameterKey": "CwAgentSecurityGroupId",
-    "ParameterValue": "sg-00000000000000000"
+    "ParameterValue": "sg-055e2154d9fb86368"
   },
   {
     "ParameterKey": "EcsCluster",
-    "ParameterValue": "ktorbase"
+    "ParameterValue": "arn:aws:ecs:eu-central-1:276003551821:cluster/ktorbase"
   },
   {
     "ParameterKey": "Environment",
@@ -33,7 +33,7 @@
   },
   {
     "ParameterKey": "ServiceImageName",
-    "ParameterValue": "linkedplanet/ktorbase"
+    "ParameterValue": "276003551821.dkr.ecr.eu-central-1.amazonaws.com/ktorbase/service"
   },
   {
     "ParameterKey": "ServiceImageVersion",
@@ -49,19 +49,19 @@
   },
   {
     "ParameterKey": "ExternalSubnets",
-    "ParameterValue": "subnet-6634c16b94164e479, subnet-6634c16b94164e479"
+    "ParameterValue": "subnet-0c97bb1a47f292011, subnet-0ba963f40a0c02335"
   },
   {
     "ParameterKey": "InternalSubnets",
-    "ParameterValue": "subnet-6634c16b94164e479, subnet-6634c16b94164e479"
+    "ParameterValue": "subnet-08ef622575c3c7834, subnet-018c0ba7a8c95b714"
   },
   {
     "ParameterKey": "ParameterStoreArn",
-    "ParameterValue": "arn:aws:acm:eu-central-1:000000000000:parameter/ktorbase/*"
+    "ParameterValue": "arn:aws:ssm:eu-central-1:276003551821:parameter/ktorbase-test/*"
   },
   {
     "ParameterKey": "VpcId",
-    "ParameterValue": "vpc-6634c16b94164e479"
+    "ParameterValue": "vpc-0bd0ea329858c5c73"
   },
   {
     "ParameterKey": "AppBannerBackgroundColor",
@@ -70,10 +70,6 @@
   {
     "ParameterKey": "AppBannerMenuBackgroundColor",
     "ParameterValue": "rgba(0, 125, 0, 0.6)"
-  },
-  {
-    "ParameterKey": "AppBaseUrl",
-    "ParameterValue": "https://ktorbase-test.linked-planet.com"
   },
   {
     "ParameterKey": "AppSsoSaml",

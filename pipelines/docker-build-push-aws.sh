@@ -9,7 +9,7 @@ DOCKER_PROJECT_NAME=service
 DOCKER_IMAGE_NAME=${DOCKER_REGISTRY_NAME}/${DOCKER_PROJECT_NAME}
 
 # aws login
-eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}" --no-include-email)"
+aws ecr get-login-password | docker login --username AWS --password-stdin ${AWS_REGISTRY_URL}
 
 # create ecr repository if it does not exist
 if ! aws ecr list-images --repository-name "${DOCKER_IMAGE_NAME}" >/dev/null 2>/dev/null; then
