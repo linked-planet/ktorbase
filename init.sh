@@ -1,7 +1,14 @@
 #!/bin/bash
 set -e
 
-if [[ -z $1 && -z $2 && -z $3 && -z $4 ]]; then
+if [[ "$#" == 4 ]]; then
+   # parameters
+  echo "Starting in parameterized mode ..."
+  DEST_FOLDER=$1
+  GROUP_ID=$2
+  ARTIFACT_ID=$3
+  GIT_BRANCH=$4
+elif [[ "$#" == 0 ]]; then
   # interactive
   echo "Starting in interactive mode ..."
   read -p "Enter destination-folder for your new project [./ktor-example]: " -r DEST_FOLDER_INPUT
@@ -12,19 +19,12 @@ if [[ -z $1 && -z $2 && -z $3 && -z $4 ]]; then
   ARTIFACT_ID=${ARTIFACT_ID_INPUT:-ktor-example}
   read -p "Enter branch of ktorbase repo [master]: " -r GIT_BRANCH_INPUT
   GIT_BRANCH=${GIT_BRANCH_INPUT:-master}
-elif [[ -z $1 || -z $2 || -z $3 || -z $4 ]]; then
+else
   # unknown
   echo "- Interactive usage: $0"
   echo "- Parameterized usage: $0 <destination-folder> <group-id> <artifact-id> <git-branch of ktorbase repo>"
   echo "  Parameterized example: $0 ~/tmp com.linked-planet example-project master"
   exit 1
-else
-  # parameters
-  echo "Starting in parameterized mode ..."
-  DEST_FOLDER=$1
-  GROUP_ID=$2
-  ARTIFACT_ID=$3
-  GIT_BRANCH=$4
 fi
 
 echo "Resolving absolute path to destination-folder ..."
