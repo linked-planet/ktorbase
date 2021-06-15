@@ -27,7 +27,6 @@ jobs:
         run: >
           BRANCH=${GITHUB_REF#refs/heads/};
           curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/init.sh";
-          ls -la;
           chmod +x init.sh;
           ./init.sh /tmp com.linked-planet ktor-example "$BRANCH"
 
