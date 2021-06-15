@@ -34,7 +34,7 @@ See also official [Kotlin Fullstack Sample][kotlin-fullstack-sample].
 #### On-the-fly & interactive initialization
 Download and execute the script `init.sh`:
 ```
-bash <(curl -s https://raw.githubusercontent.com/linked-planet/ktorbase/master/generate.sh)
+bash <(curl -s https://raw.githubusercontent.com/linked-planet/ktorbase/master/init.sh)
 ```
 
 The script will prompt for the required parameters.
