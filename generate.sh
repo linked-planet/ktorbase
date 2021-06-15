@@ -16,6 +16,11 @@ DEST_FOLDER=$1
 GROUP_ID=$2
 ARTIFACT_ID=$3
 
+if [[ "$GROUP_ID" == "com.linkedplanet" ]]; then
+  echo "Use group-id com.linked-planet instead of com.linkedplanet!"
+  exit 1
+fi
+
 NAME=$GROUP_ID.$ARTIFACT_ID
 FULL_DEST_FOLDER=$DEST_FOLDER/$NAME
 NAME_PATH=$(echo "$NAME" | tr . /)
