@@ -24,9 +24,10 @@ jobs:
           distribution: 'adopt'
 
       - name: Initialize
-        run: |
+        run: >
           BRANCH=${GITHUB_REF#refs/heads/}
-          curl -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/init.sh" && chmod +x init.sh \
+          curl -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/init.sh"
+          chmod +x init.sh
           ./init.sh /tmp com.linked-planet ktor-example "$BRANCH"
 
       - name: Gradle Build
