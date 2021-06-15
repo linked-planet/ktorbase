@@ -7,8 +7,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
       - uses: actions/cache@v2
         with:
           path: |
@@ -25,8 +23,13 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
-      - name: Generate & Gradle Build
-        run: ./generate.sh /tmp com.linked-planet ktor-example && cd /tmp/com.linked-planet.ktor-example && ./gradlew build
+      - name: Initialize
+        run: |
+          curl -s https://raw.githubusercontent.com/linked-planet/ktorbase/master/init.sh && chmod +x init.sh \
+          ./init.sh /tmp com.linked-planet ktor-example ${GITHUB_REF#refs/heads/}
+
+      - name: Gradle Build
+        run: cd /tmp/com.linked-planet.ktor-example && ./gradlew build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
