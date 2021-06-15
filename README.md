@@ -30,7 +30,17 @@ See also official [Kotlin Fullstack Sample][kotlin-fullstack-sample].
 ## Usage
 
 ### Generate a new project
-Use `generate.sh`:
+
+#### On-the-fly & interactive initialization
+Download and execute the script `init.sh`:
+```
+bash <(curl -s https://raw.githubusercontent.com/linked-planet/ktorbase/master/init.sh)
+```
+
+The script will prompt for the required parameters.
+
+#### Clone-based generation
+Clone the repository and use the script `generate.sh`:
 ```
 # <destination-folder> <group-id> <artifact-id>
 ./generate.sh ~/tmp com.linked-planet example-project
