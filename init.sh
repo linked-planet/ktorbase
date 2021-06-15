@@ -10,11 +10,13 @@ if [[ -z $1 && -z $2 && -z $3 ]]; then
   GROUP_ID=${GROUP_ID_INPUT:-com.linked-planet}
   read -p "Enter artifact-id of your new project [ktor-example]: " -r ARTIFACT_ID
   ARTIFACT_ID=${ARTIFACT_ID_INPUT:-ktor-example}
+  read -p "Enter branch of ktorbase repo [master]: " -r ARTIFACT_ID
+  ARTIFACT_ID=${ARTIFACT_ID_INPUT:-ktor-example}
 elif [[ -z $1 || -z $2 || -z $3 ]]; then
   # unknown
   echo "- Interactive usage: $0"
-  echo "- Parameterized usage: $0 <destination-folder> <group-id> <artifact-id>"
-  echo "  Parameterized example: $0 ~/tmp com.linked-planet example-project"
+  echo "- Parameterized usage: $0 <destination-folder> <group-id> <artifact-id> <git-branch of ktorbase repo>"
+  echo "  Parameterized example: $0 ~/tmp com.linked-planet example-project master"
   exit 1
 else
   # parameters
@@ -22,6 +24,7 @@ else
   DEST_FOLDER=$1
   GROUP_ID=$2
   ARTIFACT_ID=$3
+  GIT_BRANCH=$4
 fi
 
 echo "Resolving absolute path to destination-folder ..."
@@ -35,7 +38,7 @@ if [ ! -e "$CHECKOUT_DIR" ]; then
 fi
 
 echo "Cloning ktorbase to temporary checkout directory ($CHECKOUT_DIR) ..."
-git clone --branch=master --single-branch --depth=1 https://github.com/linked-planet/ktorbase.git "$CHECKOUT_DIR"
+git clone --branch="$GIT_BRANCH" --single-branch --depth=1 https://github.com/linked-planet/ktorbase.git "$CHECKOUT_DIR"
 
 echo "Starting project generation using ktorbase ..."
 cd "$CHECKOUT_DIR"
