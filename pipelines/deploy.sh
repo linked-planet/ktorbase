@@ -35,7 +35,6 @@ echoDemarcation() {
 # --------------------------------------------------------------------------------
 # TRIGGER DEPLOY
 # --------------------------------------------------------------------------------
-set -x
 echoDemarcation "Deploy Cloud Formation Template ..."
 PARAMETER_OVERRIDES=$(jq -r '.[] | del(select(."ParameterKey" == "ServiceImageVersion")) | values | "\"\(.ParameterKey)=\(.ParameterValue)\""' "$PARAM_FILE" | tr '\n' ',')
 DEPLOY_RES=$(
@@ -48,7 +47,6 @@ DEPLOY_RES=$(
     --parameter-overrides "[$PARAMETER_OVERRIDES ServiceImageVersion=$SERVICE_IMAGE_VERSION]"
 )
 echo "$DEPLOY_RES"
-set +x
 
 # --------------------------------------------------------------------------------
 # DESCRIBE AND EXECUTE CHANGE SET IF CREATED
