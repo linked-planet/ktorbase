@@ -36,7 +36,7 @@ echoDemarcation() {
 # TRIGGER DEPLOY
 # --------------------------------------------------------------------------------
 echoDemarcation "Deploy Cloud Formation Template ..."
-mapfile -t PARAMETER_OVERRIDES < <(jq -r '.[] | "\(.ParameterKey)=\(.ParameterValue)"' "$PARAM_FILE")
+mapfile -t PARAMETER_OVERRIDES < <(jq -r '.[] | del(select(."ParameterKey" == "ServiceImageVersion")) | values | "\(.ParameterKey)=\(.ParameterValue)"' "$PARAM_FILE")
 DEPLOY_RES=$(
   aws cloudformation deploy \
     --template-file "${TEMPLATE_FILE}" \
