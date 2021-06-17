@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -24,10 +24,6 @@ PARAM_FILE=$SCRIPT_DIR/../aws/templates/$STACK_NAME.json
 # --------------------------------------------------------------------------------
 # HELPER FUNCTIONS
 # --------------------------------------------------------------------------------
-getCfParams() {
-  jq -r '.[] | [.ParameterKey, .ParameterValue] | join("=")' <"$PARAM_FILE"
-}
-
 echoDemarcation() {
   TEXT=$1
   echo
@@ -40,7 +36,7 @@ echoDemarcation() {
 # TRIGGER DEPLOY
 # --------------------------------------------------------------------------------
 echoDemarcation "Deploy Cloud Formation Template ..."
-PARAMETER_OVERRIDES=$(getCfParams)
+mapfile -t PARAMETER_OVERRIDES < <(jq -r '.[] | "\(.ParameterKey)=\(.ParameterValue)"' "$PARAM_FILE")
 DEPLOY_RES=$(
   aws cloudformation deploy \
     --template-file "${TEMPLATE_FILE}" \
@@ -48,7 +44,7 @@ DEPLOY_RES=$(
     --capabilities CAPABILITY_NAMED_IAM \
     --no-execute-changeset \
     --no-fail-on-empty-changeset \
-    --parameter-overrides "ServiceImageVersion=$SERVICE_IMAGE_VERSION" $PARAMETER_OVERRIDES
+    --parameter-overrides "${PARAMETER_OVERRIDES[@]}" "ServiceImageVersion=$SERVICE_IMAGE_VERSION"
 )
 echo "$DEPLOY_RES"
 
