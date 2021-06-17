@@ -24,11 +24,6 @@ PARAM_FILE=$SCRIPT_DIR/../aws/templates/$STACK_NAME.json
 # --------------------------------------------------------------------------------
 # HELPER FUNCTIONS
 # --------------------------------------------------------------------------------
-getCfParam() {
-  KEY=$1
-  jq -r '.[] | select(.ParameterKey == "'"$KEY"'") | .ParameterValue' <"$PARAM_FILE"
-}
-
 echoDemarcation() {
   TEXT=$1
   echo
@@ -41,6 +36,7 @@ echoDemarcation() {
 # TRIGGER DEPLOY
 # --------------------------------------------------------------------------------
 echoDemarcation "Deploy Cloud Formation Template ..."
+PARAMETER_OVERRIDES=$(jq -r '.[] | del(select(."ParameterKey" == "ServiceImageVersion")) | values | "\"\(.ParameterKey)=\(.ParameterValue)\""' "$PARAM_FILE" | tr '\n' ',')
 DEPLOY_RES=$(
   aws cloudformation deploy \
     --template-file "${TEMPLATE_FILE}" \
@@ -48,31 +44,7 @@ DEPLOY_RES=$(
     --capabilities CAPABILITY_NAMED_IAM \
     --no-execute-changeset \
     --no-fail-on-empty-changeset \
-    --parameter-overrides \
-    "CertificateArn=$(getCfParam CertificateArn)" \
-    "CwAgentSecurityGroupId=$(getCfParam CwAgentSecurityGroupId)" \
-    "EcsCluster=$(getCfParam EcsCluster)" \
-    "Environment=$(getCfParam Environment)" \
-    "ServiceCpu=$(getCfParam ServiceCpu)" \
-    "ServiceDeregistrationDelaySeconds=$(getCfParam ServiceDeregistrationDelaySeconds)" \
-    "ServiceDeploymentMinimumPercent=$(getCfParam ServiceDeploymentMinimumPercent)" \
-    "ServiceDeploymentMaximumPercent=$(getCfParam ServiceDeploymentMaximumPercent)" \
-    "ServiceImageName=$(getCfParam ServiceImageName)" \
-    "ServiceImageVersion=$SERVICE_IMAGE_VERSION" \
-    "ServiceMemory=$(getCfParam ServiceMemory)" \
-    "ServiceNodeCount=$(getCfParam ServiceNodeCount)" \
-    "ExternalSubnets=$(getCfParam ExternalSubnets)" \
-    "InternalSubnets=$(getCfParam InternalSubnets)" \
-    "ParameterStoreArn=$(getCfParam ParameterStoreArn)" \
-    "VpcId=$(getCfParam VpcId)" \
-    "AppBannerBackgroundColor=$(getCfParam AppBannerBackgroundColor)" \
-    "AppBannerMenuBackgroundColor=$(getCfParam AppBannerMenuBackgroundColor)" \
-    "AppSsoSaml=$(getCfParam AppSsoSaml)" \
-    "AppTitle=$(getCfParam AppTitle)" \
-    "SamlIdentityProviderCertificate=$(getCfParam SamlIdentityProviderCertificate)" \
-    "SamlIdentityProviderEntityId=$(getCfParam SamlIdentityProviderEntityId)" \
-    "SamlIdentityProviderLoginUrl=$(getCfParam SamlIdentityProviderLoginUrl)" \
-    "SamlIdentityProviderLogoutUrl=$(getCfParam SamlIdentityProviderLogoutUrl)"
+    --parameter-overrides "[$PARAMETER_OVERRIDES ServiceImageVersion=$SERVICE_IMAGE_VERSION]"
 )
 echo "$DEPLOY_RES"
 
