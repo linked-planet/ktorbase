@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -36,7 +36,7 @@ echoDemarcation() {
 # TRIGGER DEPLOY
 # --------------------------------------------------------------------------------
 echoDemarcation "Deploy Cloud Formation Template ..."
-mapfile -t PARAMETER_OVERRIDES < <(jq -r '.[] | del(select(."ParameterKey" == "ServiceImageVersion")) | values | "\(.ParameterKey)=\(.ParameterValue)"' "$PARAM_FILE")
+PARAMETER_OVERRIDES=$(jq -r '.[] | del(select(."ParameterKey" == "ServiceImageVersion")) | values | "\"\(.ParameterKey)=\(.ParameterValue)\""' "$PARAM_FILE" | tr '\n' ' ')
 DEPLOY_RES=$(
   aws cloudformation deploy \
     --template-file "${TEMPLATE_FILE}" \
@@ -44,7 +44,7 @@ DEPLOY_RES=$(
     --capabilities CAPABILITY_NAMED_IAM \
     --no-execute-changeset \
     --no-fail-on-empty-changeset \
-    --parameter-overrides "${PARAMETER_OVERRIDES[@]}" "ServiceImageVersion=$SERVICE_IMAGE_VERSION"
+    --parameter-overrides $PARAMETER_OVERRIDES "ServiceImageVersion=$SERVICE_IMAGE_VERSION"
 )
 echo "$DEPLOY_RES"
 
