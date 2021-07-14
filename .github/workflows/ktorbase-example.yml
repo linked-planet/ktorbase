@@ -27,8 +27,24 @@ jobs:
         run: >
           BRANCH=${GITHUB_REF#refs/heads/};
           curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/init.sh";
-          chmod +x init.sh;
-          ./init.sh /tmp com.linked-planet ktor-example "$BRANCH"
+          sh ./init.sh /tmp com.linked-planet ktor-example "$BRANCH";
+          echo "Creating temporary repository with initial version ...";
+          cd /tmp/com.linked-planet.ktor-example;
+          git init;
+          git config user.email "test@example.com";
+          git config user.name "test";
+          git add .;
+          git commit -m "Initial commit"
+
+      - name: Update
+        run: >
+          BRANCH=${GITHUB_REF#refs/heads/};
+          curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/update.sh";
+          sh ./update.sh /tmp/com.linked-planet.ktor-example com.linked-planet ktor-example "$BRANCH";
+          echo "Comparing updated version with initial version ...";
+          cd /tmp/com.linked-planet.ktor-example;
+          git add .;
+          git diff --cached --exit-code
 
       - name: Gradle Build
         run: cd /tmp/com.linked-planet.ktor-example && ./gradlew build

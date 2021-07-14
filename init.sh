@@ -1,23 +1,27 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-if [[ "$#" == 4 ]]; then
+if [ "$#" -eq 4 ]; then
    # parameters
   echo "Starting in parameterized mode ..."
   DEST_FOLDER=$1
   GROUP_ID=$2
   ARTIFACT_ID=$3
   GIT_BRANCH=$4
-elif [[ "$#" == 0 ]]; then
+elif [ "$#" -eq 0 ]; then
   # interactive
   echo "Starting in interactive mode ..."
-  read -p "Enter destination-folder for your new project [./ktor-example]: " -r DEST_FOLDER_INPUT
+  echo "Enter destination-folder for your new project [./ktor-example]: "
+  read -r DEST_FOLDER_INPUT
   DEST_FOLDER=${DEST_FOLDER_INPUT:-./ktor-example}
-  read -p "Enter group-id of your new project [com.linked-planet]: " -r GROUP_ID_INPUT
+  echo "Enter group-id of your new project [com.linked-planet]: "
+  read -r GROUP_ID_INPUT
   GROUP_ID=${GROUP_ID_INPUT:-com.linked-planet}
-  read -p "Enter artifact-id of your new project [ktor-example]: " -r ARTIFACT_ID_INPUT
+  echo "Enter artifact-id of your new project [ktor-example]: "
+  read -r ARTIFACT_ID_INPUT
   ARTIFACT_ID=${ARTIFACT_ID_INPUT:-ktor-example}
-  read -p "Enter branch of ktorbase repo [master]: " -r GIT_BRANCH_INPUT
+  echo "Enter branch of ktorbase repo [master]: "
+  read -r GIT_BRANCH_INPUT
   GIT_BRANCH=${GIT_BRANCH_INPUT:-master}
 else
   # unknown
@@ -45,7 +49,7 @@ cd "$CHECKOUT_DIR"
 set +e
 ./generate.sh "$DEST_FOLDER" "$GROUP_ID" "$ARTIFACT_ID"
 GENERATION_SUCCEEDED=$?
-if [[ "$GENERATION_SUCCEEDED" == 0 ]]; then
+if [ "$GENERATION_SUCCEEDED" -eq 0 ]; then
   echo "Successfully created new ktorbase project in $DEST_FOLDER/$GROUP_ID.$ARTIFACT_ID!"
 else
   echo "Error during project generation, see the previous logs for more details!"
