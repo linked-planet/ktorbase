@@ -46,6 +46,15 @@ Clone the repository and use the script `generate.sh`:
 ./generate.sh ~/tmp com.linked-planet example-project
 ```
 
+### Update an existing project
+
+If you want to update an existing ktorbase-based project, simply download and run the script `update.sh`: 
+```
+bash <(curl -s https://raw.githubusercontent.com/linked-planet/ktorbase/master/update.sh)
+```
+
+The script will prompt for the required parameters.
+
 ### Running
 *Note: This template can be run directly, which is useful to try it or to
 test changes.  

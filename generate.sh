@@ -47,6 +47,8 @@ rm -rf "$FULL_DEST_FOLDER/.idea"
 rm -rf "$FULL_DEST_FOLDER/.gradle"
 rm -rf "$FULL_DEST_FOLDER/.github"
 rm "$FULL_DEST_FOLDER/generate.sh"
+rm "$FULL_DEST_FOLDER/init.sh"
+rm "$FULL_DEST_FOLDER/update.sh"
 rm "$FULL_DEST_FOLDER/LICENSE"
 
 echo "Renaming folders ..."
