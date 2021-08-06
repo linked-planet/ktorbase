@@ -35,7 +35,7 @@ jobs:
 
       - name: Clone from Bitbucket
         run: >
-          git clone https://${{ secrets.BITBUCKET_USER_NAME }}@bitbucket.org/linked-planet/com.linked-planet.ktor-bitbucket-example.git /tmp/com.linked-planet.ktor-bitbucket-example
+          git clone https://git@bitbucket.org/linked-planet/com.linked-planet.ktor-bitbucket-example.git /tmp/com.linked-planet.ktor-bitbucket-example
 
       - name: Update
         run: >
