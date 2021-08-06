@@ -35,18 +35,19 @@ jobs:
 
       - name: Clone from Bitbucket
         run: >
-          git clone https://bitbucket.org/linked-planet/com.linked-planet.ktor-bitbucket-example.git
+          git clone https://bitbucket.org/linked-planet/com.linked-planet.ktor-bitbucket-example.git /tmp
 
       - name: Update
         run: >
           BRANCH=${GITHUB_REF#refs/heads/};
           curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/update.sh";
-          sh ./update.sh ./com.linked-planet.ktor-bitbucket-example com.linked-planet ktor-bitbucket-example "$BRANCH"
+          sh ./update.sh /tmp/com.linked-planet.ktor-bitbucket-example com.linked-planet ktor-bitbucket-example "$BRANCH"
 
       - name: Commit and Push to Bitbucket
         run: |
-          cd com.linked-planet.ktor-bitbucket-example;
+          cd /tmp/com.linked-planet.ktor-bitbucket-example;
           git config --global user.email "${{ secrets.BITBUCKET_USER_MAIL }}";
           git config --global user.name "${{ secrets.BITBUCKET_USER_NAME }}";
+          git add -A;
           git diff-index --quiet HEAD || git commit -m "updated project from Github commit ${{ env.GITHUB_SHA }} (${{ env.GITHUB_REF }})";
           git push
