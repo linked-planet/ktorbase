@@ -45,19 +45,12 @@ jobs:
 
       - name: Commit and Push to Bitbucket
         run: |
-          ORIG_DIR=$(pwd);
-          echo "Project dir: $ORIG_DIR";
           cd /tmp/com.linked-planet.ktor-bitbucket-example;
           git config --global user.email "${{ secrets.BITBUCKET_USER_MAIL }}";
           git config --global user.name "${{ secrets.BITBUCKET_USER_NAME }}";
-          echo "Configured git";
           git add -A;
-          echo "Added changes";
-          git diff-index --quiet HEAD;
-          DIFF_EXISTS=$?;
-          echo "DIFF_EXISTS: $DIFF_EXISTS";
-          if [[ $DIFF_EXISTS == 1 ]]; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline"; fi;
-          echo "Pushing";
+          if [ -z "$(git status --porcelain)" ]; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "${GITHUB_ACTION_PATH}/run_pipeline"; fi;
+          echo "Creatiing file indicator for next step in ${GITHUB_ACTION_PATH}/run_pipeline";
           git push
 
       - name: Watch Bitbucket Pipeline
