@@ -35,7 +35,7 @@ jobs:
 
       - name: Clone from Bitbucket
         run: >
-          git clone https://bitbucket.org/linked-planet/ktorbase-bitbucket-example.git
+          git clone https://bitbucket.org/linked-planet/com.linked-planet.ktor-bitbucket-example.git
 
       - name: Update
         run: >
