@@ -51,7 +51,7 @@ jobs:
           git config --global user.name "${{ secrets.BITBUCKET_USER_NAME }}";
           git add -A;
           DIFF_EXISTS=$(git diff-index --quiet HEAD);
-          if [[ $DIFF_EXISTS == 1 ]]; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline";
+          if [[ $DIFF_EXISTS == 1 ]]; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline"; fi;
           git push
 
       - name: Watch Bitbucket Pipeline
