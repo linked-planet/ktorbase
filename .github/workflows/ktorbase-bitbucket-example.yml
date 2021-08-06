@@ -3,7 +3,7 @@ name: KtorBase-Bitbucket-Example
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
 
