@@ -51,3 +51,23 @@ jobs:
           git add -A;
           git diff-index --quiet HEAD || git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})";
           git push
+
+      - name: Watch Bitbucket Pipeline
+        run: |
+          cd /tmp/com.linked-planet.ktor-bitbucket-example;
+          BITBUCKET_COMMIT_HASH=$(git log --format="%h" -n 1);
+          echo "Watching Pipeline for commit $BITBUCKET_COMMIT_HASH in Bitbucket";
+          sleep 30;
+          BITBUCKET_PIPELINE_RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/linked-planet/com.linked-planet.ktor-bitbucket-example/commit/$BITBUCKET_COMMIT_HASH/statuses");
+          BITBUCKET_PIPELINE_ERROR=$(echo "$BITBUCKET_PIPELINE_RESPONSE" | jq -r '.error.message');
+          if [[ $BITBUCKET_PIPELINE_ERROR == "Commit not found" ]]; then echo "-> Nothing to commit and therewith no Pipeline run" && exit 0; fi;
+          BITBUCKET_PIPELINE_STATE=$(echo $BITBUCKET_PIPELINE_RESPONSE | jq -r '.values[0].state');
+          while [ $BITBUCKET_PIPELINE_STATE = "INPROGRESS" ]; do \
+            echo "Pipeline still running, waiting ..."; \
+            sleep 5;
+            BITBUCKET_PIPELINE_RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/linked-planet/com.linked-planet.ktor-bitbucket-example/commit/$BITBUCKET_COMMIT_HASH/statuses"); \
+            BITBUCKET_PIPELINE_STATE=$(echo $BITBUCKET_PIPELINE_RESPONSE | jq -r '.values[0].state'); \
+          done;
+          if [[ $BITBUCKET_PIPELINE_STATE == "FAILED" || $BITBUCKET_PIPELINE_STATE == "STOPPED" ]]; then echo "-> Bitbucket Pipeline failed/stopped" && exit 1; fi;
+          if [[ $BITBUCKET_PIPELINE_STATE == "SUCCESSFUL" ]]; then echo "-> Bitbucket Pipeline succedded" && exit 0; fi;
+          echo "-> Unknown Error with Bitbucket Pipeline" && exit 1
