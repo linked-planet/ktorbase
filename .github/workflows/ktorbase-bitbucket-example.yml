@@ -53,6 +53,9 @@ jobs:
           if [ -z "$(git status --porcelain)" ]; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline"; fi;
           git push
 
+  watch-bitbucket-pipeline:
+    runs-on: ubuntu-latest
+    steps:
       - name: Watch Bitbucket Pipeline
         run: |
           if [ ! -f run_pipeline ]; then echo "-> Skip this step as nothing was pushed to Bitbucket" && exit 0; fi
