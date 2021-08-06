@@ -53,7 +53,8 @@ jobs:
           echo "Configured git";
           git add -A;
           echo "Added changes";
-          DIFF_EXISTS=$(git diff-index --quiet HEAD);
+          git diff-index --quiet HEAD;
+          DIFF_EXISTS=$?;
           echo "DIFF_EXISTS: $DIFF_EXISTS";
           if [[ $DIFF_EXISTS == 1 ]]; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline"; fi;
           echo "Pushing";
