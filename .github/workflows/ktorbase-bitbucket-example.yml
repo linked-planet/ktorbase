@@ -45,15 +45,20 @@ jobs:
 
       - name: Commit and Push to Bitbucket
         run: |
+          ORIG_DIR=$(pwd)
           cd /tmp/com.linked-planet.ktor-bitbucket-example;
           git config --global user.email "${{ secrets.BITBUCKET_USER_MAIL }}";
           git config --global user.name "${{ secrets.BITBUCKET_USER_NAME }}";
           git add -A;
-          git diff-index --quiet HEAD || git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})";
+          DIFF_EXISTS=$(git diff-index --quiet HEAD);
+          if [[ $DIFF_EXISTS == 1 ]]; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline";
           git push
 
       - name: Watch Bitbucket Pipeline
         run: |
+          if [ ! -f "$ORIG_DIR/run_pipeline" ]; then
+              echo "-> Skip this step as nothing was pushed to Bitbucket"
+          fi
           cd /tmp/com.linked-planet.ktor-bitbucket-example;
           BITBUCKET_COMMIT_HASH=$(git log --format="%h" -n 1);
           echo "Watching Pipeline for commit $BITBUCKET_COMMIT_HASH in Bitbucket";
