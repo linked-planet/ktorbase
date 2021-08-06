@@ -52,7 +52,7 @@ jobs:
           git add -A;
           echo "Identifying changes ...";
           git status --porcelain;
-          if git diff-index --quiet HEAD --; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline"; fi;
+          if ! git diff-index --quiet HEAD --; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline"; fi;
           git push
 
       - name: Watch Bitbucket Pipeline
