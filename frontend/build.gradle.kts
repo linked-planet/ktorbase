@@ -76,6 +76,7 @@ dependencies {
 
     // Misc
     implementation(npm("uuid", "^3.3.2"))
+    implementation(npm("@fortawesome/fontawesome-free", "^5.15.1"))
 
     implementation(devNpm("style-loader", "2.0.0"))
     implementation(devNpm("css-loader", "3.4.2"))
