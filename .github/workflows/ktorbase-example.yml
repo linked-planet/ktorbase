@@ -136,11 +136,13 @@ jobs:
           if [ ! -f run_pipeline ]; then echo "-> Skip this step as nothing was pushed to Bitbucket" && exit 0; fi
           cd /tmp/com.linked-planet.ktor-bitbucket-example;
           BITBUCKET_COMMIT_HASH=$(git log --format="%h" -n 1);
-          echo "Watching Pipeline for commit $BITBUCKET_COMMIT_HASH in Bitbucket";
+          echo "Searching Pipeline for commit $BITBUCKET_COMMIT_HASH in Bitbucket ...";
           sleep 30;
           BITBUCKET_PIPELINE_RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/linked-planet/com.linked-planet.ktor-bitbucket-example/commit/$BITBUCKET_COMMIT_HASH/statuses");
           BITBUCKET_PIPELINE_ERROR=$(echo "$BITBUCKET_PIPELINE_RESPONSE" | jq -r '.error.message');
           if [[ $BITBUCKET_PIPELINE_ERROR == "Commit not found" ]]; then echo "-> Nothing to commit and therewith no Pipeline run" && exit 0; fi;
+          BITBUCKET_PIPELINE_LINK=$(echo $BITBUCKET_PIPELINE_RESPONSE | jq -r '.values[0].url');
+          echo "Watching Pipeline $BITBUCKET_PIPELINE_LINK in Bitbucket ...";
           BITBUCKET_PIPELINE_STATE=$(echo $BITBUCKET_PIPELINE_RESPONSE | jq -r '.values[0].state');
           while [ $BITBUCKET_PIPELINE_STATE = "INPROGRESS" ]; do \
             echo "Pipeline still running, waiting ..."; \
