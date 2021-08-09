@@ -8,7 +8,7 @@ deploy-script-test: &deploy-script-test
 steps:
   - build: &build
       name: build
-      image: atlassian/default-image:2
+      image: linkedplanet/docker-build-kotlin-fullstack:awscli-v2
       caches:
         - gradle
         - node
