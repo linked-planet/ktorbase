@@ -83,7 +83,7 @@ jobs:
         run: ./gradlew integrationTest
 
   bitbucket-build-and-test:
-    needs: bitbucket-build-and-test
+    needs: github-build-and-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/cache@v2
