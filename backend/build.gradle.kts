@@ -25,7 +25,9 @@ dependencies {
     implementation("io.ktor", "ktor-client-logging-jvm", ktorVersion)
     implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-1.4.2")
 
-    implementation("ch.qos.logback", "logback-classic", "1.2.3")
+    implementation("org.apache.logging.log4j", "log4j-api", "2.14.0")
+    implementation("org.apache.logging.log4j", "log4j-core", "2.14.0")
+    implementation("org.apache.logging.log4j", "log4j-slf4j-impl", "2.14.0")
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.7.1")
     testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.7.1")
