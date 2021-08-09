@@ -72,6 +72,10 @@
     "ParameterValue": "rgba(0, 125, 0, 0.6)"
   },
   {
+    "ParameterKey": "AppBaseUrl",
+    "ParameterValue": "https://ktorbase-test.linked-planet.com"
+  },
+  {
     "ParameterKey": "AppSsoSaml",
     "ParameterValue": "false"
   },

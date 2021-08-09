@@ -6,6 +6,7 @@ object AppConfig {
 
     private val config = ConfigFactory.load().getConfig("app")
     val title: String = config.getString("title")
+    val baseUrl: String = config.getString("baseUrl")
     val bannerBackgroundColor: String = config.getString("bannerBackgroundColor")
     val bannerMenuBackgroundColor: String = config.getString("bannerMenuBackgroundColor")
     val ssoSaml: Boolean = config.getBoolean("sso.saml")

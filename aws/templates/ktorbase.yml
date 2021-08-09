@@ -95,6 +95,9 @@ Parameters:
   AppBannerMenuBackgroundColor:
     Type: String
     Description: Value for CSS `background-color` property of the banner menu, used for coloring based on environment
+  AppBaseUrl:
+    Type: String
+    Description: Base URL under which the application will be reachable, needed to be known by the application for linking back to itself
   AppSsoSaml:
     Type: String
     AllowedValues: [ "true", "false" ]
@@ -298,6 +301,8 @@ Resources:
               Value: !Ref AppBannerBackgroundColor
             - Name: APP_BANNER_MENU_BACKGROUND_COLOR
               Value: !Ref AppBannerMenuBackgroundColor
+            - Name: APP_BASE_URL
+              Value: !Ref AppBaseUrl
             - Name: APP_SSO_SAML
               Value: !Ref AppSsoSaml
             - Name: APP_TITLE
