@@ -90,6 +90,7 @@ find "$FULL_DEST_FOLDER" -type f -exec sed -i "s/ktorbase/$ARTIFACT_ID/g" {} +
 
 echo "Fresh README.md ..."
 echo "# $ARTIFACT_ID" > "$FULL_DEST_FOLDER/README.md"
+echo "This project is based on ktorbase (see https://github.com/linked-planet/ktorbase for more details)."
 
 echo "Done! Have fun hakking! Remember to read the SICP!! :-)"
 echo "https://cpsc.yale.edu/epigrams-programming"
