@@ -8,7 +8,7 @@ deploy-script-test: &deploy-script-test
 steps:
   - build: &build
       name: build
-      image: linkedplanet/docker-build-kotlin-fullstack:awscli-v2
+      image: linkedplanet/docker-build-kotlin-fullstack
       caches:
         - gradle
         - node
