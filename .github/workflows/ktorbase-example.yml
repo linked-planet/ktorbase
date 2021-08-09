@@ -1,10 +1,14 @@
 name: KtorBase-Example
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
 
-  build-and-test:
+  github-build-and-test:
+    needs: bitbucket-build-and-test # TODO: switch dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/cache@v2
@@ -78,3 +82,72 @@ jobs:
           BACKEND_BASE_URL: https://ktorbase.opencpms.io/
           BACKEND_PORT: 443
         run: ./gradlew integrationTest
+
+  bitbucket-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-example-ktorbase-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-example-ktorbase-
+
+      # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          name: id_rsa
+          key: ${{ secrets.BITBUCKET_SSH_KEY }}
+          known_hosts: ${{ secrets.BITBUCKET_KNOWN_HOSTS }}
+
+      - name: Clone from Bitbucket
+        run: >
+          git clone git@bitbucket.org:linked-planet/com.linked-planet.ktor-bitbucket-example.git /tmp/com.linked-planet.ktor-bitbucket-example
+
+      - name: Update
+        run: >
+          BRANCH=${GITHUB_REF#refs/heads/};
+          curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/update.sh";
+          sh ./update.sh /tmp/com.linked-planet.ktor-bitbucket-example com.linked-planet ktor-bitbucket-example "$BRANCH"
+
+      - name: Commit and Push to Bitbucket
+        run: |
+          ORIG_DIR=$(pwd);
+          cd /tmp/com.linked-planet.ktor-bitbucket-example;
+          git config --global user.email "${{ secrets.BITBUCKET_USER_MAIL }}";
+          git config --global user.name "${{ secrets.BITBUCKET_USER_NAME }}";
+          git add -A;
+          echo "Identifying changes ...";
+          git status --porcelain;
+          if ! git diff-index --quiet HEAD --; then git commit -m "updated project from Github commit ${GITHUB_SHA} (${GITHUB_REF})" && touch "$ORIG_DIR/run_pipeline"; fi;
+          git push
+
+      - name: Watch Bitbucket Pipeline
+        run: |
+          if [ ! -f run_pipeline ]; then echo "-> Skip this step as nothing was pushed to Bitbucket" && exit 0; fi
+          cd /tmp/com.linked-planet.ktor-bitbucket-example;
+          BITBUCKET_COMMIT_HASH=$(git log --format="%h" -n 1);
+          echo "Watching Pipeline for commit $BITBUCKET_COMMIT_HASH in Bitbucket";
+          sleep 30;
+          BITBUCKET_PIPELINE_RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/linked-planet/com.linked-planet.ktor-bitbucket-example/commit/$BITBUCKET_COMMIT_HASH/statuses");
+          BITBUCKET_PIPELINE_ERROR=$(echo "$BITBUCKET_PIPELINE_RESPONSE" | jq -r '.error.message');
+          if [[ $BITBUCKET_PIPELINE_ERROR == "Commit not found" ]]; then echo "-> Nothing to commit and therewith no Pipeline run" && exit 0; fi;
+          BITBUCKET_PIPELINE_STATE=$(echo $BITBUCKET_PIPELINE_RESPONSE | jq -r '.values[0].state');
+          while [ $BITBUCKET_PIPELINE_STATE = "INPROGRESS" ]; do \
+            echo "Pipeline still running, waiting ..."; \
+            sleep 5;
+            BITBUCKET_PIPELINE_RESPONSE=$(curl -s "https://api.bitbucket.org/2.0/repositories/linked-planet/com.linked-planet.ktor-bitbucket-example/commit/$BITBUCKET_COMMIT_HASH/statuses"); \
+            BITBUCKET_PIPELINE_STATE=$(echo $BITBUCKET_PIPELINE_RESPONSE | jq -r '.values[0].state'); \
+          done;
+          if [[ $BITBUCKET_PIPELINE_STATE == "FAILED" || $BITBUCKET_PIPELINE_STATE == "STOPPED" ]]; then echo "-> Bitbucket Pipeline failed/stopped" && exit 1; fi;
+          if [[ $BITBUCKET_PIPELINE_STATE == "SUCCESSFUL" ]]; then echo "-> Bitbucket Pipeline succedded" && exit 0; fi;
+          echo "-> Unknown Error with Bitbucket Pipeline" && exit 1
