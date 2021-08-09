@@ -20,6 +20,7 @@ STACK_NAME=$BASE_NAME-$ENV
 
 TEMPLATE_FILE=$SCRIPT_DIR/../aws/templates/$BASE_NAME.yml
 PARAM_FILE=$SCRIPT_DIR/../aws/templates/$STACK_NAME.json
+TEMP_PARAM_FILE=$(mktemp)
 
 # --------------------------------------------------------------------------------
 # HELPER FUNCTIONS
@@ -36,7 +37,8 @@ echoDemarcation() {
 # TRIGGER DEPLOY
 # --------------------------------------------------------------------------------
 echoDemarcation "Deploy Cloud Formation Template ..."
-PARAMETER_OVERRIDES=$(jq -r '.[] | del(select(."ParameterKey" == "ServiceImageVersion")) | values | "\"\(.ParameterKey)=\(.ParameterValue)\""' "$PARAM_FILE" | tr '\n' ',')
+aws --version
+jq -r "(.[] | select(.ParameterKey == \"ServiceImageVersion\") | .ParameterValue) |= \"$SERVICE_IMAGE_VERSION\"" "$PARAM_FILE" > $TEMP_PARAM_FILE
 DEPLOY_RES=$(
   aws cloudformation deploy \
     --template-file "${TEMPLATE_FILE}" \
@@ -44,7 +46,7 @@ DEPLOY_RES=$(
     --capabilities CAPABILITY_NAMED_IAM \
     --no-execute-changeset \
     --no-fail-on-empty-changeset \
-    --parameter-overrides "[$PARAMETER_OVERRIDES ServiceImageVersion=$SERVICE_IMAGE_VERSION]"
+    --parameter-overrides "file://$TEMP_PARAM_FILE"
 )
 echo "$DEPLOY_RES"
 

@@ -41,33 +41,27 @@ steps:
 
   - deploy-test-auto: &deploy-test-auto
       name: deploy-test-auto
-      image: atlassian/pipelines-awscli:latest
+      image: linktimelabs/docker-build-kotlin-fullstack:awscli-v2
       deployment: test
       <<: *deploy-script-test
 
   - deploy-test-manual: &deploy-test-manual
       name: deploy-test-manual
-      image: atlassian/pipelines-awscli:latest
+      image: linktimelabs/docker-build-kotlin-fullstack:awscli-v2
       trigger: manual
       deployment: test
       <<: *deploy-script-test
 
-  - deploy-uat-auto: &deploy-uat-auto
-      name: deploy-uat-auto
-      image: atlassian/pipelines-awscli:latest
-      deployment: uat
-      <<: *deploy-script-test
-
   - deploy-uat-manual: &deploy-uat-manual
       name: deploy-uat-manual
-      image: atlassian/pipelines-awscli:latest
+      image: linktimelabs/docker-build-kotlin-fullstack:awscli-v2
       trigger: manual
       deployment: uat
       <<: *deploy-script-test
 
   - deploy-prod-manual: &deploy-prod-manual
       name: deploy-prod-manual
-      image: atlassian/pipelines-awscli:latest
+      image: linktimelabs/docker-build-kotlin-fullstack:awscli-v2
       trigger: manual
       deployment: prod
       script:
