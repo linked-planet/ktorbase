@@ -71,6 +71,7 @@ steps:
         - export DOCKER_TAG_PROD=$(echo "prod-$BITBUCKET_COMMIT_SHORT-$BITBUCKET_BUILD_NUMBER")
         - sh pipelines/docker-tag-push-aws.sh ${DOCKER_TAG_TEST} ${DOCKER_TAG_PROD}
         - sh pipelines/deploy.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_PROD}
+        - sh pipelines/deploy-wait.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${DOCKER_TAG_TEST}
       services:
         - docker
 
