@@ -83,3 +83,8 @@ dependencies {
     implementation(devNpm("file-loader", "6.2.0"))
     implementation(devNpm("@babel/core", "7.12.9"))
 }
+
+// without this, node will fail to execute in the Build Container
+rootProject.plugins.withType(org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin::class.java) {
+    rootProject.the<org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootExtension>().download = false
+}
