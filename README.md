@@ -14,8 +14,8 @@ A template for a Kotlin fullstack web application.
 - [AWS Container Insights Prometheus Metrics Monitoring][aws-prometheus]
   - [jmx-exporter.yml](docker-build/jmx-exporter.yml)
   - [start.sh](docker-build/start.sh)
-- Bitbucket Pipelines CI/CD
-  - [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
+- GitHub Actions CI/CD
+  - [.github/workflows](.github/workflows)
 - [Ktor OneLogin SAML Integration][ktor-onelogin-saml]
 - [Typesafe Config][tsconfig]
   - [application.conf](backend/src/main/resources/application.conf)
@@ -154,11 +154,11 @@ please tell us :-)
 
 ## Deployment
 ### Overview
-[Bitbucket Pipelines][bitbucket-pipelines] is used to build a
+[GitHub Actions][github-actions] is used to build a
 [Docker][docker] image and deploy the application on
 [AWS Elastic Container Service][aws-ecs] via [AWS CloudFormation][aws-cloudformation].
 
-- If you don't use Bitbucket Pipelines, delete [bitbucket-pipelines.yml](bitbucket-pipelines.yml)
+- If you don't use GitHub Actions, delete [.github](.github)
 - If you don't use AWS (or you don't want to use our template), delete
   the [aws](aws) folder
 - If you don't use Docker either, delete the [docker-build](docker-build) directory
@@ -199,7 +199,7 @@ It is used to encrypt the data stored within the session cookie.**
 
 
 ## Template License
-Written in 2020-2021 by [linked-planet GmbH](https://www.linked-planet.com).
+Written in 2020-2022 by [linked-planet GmbH](https://www.linked-planet.com).
 
 To the extent possible under law, the author(s) have dedicated all copyright and related
 and neighboring rights to this template to the public domain worldwide.
@@ -215,7 +215,7 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [sass]: https://sass-lang.com/
 [sassy-vs-scss]: http://thesassway.com/editorial/sass-vs-scss-which-syntax-is-better
 [ktor-onelogin-saml]: https://github.com/linked-planet/ktor-onelogin-saml
-[bitbucket-pipelines]: https://bitbucket.org/product/features/pipelines
+[github-actions]: https://github.com/features/actions
 [docker]: https://www.docker.com/
 [aws-ecs]: https://aws.amazon.com/ecs/
 [aws-cloudformation]: https://aws.amazon.com/cloudformation/

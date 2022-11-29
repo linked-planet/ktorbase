@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.targets.js.nodejs.*
-
 val buildVersion: String = System.getProperty("buildVersion", "BUILD_VERSION")
 val kotlinVersion: String by project
 
@@ -84,9 +82,4 @@ dependencies {
     implementation(devNpm("node-sass", "4.14.1"))
     implementation(devNpm("file-loader", "6.2.0"))
     implementation(devNpm("@babel/core", "7.12.9"))
-}
-
-// without this, node will fail to execute in the Bitbucket Pipeline Build Container
-rootProject.plugins.withType(NodeJsRootPlugin::class.java) {
-    rootProject.the<NodeJsRootExtension>().download = false
 }
