@@ -1,76 +1,73 @@
 package com.linkedplanet.ktorbase.component.login
 
-import com.linkedplanet.ktorbase.reducers.SessionHandler
-import imports.atlaskit.textfield.Textfield
-import kotlinx.browser.*
-import kotlinx.html.*
+import com.linkedplanet.uikit.wrapper.atlaskit.textfield.TextField
+import kotlinx.browser.document
+import kotlinx.browser.localStorage
+import kotlinx.html.ButtonType
+import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import org.w3c.dom.HTMLInputElement
-import react.*
-import react.dom.*
-import react.redux.rConnect
-import redux.WrapperAction
+import react.Props
+import react.RBuilder
+import react.dom.button
+import react.dom.div
+import react.dom.fieldset
+import react.dom.form
+import react.dom.legend
+import react.fc
+import react.useState
 
-val loginComponent: RClass<RProps> =
-    rConnect<LoginComponent, WrapperAction>()(LoginComponent::class.js.unsafeCast<RClass<RProps>>())
+external interface LoginProps : Props {
+    var login: (String, String) -> Unit
+}
 
-class LoginComponent : RComponent<RProps, LoginComponent.State>() {
+private val LoginComponent = fc<LoginProps> { props ->
+    val (username, setUsername) = useState("")
+    val (password, setPassword) = useState("")
 
-    override fun RBuilder.render() {
-        localStorage.setItem("theme", "theme-light")
-        document.documentElement?.className = "theme-light"
+    localStorage.setItem("theme", "theme-light")
+    document.documentElement?.className = "theme-light"
+    div {
+        attrs.id = "login-view"
         div {
-            attrs.id = "login-view"
-            div {
-                attrs.id = "login"
-                form {
-                    fieldset {
-                        legend { +"Login" }
-                        attrs.disabled = state.disabled
-                        Textfield {
-                            attrs.isCompact = true
-                            attrs.placeholder = "Username"
-                            attrs.onChange = {
-                                val v = (it.target as HTMLInputElement).value
-                                setState { username = v }
-                            }
-                            attrs.autoFocus = true
-                            attrs.autoComplete = "off"
+            attrs.id = "login"
+            form {
+                fieldset {
+                    legend { +"Login" }
+                    TextField {
+                        attrs.isCompact = true
+                        attrs.placeholder = "Username"
+                        attrs.onChange = {
+                            val v = (it.target as HTMLInputElement).value
+                            setUsername(v)
                         }
-                        Textfield {
-                            attrs.isCompact = true
-                            attrs.placeholder = "Password"
-                            attrs.type = "password"
-                            attrs.onChange = {
-                                val v = (it.target as HTMLInputElement).value
-                                setState { password = v }
-                            }
-                            attrs.autoComplete = "off"
+                        // TODO
+//                        attrs.autoFocus = true
+//                        attrs.autoComplete = "off"
+                    }
+                    TextField {
+                        attrs.isCompact = true
+                        attrs.placeholder = "Password"
+                        attrs.type = "password"
+                        attrs.onChange = {
+                            val v = (it.target as HTMLInputElement).value
+                            setPassword(v)
                         }
-                        button(type = ButtonType.submit) {
-                            +"Login"
-                            attrs.disabled = state.disabled
-                            attrs.onClickFunction = {
-                                it.preventDefault()
-                                SessionHandler.login(state.username, state.password)
-                            }
-                        }
-                        state.message?.takeIf { it.isNotEmpty() }?.let { message ->
-                            val classes = if (state.error) "error" else ""
-                            span(classes) { +message }
+                        // TODO
+//                        attrs.autoComplete = "off"
+                    }
+                    button(type = ButtonType.submit) {
+                        +"Login"
+                        attrs.onClickFunction = {
+                            it.preventDefault()
+                            props.login(username, password)
                         }
                     }
                 }
             }
         }
     }
-
-    interface State : RState {
-        var disabled: Boolean
-        var username: String
-        var password: String
-        var message: String?
-        var error: Boolean
-    }
-
 }
+
+fun RBuilder.LoginComponent(handler: LoginProps.() -> Unit) =
+    child(LoginComponent) { attrs { handler() } }

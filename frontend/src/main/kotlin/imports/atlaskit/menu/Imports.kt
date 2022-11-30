@@ -3,23 +3,23 @@
 package imports.atlaskit.menu
 
 import org.w3c.dom.events.Event
-import react.RClass
-import react.RProps
-import react.ReactElement
+import react.ComponentClass
+import react.Props
+import react.ReactNode
 
 @JsName("MenuGroup")
-external val MenuGroup: RClass<MenuGroupProps>
+external val MenuGroup: ComponentClass<MenuGroupProps>
 
-external interface MenuGroupProps : RProps {
+external interface MenuGroupProps : Props {
 
-    var children: ReactElement
+    var children: ReactNode
 
 }
 
 @JsName("LinkItem")
-external val LinkItem: RClass<LinkItemProps>
+external val LinkItem: ComponentClass<LinkItemProps>
 
-external interface LinkItemProps : RProps {
+external interface LinkItemProps : Props {
 
     var onClick: (Event) -> Unit
 

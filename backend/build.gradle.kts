@@ -2,7 +2,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
-val jvmTarget: String by project
 
 plugins {
     kotlin("jvm")
@@ -30,12 +29,12 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", "2.14.0")
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.7.1")
-    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.7.1")
+    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.7.1")
     testImplementation("io.rest-assured", "rest-assured", "4.3.3")
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = jvmTarget
+    kotlinOptions.jvmTarget = "11"
     kotlinOptions.freeCompilerArgs = listOf("-Xuse-experimental=kotlin.Experimental")
 }
 

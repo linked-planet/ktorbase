@@ -1,59 +1,49 @@
 package com.linkedplanet.ktorbase.component.banner
 
-import com.linkedplanet.ktorbase.AppState
-import com.linkedplanet.ktorbase.model.*
-import com.linkedplanet.ktorbase.reducers.SessionHandler
-import imports.atlaskit.menu.*
-import imports.atlaskit.navigation.*
-import imports.atlaskit.popup.Popup
-import kotlinext.js.Object
+import com.linkedplanet.ktorbase.model.Config
+import com.linkedplanet.ktorbase.model.Session
+import com.linkedplanet.uikit.util.createElementNullSafe
+import com.linkedplanet.uikit.wrapper.atlaskit.navigation.AtlassianNavigation
+import com.linkedplanet.uikit.wrapper.atlaskit.navigation.CustomProductHome
+import com.linkedplanet.uikit.wrapper.atlaskit.navigation.Profile
+import com.linkedplanet.uikit.wrapper.atlaskit.popup.Popup
+import imports.atlaskit.menu.LinkItem
+import imports.atlaskit.menu.MenuGroup
 import kotlinx.html.id
-import react.*
-import react.dom.*
-import react.redux.rConnect
-import redux.*
+import kotlinx.js.Object
+import kotlinx.js.jso
+import react.Props
+import react.RBuilder
+import react.createElement
+import react.dom.div
+import react.dom.img
+import react.dom.jsStyle
+import react.fc
+import react.useState
 
-interface BannerStateProps : RProps {
+external interface BannerComponentProps : Props {
     var session: Session?
     var config: Config?
+    var logout: () -> Unit
 }
 
-interface BannerDispatchProps : RProps
-interface BannerProps : BannerStateProps, BannerDispatchProps
-
-val bannerComponent: RClass<BannerProps> =
-    (rConnect<AppState, RAction, WrapperAction, RProps, BannerStateProps, BannerDispatchProps, BannerProps>(
-        { state, _ ->
-            session = state.session
-            config = state.config
-        },
-        { _, _ -> }
-    ))(BannerComponent::class.js.unsafeCast<RClass<BannerProps>>())
-
-class BannerComponent(props: BannerProps) : RComponent<BannerProps, BannerComponent.State>(props) {
-
-    init {
-        state.profilePopupIsOpen = false
-    }
-
-    override fun RBuilder.render() {
-        val config = props.config
-        val session = props.session
-        div {
-            attrs.id = "banner"
-            AtlassianNavigation {
-                attrs.label = "Test"
-                attrs.renderProductHome = {
-                    CustomProductHome {
-                        attrs.iconAlt = "frontend/favicon.png"
-                        attrs.iconUrl = "frontend/favicon.png"
-                        attrs.logoAlt = "frontend/favicon.png"
-                        attrs.logoUrl = "frontend/favicon.png"
-                        attrs.siteTitle = "KtorBase"
-                    }
-                }
-                if (config != null && session != null) {
-                    val icon = img {
+private val BannerComponent = fc<BannerComponentProps> { props ->
+    val (profilePopupIsOpen, setProfilePopupIsOpen) = useState(false)
+    val config = props.config
+    val session = props.session
+    div {
+        attrs.id = "banner"
+        AtlassianNavigation {
+            attrs.renderProductHome = {
+                createElement(CustomProductHome, jso {
+                    iconUrl = "frontend/favicon.png"
+                    logoUrl = "frontend/favicon.png"
+                    siteTitle = "KtorBase"
+                })
+            }
+            if (config != null && session != null) {
+                val profileIcon = createElementNullSafe {
+                    img {
                         attrs.src =
                             "https://w7.pngwing.com/pngs/7/618/png-transparent-man-illustration-avatar-icon-fashion-men-avatar-face-fashion-girl-heroes.png"
                         attrs.jsStyle {
@@ -62,45 +52,43 @@ class BannerComponent(props: BannerProps) : RComponent<BannerProps, BannerCompon
                             height = 32
                         }
                     }
-                    attrs.renderProfile = {
-                        Popup {
-                            attrs.isOpen = state.profilePopupIsOpen
-                            attrs.onClose = {
-                                setState { profilePopupIsOpen = false }
-                            }
-                            attrs.placement = "bottom-start"
-                            attrs.trigger = { triggerProps ->
+                }
+                attrs.renderProfile = {
+                    createElement(Popup, jso {
+                        isOpen = profilePopupIsOpen
+                        onClose = { setProfilePopupIsOpen(false) }
+                        placement = "bottom-start"
+                        trigger = { triggerProps ->
+                            createElementNullSafe {
                                 Profile {
                                     Object.keys(triggerProps).forEach { key ->
-                                        val descriptor = Object.getOwnPropertyDescriptor<RProps>(triggerProps, key)
+                                        val descriptor = Object.getOwnPropertyDescriptor<Props>(triggerProps, key)
                                         Object.defineProperty(attrs, key, descriptor)
                                     }
-                                    attrs.icon = icon
-                                    attrs.onClick = {
-                                        setState { profilePopupIsOpen = !profilePopupIsOpen }
-                                    }
+                                    attrs.icon = profileIcon
+                                    attrs.onClick = { setProfilePopupIsOpen(!profilePopupIsOpen) }
                                 }
                             }
-                            attrs.content = { _ ->
+                        }
+                        content = { _ ->
+                            createElementNullSafe {
                                 MenuGroup {
                                     LinkItem {
                                         +"Logout"
                                         attrs.onClick = {
-                                            setState { profilePopupIsOpen = false }
-                                            SessionHandler.logout()
+                                            setProfilePopupIsOpen(false)
+                                            props.logout()
                                         }
                                     }
                                 }
                             }
                         }
-                    }
+                    })
                 }
             }
         }
     }
-
-    interface State : RState {
-        var profilePopupIsOpen: Boolean
-    }
-
 }
+
+fun RBuilder.BannerComponent(handler: BannerComponentProps.() -> Unit) =
+    child(BannerComponent) { attrs { handler() } }

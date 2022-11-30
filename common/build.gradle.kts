@@ -1,6 +1,4 @@
 val kotlinVersion: String by project
-val jvmTarget: String by project
-val copyJvmTarget = jvmTarget
 
 plugins {
     kotlin("multiplatform")
