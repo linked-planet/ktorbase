@@ -2,7 +2,7 @@ println("Gradle Version: " + GradleVersion.current().toString())
 println("Java Version: " + JavaVersion.current().toString())
 
 plugins {
-    kotlin("multiplatform") version "1.7.20" apply false
+    kotlin("multiplatform") version "1.7.22" apply false
 
     // derive gradle version from git tag
     id("pl.allegro.tech.build.axion-release") version "1.14.3"
@@ -16,7 +16,7 @@ plugins {
 group = "com.linked-planet"
 version = scmVersion.version
 
-ext.set("kotlinVersion", "1.7.20")
+ext.set("kotlinVersion", "1.7.22")
 
 allprojects {
     repositories {
