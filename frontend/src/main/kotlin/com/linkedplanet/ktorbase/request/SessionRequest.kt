@@ -1,10 +1,12 @@
 package com.linkedplanet.ktorbase.request
 
-import com.linkedplanet.ktorbase.routes.*
-import com.linkedplanet.ktorbase.util.*
+import com.linkedplanet.ktorbase.routes.LoginBody
+import com.linkedplanet.ktorbase.routes.SessionResponse
+import com.linkedplanet.uikit.util.BadStatusCodeException
+import com.linkedplanet.uikit.util.RequestUtil.requestAndHandleSuccess
+import com.linkedplanet.uikit.util.RequestUtil.requestAndParseResult
 import kotlin.js.json
 
-@Suppress("UnsafeCastFromDynamic")
 object SessionRequest {
 
     suspend fun currentUser(): SessionResponse =
@@ -29,11 +31,8 @@ object SessionRequest {
                 parse = { JSON.parse(JSON.stringify(it)) }
             )
         } catch (e: BadStatusCodeException) {
-            if (e.statusCode == 401) {
-                null
-            } else {
-                throw e
-            }
+            if (e.statusCode == 401) null
+            else throw e
         }
 
     suspend fun logout() =

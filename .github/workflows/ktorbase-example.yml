@@ -4,13 +4,15 @@ on:
   push:
     branches:
       - master
+  schedule:
+    - cron: "0 1 * * *"
 
 jobs:
 
   github-build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -19,11 +21,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-example-ktorbase-
 
-      # ktor prevents compile-time 11, see: https://youtrack.jetbrains.com/issue/KTOR-619
-      - name: Set up JDK 8
-        uses: actions/setup-java@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v3
         with:
-          java-version: '8'
+          java-version: '11'
           distribution: 'adopt'
 
       - name: Initialize
@@ -53,10 +54,10 @@ jobs:
         run: cd /tmp/com.linked-planet.ktor-example && ./gradlew build
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Docker Build and Push
         working-directory: /tmp/com.linked-planet.ktor-example

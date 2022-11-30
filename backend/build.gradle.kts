@@ -2,15 +2,15 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
-val jvmTarget: String by project
 
 plugins {
     kotlin("jvm")
     application
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 val ktorVersion = "1.5.4"
+val log4jVersion = "2.19.0"
 dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(project(":common"))
@@ -25,17 +25,16 @@ dependencies {
     implementation("io.ktor", "ktor-client-logging-jvm", ktorVersion)
     implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-1.4.2")
 
-    implementation("org.apache.logging.log4j", "log4j-api", "2.14.0")
-    implementation("org.apache.logging.log4j", "log4j-core", "2.14.0")
-    implementation("org.apache.logging.log4j", "log4j-slf4j-impl", "2.14.0")
+    implementation("org.apache.logging.log4j", "log4j-api", log4jVersion)
+    implementation("org.apache.logging.log4j", "log4j-core", log4jVersion)
+    implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
 
-    testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.7.1")
-    testRuntime("org.junit.jupiter", "junit-jupiter-engine", "5.7.1")
-    testImplementation("io.rest-assured", "rest-assured", "4.3.3")
+    testImplementation(kotlin("test"))
+    testImplementation("io.rest-assured", "rest-assured", "5.3.0")
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = jvmTarget
+    kotlinOptions.jvmTarget = "11"
     kotlinOptions.freeCompilerArgs = listOf("-Xuse-experimental=kotlin.Experimental")
 }
 
@@ -66,7 +65,7 @@ task("updateBuildVersion") {
 }
 
 sourceSets {
-    create("integrationTest") {
+    create("integration") {
         kotlin {
             compileClasspath += main.get().output + configurations.testRuntimeClasspath.get()
             runtimeClasspath += output + compileClasspath
@@ -77,8 +76,7 @@ sourceSets {
 val integrationTest = task<Test>("integrationTest") {
     description = "Run all integration tests"
     group = "verification"
-    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
-    classpath = sourceSets["integrationTest"].runtimeClasspath
+    testClassesDirs = sourceSets["integration"].output.classesDirs
+    classpath = sourceSets["integration"].runtimeClasspath
     mustRunAfter(tasks["test"])
-    useJUnitPlatform()
 }
