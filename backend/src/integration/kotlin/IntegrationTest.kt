@@ -3,7 +3,8 @@ import io.restassured.RestAssured
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType
 import io.restassured.response.ValidatableResponse
-import org.junit.jupiter.api.*
+import org.junit.BeforeClass
+import kotlin.test.Test
 
 /*
  * Meant to run against the fully built application, deployed e.g. as Docker Container.
@@ -34,7 +35,7 @@ class IntegrationTest {
     }
 
     companion object {
-        @BeforeAll
+        @BeforeClass
         @JvmStatic
         fun configureRestAssured() {
             RestAssured.baseURI = BackendConfig.baseUrl

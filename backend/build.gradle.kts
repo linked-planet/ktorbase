@@ -28,8 +28,7 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-core", "2.14.0")
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", "2.14.0")
 
-    testImplementation("org.junit.jupiter", "junit-jupiter-api", "5.7.1")
-    testRuntimeOnly("org.junit.jupiter", "junit-jupiter-engine", "5.7.1")
+    testImplementation(kotlin("test"))
     testImplementation("io.rest-assured", "rest-assured", "4.3.3")
 }
 
@@ -65,7 +64,7 @@ task("updateBuildVersion") {
 }
 
 sourceSets {
-    create("integrationTest") {
+    create("integration") {
         kotlin {
             compileClasspath += main.get().output + configurations.testRuntimeClasspath.get()
             runtimeClasspath += output + compileClasspath
@@ -76,8 +75,7 @@ sourceSets {
 val integrationTest = task<Test>("integrationTest") {
     description = "Run all integration tests"
     group = "verification"
-    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
-    classpath = sourceSets["integrationTest"].runtimeClasspath
+    testClassesDirs = sourceSets["integration"].output.classesDirs
+    classpath = sourceSets["integration"].runtimeClasspath
     mustRunAfter(tasks["test"])
-    useJUnitPlatform()
 }
