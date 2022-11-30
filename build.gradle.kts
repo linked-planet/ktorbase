@@ -11,9 +11,11 @@ ext.set("jvmTarget", "1.8") // ktor prevents compile-time 11, see: https://youtr
 
 plugins {
     kotlin("multiplatform") version "1.7.20" apply false
-    id("com.github.hierynomus.license") version "0.16.1"
-    id("com.github.hierynomus.license-report") version "0.16.1"
-    id("com.github.ben-manes.versions") version "0.38.0"
+
+    // provide & configure tasks: dependencyUpdates, useLatestVersions
+    id("com.github.ben-manes.versions") version "0.44.0"
+    id("se.ascp.gradle.gradle-versions-filter") version "0.1.16"
+    id("se.patrikerdes.use-latest-versions") version "0.2.18"
 }
 
 allprojects {
