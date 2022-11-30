@@ -137,19 +137,8 @@ want to use something else.
 The build is configured to use [Sassy CSS][sass].  
 (*see [Sass vs. SCSS: which syntax is better?][sassy-vs-scss]*)
 
-There are some utility classes
-that can be used to enable developer features like letting specific
-routes fail, or introducing random HTTP delay. We find these
-useful for testing how our applications behave in error situations.
-There might be more elegant ways or tools for doing this - use them
-at your own discretion, or delete them if you don't want them:
-- [DevOptions](frontend/src/main/kotlin/com/linkedplanet/ktorbase/DevOptions.kt)
-- [GlobalOptions](frontend/src/main/kotlin/com/linkedplanet/ktorbase/GlobalOptions.kt)
-- [Async](frontend/src/main/kotlin/com/linkedplanet/ktorbase/util/Async.kt)
-
-We don't claim that these are the best ways to handle these situations. So far,
-they worked for us very reliably. If you know how to do things in a better way,
-please tell us :-)
+For further information regarding frontend development, see
+[linked-planet UI-Kit][ui-kit].
 
 
 ## Deployment
@@ -163,12 +152,6 @@ please tell us :-)
   the [aws](aws) folder
 - If you don't use Docker either, delete the [docker-build](docker-build) directory
   and the [Dockerfile](Dockerfile)
-
-### Java Version
-We are running on JRE 11, but the application is compiled with JDK 8 due to the following
-ktor issues:
-- https://github.com/ktorio/ktor/issues/1137
-- https://github.com/ktorio/ktor/issues/321
 
 ### Configuration
 AWS configuration parameters are stored within the repository in JSON files per
@@ -223,3 +206,4 @@ This template is distributed without any warranty. See <http://creativecommons.o
 [kotlin-fullstack-sample]: https://github.com/Kotlin/kotlin-full-stack-application-demo
 [jetty]: https://www.eclipse.org/jetty/
 [aws-prometheus]: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights-Prometheus.html
+[ui-kit]: https://github.com/linked-planet/ui-kit
