@@ -30,7 +30,7 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
 
     testImplementation(kotlin("test"))
-    testImplementation("io.rest-assured", "rest-assured", "4.3.3")
+    testImplementation("io.rest-assured", "rest-assured", "5.3.0")
 }
 
 tasks.withType<KotlinCompile> {
