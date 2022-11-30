@@ -41,7 +41,7 @@ private val LoginComponent = fc<LoginProps> { props ->
                             val v = (it.target as HTMLInputElement).value
                             setUsername(v)
                         }
-                        // TODO
+                        // TODO add to ui-kit-lib
 //                        attrs.autoFocus = true
 //                        attrs.autoComplete = "off"
                     }
@@ -53,7 +53,7 @@ private val LoginComponent = fc<LoginProps> { props ->
                             val v = (it.target as HTMLInputElement).value
                             setPassword(v)
                         }
-                        // TODO
+                        // TODO add to ui-kit-lib
 //                        attrs.autoComplete = "off"
                     }
                     button(type = ButtonType.submit) {

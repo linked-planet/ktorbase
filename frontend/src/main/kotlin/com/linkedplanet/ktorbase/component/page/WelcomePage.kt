@@ -1,4 +1,4 @@
-package com.linkedplanet.ktorbase.component.pages.mainPage
+package com.linkedplanet.ktorbase.component.page
 
 import com.linkedplanet.ktorbase.model.Config
 import com.linkedplanet.ktorbase.model.Session
@@ -8,12 +8,12 @@ import react.dom.div
 import react.dom.p
 import react.fc
 
-external interface MainPageProps : Props {
+external interface WelcomePageProps : Props {
     var session: Session
     var config: Config
 }
 
-private val MainPage = fc<MainPageProps> { props ->
+private val WelcomePage = fc<WelcomePageProps> { props ->
     val greetUsername = props.session.username
     div {
         p { +"Hello $greetUsername" }
@@ -22,5 +22,5 @@ private val MainPage = fc<MainPageProps> { props ->
     }
 }
 
-fun RBuilder.MainPage(handler: MainPageProps.() -> Unit) =
-    child(MainPage) { attrs { handler() } }
+fun RBuilder.WelcomePage(handler: WelcomePageProps.() -> Unit) =
+    child(WelcomePage) { attrs { handler() } }

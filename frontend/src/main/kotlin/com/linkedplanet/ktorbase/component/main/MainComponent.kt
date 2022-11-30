@@ -2,7 +2,7 @@ package com.linkedplanet.ktorbase.component.main
 
 import com.linkedplanet.ktorbase.component.banner.BannerComponent
 import com.linkedplanet.ktorbase.component.login.LoginComponent
-import com.linkedplanet.ktorbase.component.pages.mainPage.MainPage
+import com.linkedplanet.ktorbase.component.page.WelcomePage
 import com.linkedplanet.ktorbase.model.Config
 import com.linkedplanet.ktorbase.model.Notification
 import com.linkedplanet.ktorbase.model.NotificationType
@@ -100,7 +100,7 @@ private val MainComponent = fc<Props> { _ ->
                 }
 
             is AppState.Main -> {
-                MainPage {
+                WelcomePage {
                     this.session = appState.session
                     this.config = appState.config
                 }
