@@ -23,7 +23,7 @@ kotlin {
 dependencies {
     implementation(kotlin("stdlib-js", kotlinVersion))
     implementation(project(":common"))
-    implementation("com.linked-planet.ui", "ui-kit-lib", "0.10.0")
+    implementation("com.linked-planet.ui", "ui-kit-lib", "0.11.0")
 
     implementation(npm("@atlaskit/menu", "0.5.0"))
 }
