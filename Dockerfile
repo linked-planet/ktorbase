@@ -1,7 +1,7 @@
 FROM openjdk:11-jre
 
 # install prometheus jmx exporter
-ENV JMX_PROMETHEUS_VERSION="0.15.0"
+ENV JMX_PROMETHEUS_VERSION="0.17.2"
 ENV JMX_PROMETHEUS_PORT=9404
 RUN mkdir -p /opt/jmx_exporter
 RUN wget --no-verbose \
