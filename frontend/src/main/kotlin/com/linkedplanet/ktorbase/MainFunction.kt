@@ -1,6 +1,6 @@
 package com.linkedplanet.ktorbase
 
-import com.linkedplanet.ktorbase.component.main.MainComponent
+import com.linkedplanet.ktorbase.component.MainComponent
 import kotlinx.browser.document
 import org.w3c.dom.Element
 import react.Props

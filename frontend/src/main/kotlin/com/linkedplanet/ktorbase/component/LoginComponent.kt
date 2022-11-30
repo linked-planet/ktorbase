@@ -1,4 +1,4 @@
-package com.linkedplanet.ktorbase.component.login
+package com.linkedplanet.ktorbase.component
 
 import com.linkedplanet.uikit.wrapper.atlaskit.textfield.TextField
 import kotlinx.browser.document

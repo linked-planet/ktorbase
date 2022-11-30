@@ -1,8 +1,5 @@
-package com.linkedplanet.ktorbase.component.main
+package com.linkedplanet.ktorbase.component
 
-import com.linkedplanet.ktorbase.component.banner.BannerComponent
-import com.linkedplanet.ktorbase.component.login.LoginComponent
-import com.linkedplanet.ktorbase.component.page.WelcomePage
 import com.linkedplanet.ktorbase.model.Config
 import com.linkedplanet.ktorbase.model.Notification
 import com.linkedplanet.ktorbase.model.NotificationType

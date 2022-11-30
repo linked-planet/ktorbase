@@ -1,4 +1,4 @@
-package com.linkedplanet.ktorbase.component.page
+package com.linkedplanet.ktorbase.component
 
 import com.linkedplanet.ktorbase.model.Config
 import com.linkedplanet.ktorbase.model.Session
