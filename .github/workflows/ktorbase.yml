@@ -1,6 +1,13 @@
 name: KtorBase
 
-on: [ push ]
+on:
+  push:
+    branches:
+      - '**'
+  schedule:
+    - cron: "0 1 * * *"
+  release:
+    types: [ published ]
 
 jobs:
 
