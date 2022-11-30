@@ -10,6 +10,7 @@ plugins {
 }
 
 val ktorVersion = "1.5.4"
+val log4jVersion = "2.19.0"
 dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(project(":common"))
@@ -24,9 +25,9 @@ dependencies {
     implementation("io.ktor", "ktor-client-logging-jvm", ktorVersion)
     implementation("com.link-time.ktor", "ktor-onelogin-saml", "1.2.0-ktor-1.4.2")
 
-    implementation("org.apache.logging.log4j", "log4j-api", "2.14.0")
-    implementation("org.apache.logging.log4j", "log4j-core", "2.14.0")
-    implementation("org.apache.logging.log4j", "log4j-slf4j-impl", "2.14.0")
+    implementation("org.apache.logging.log4j", "log4j-api", log4jVersion)
+    implementation("org.apache.logging.log4j", "log4j-core", log4jVersion)
+    implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
 
     testImplementation(kotlin("test"))
     testImplementation("io.rest-assured", "rest-assured", "4.3.3")
