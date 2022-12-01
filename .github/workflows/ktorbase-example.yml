@@ -31,9 +31,8 @@ jobs:
 
       - name: Initialize
         run: >
-          BRANCH=${GITHUB_REF#refs/heads/};
-          curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/init.sh";
-          sh ./init.sh /tmp com.linked-planet ktor-example "$BRANCH";
+          curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/master/init.sh";
+          sh ./init.sh /tmp com.linked-planet ktor-example "master";
           echo "Creating temporary repository with initial version ...";
           cd /tmp/com.linked-planet.ktor-example;
           git init;
@@ -44,9 +43,8 @@ jobs:
 
       - name: Update
         run: >
-          BRANCH=${GITHUB_REF#refs/heads/};
-          curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/$BRANCH/update.sh";
-          sh ./update.sh /tmp/com.linked-planet.ktor-example com.linked-planet ktor-example "$BRANCH";
+          curl -O -s "https://raw.githubusercontent.com/linked-planet/ktorbase/master/update.sh";
+          sh ./update.sh /tmp/com.linked-planet.ktor-example com.linked-planet ktor-example "master";
           echo "Comparing updated version with initial version ...";
           cd /tmp/com.linked-planet.ktor-example;
           git add .;
