@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="ktorbase [dependencyUpdates]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+  <configuration default="false" name="dependencyUpdates" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
