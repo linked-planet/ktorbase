@@ -37,8 +37,9 @@ jobs:
       - name: Extract Version
         id: extract-version
         run: |
-          VERSION="v$(./gradlew cV | grep "Project version" | cut -d ":" -f2 | xargs)"
-          echo "version=$VERSION" >> $GITHUB_ENV
+          VERSION="$(./gradlew cV | grep "Project version" | cut -d ":" -f2 | xargs)"
+          echo "Detected version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
