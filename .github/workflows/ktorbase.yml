@@ -57,6 +57,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          load: true
           push: ${{ github.event_name == 'release' }}
           tags: |
             linkedplanet/ktorbase:latest
