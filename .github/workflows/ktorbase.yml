@@ -34,6 +34,13 @@ jobs:
       - name: Gradle Build
         run: ./gradlew build
 
+      - name: Extract Version
+        id: extract-version
+        run: |
+          VERSION="$(./gradlew cV | grep "Project version" | cut -d ":" -f2 | xargs)"
+          echo "Detected version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -50,8 +57,11 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          push: true
-          tags: linkedplanet/ktorbase:latest
+          load: true
+          push: ${{ github.event_name == 'release' }}
+          tags: |
+            linkedplanet/ktorbase:latest
+            linkedplanet/ktorbase:${{ env.VERSION }}
 
       - name: Start KtorBase
         run: docker run -d -p 9090:9090 -e APPLICATION_SECRET=0000000000000000000000000000000 linkedplanet/ktorbase:latest

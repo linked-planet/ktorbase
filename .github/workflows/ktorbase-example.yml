@@ -6,6 +6,8 @@ on:
       - master
   schedule:
     - cron: "0 1 * * *"
+  release:
+    types: [ published ]
 
 jobs:
 
@@ -66,7 +68,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_REGISTRY_URL: ${{ secrets.AWS_REGISTRY_URL }}
-        run: ./pipelines/docker-build-push-aws.sh latest
+        run: ./pipelines/docker-build-push-aws.sh latest ${GITHUB_SHA}
 
       - name: Deploy CloudFormation
         working-directory: /tmp/com.linked-planet.ktor-example
@@ -74,7 +76,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: ./pipelines/deploy.sh test latest && ./pipelines/deploy-wait.sh test latest
+        run: ./pipelines/deploy.sh test ${GITHUB_SHA} && ./pipelines/deploy-wait.sh test ${GITHUB_SHA}
 
       - name: Run Integration Tests
         working-directory: /tmp/com.linked-planet.ktor-example
