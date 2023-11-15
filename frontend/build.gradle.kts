@@ -5,6 +5,12 @@ plugins {
     kotlin("js")
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
 kotlin {
     js {
         useCommonJs()

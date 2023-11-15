@@ -9,6 +9,12 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
 val ktorVersion = "1.5.4"
 val log4jVersion = "2.19.0"
 dependencies {
