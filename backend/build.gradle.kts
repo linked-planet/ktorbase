@@ -6,7 +6,7 @@ val kotlinVersion: String by project
 plugins {
     kotlin("jvm")
     application
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 java {
@@ -16,7 +16,7 @@ java {
 }
 
 val ktorVersion = "1.5.4"
-val log4jVersion = "2.19.0"
+val log4jVersion = "2.21.1"
 dependencies {
     implementation(kotlin("stdlib-jdk8", kotlinVersion))
     implementation(project(":common"))
@@ -36,7 +36,7 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
 
     testImplementation(kotlin("test"))
-    testImplementation("io.rest-assured", "rest-assured", "5.3.0")
+    testImplementation("io.rest-assured", "rest-assured", "5.3.2")
 }
 
 tasks.withType<KotlinCompile> {
