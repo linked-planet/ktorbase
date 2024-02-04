@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 set -e
 
 # Updates an existing project using the latest version of ktorbase.
