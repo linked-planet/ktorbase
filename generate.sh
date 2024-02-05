@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Generates a new project based on the contents of this project.
 # Basically works by simply copying all files to a destination. Names will be replaced appropriately.
