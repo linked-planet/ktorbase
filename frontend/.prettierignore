@@ -1,0 +1,5 @@
+/node_modules
+/build
+node
+dist
+src/generated

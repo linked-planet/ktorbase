@@ -1,0 +1,32 @@
+@import '../variables';
+@import '../mixins';
+
+#login {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin-bottom: 120px; /* to sort of center it */
+
+  form {
+    border: $fieldset-border;
+    padding: $content-margin-l;
+
+    > * {
+      margin-bottom: $content-margin;
+    }
+
+    h2 {
+      text-transform: uppercase;
+      color: $ci-lighter;
+    }
+
+    button {
+      background: $ci-lighter !important;
+    }
+  }
+
+  span {
+    display: inline-block;
+    margin-left: $content-margin;
+  }
+}

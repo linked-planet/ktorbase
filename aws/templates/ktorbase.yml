@@ -319,7 +319,7 @@ Resources:
             Java_EMF_Metrics: true
             ECS_PROMETHEUS_EXPORTER_PORT: !Ref JmxMetricsPort
 
-  ServiceService:
+  Service:
     Type: AWS::ECS::Service
     DependsOn: ServiceLoadBalancerListener
     Properties:
